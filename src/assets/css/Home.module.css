@@ -1,0 +1,161 @@
+.home {
+  margin-top: 20vh;
+  padding: 50px 20px;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.heroContent {
+  flex: 1;
+  max-width: 600px;
+  text-align: center;
+}
+
+.heroContent h1 {
+  background: linear-gradient(to right, rgb(11, 147, 193), purple, orange);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.heroContent p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.ctaButton1 i, .ctaButton2 i {
+  margin-left: 7px;
+}
+
+.ctaButton1, .ctaButton2 {
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 30px;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.ctaButton1 {
+  margin-right: 20px;
+  background-color: hsl(230, 75%, 56%);
+  color: #fff;
+  border: 2px solid hsl(230, 75%, 56%);
+}
+
+.ctaButton2 {
+  background-color: white;
+  color: hsl(230, 75%, 56%);
+  border: 2px solid hsl(230, 75%, 56%);
+}
+
+.ctaButton1:hover {
+  background-color: white;
+  color: hsl(230, 71%, 58%);
+}
+
+.ctaButton2:hover {
+  background-color: hsl(230, 71%, 58%);
+  color: white;
+}
+
+.heroImage {
+  flex: 1;
+  max-width: 400px;
+  margin-top: 20px;
+}
+
+.heroImage img {
+  width: 100%;
+  border-radius: 15px;
+}
+
+.brands {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.brands img {
+  width: 100px;
+  height: auto;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.brands img:hover {
+  opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    flex-direction: row;
+  }
+
+  .heroContent {
+    text-align: left;
+  }
+
+  .heroImage {
+    margin-left: 50px;
+  }
+
+  .ctaButton1 {
+    margin-right: 50px;
+  }
+
+  .ctaButton2 {
+    margin-right: 70px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .heroContent h1 {
+    font-size: 3rem;
+  }
+
+  .heroContent p {
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 1024px) {
+  .heroImage {
+    display: none;
+  }
+}
+
+
+@media screen and (max-width: 430px) {
+  .home {
+    margin-top: 10vh;
+    padding: 50px 20px;
+  }
+  
+  .heroContent h1 {
+    font-size: 2.1rem;
+  }
+
+  .heroContent p {
+    font-size: 1em;
+  }
+
+  .ctaButton1, .ctaButton2 {
+    width: 100%;
+    padding: 10px 20px;
+    font-size: 0.9em;
+  }
+  
+}
