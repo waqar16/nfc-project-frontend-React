@@ -1,17 +1,28 @@
 import './assets/css/Global.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HomeLayout from './layout/HomeLayout'
+import CompanySignupLayout from './layout/CompanySignupLayout'
+import PersonalSignupLayout from './layout/PersonalSignupLayout'
+import CompanyLoginLayout from './layout/CompanyLoginLayout'
+import PersonalLoginLayout from './layout/PersonalLoginLayout'
 import Navbar from './components/navbar/Navbar';
-import Home from './components/home/Home';
 import Footer from './components/footer/Footer';
-import OurApp from './components/OurApp/OurApp';
 
 function App() {
   return (
-    <div className="App">
-      <Navbar />
-      <Home/>
-      <OurApp/>
-      <Footer/>
-    </div>
+    <Router>
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomeLayout />} />
+          <Route path="/company-signup" element={<CompanySignupLayout />} />
+          <Route path="/personal-signup" element={<PersonalSignupLayout />} />
+          <Route path="/company-login" element={<CompanyLoginLayout />} />
+          <Route path="/personal-login" element={<PersonalLoginLayout />} />
+        </Routes>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

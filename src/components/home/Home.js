@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from '../../assets/css/Home.module.css';
 import main from'../../assets/img/smart-business-card-dubai-uae.png'
 // import airbnbLogo from './images/airbnb-logo.png';
@@ -16,8 +17,12 @@ const Home = () => {
           <h1>Revolutionize Your Business Cards</h1>
           <p>Our innovative NFC Business Card platform helps you manage profiles, write information to NFC cards, and schedule appointments seamlessly. Say goodbye to traditional business cards and embrace the future.</p>
           <div className={styles.btnDiv}>
+          <Link to="/company-signup">
           <button className={styles.ctaButton1}>For Company <i class="ri-arrow-right-line"></i></button>
+          </Link>
+          <Link to="/personal-signup">
           <button className={styles.ctaButton2}>For Individual <i class="ri-arrow-right-line"></i></button>
+          </Link>
           </div>
         </div>
         <div className={styles.heroImage}>

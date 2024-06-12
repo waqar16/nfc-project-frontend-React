@@ -1,5 +1,5 @@
 import '../../assets/css/styles.css';
-
+import { Link } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import Logo from '../../assets/img/logo.png';
 
@@ -102,7 +102,7 @@ const Navbar = () => {
           <div className="nav__menu" id="nav-menu">
             <ul className="nav__list">
               <li className="nav__item">
-                <a href="#" className="nav__link">Home</a>
+                <Link className='nav__link' to="/">Home</Link>
               </li>
               <li className="nav__item">
                 <a href="#" className="nav__link">About Us</a>
@@ -132,7 +132,7 @@ const Navbar = () => {
             <i className="ri-search-line nav__search" id="search-btn"></i>
 
             {/* Login button */}
-            <i className="ri-user-line nav__login" id="login-btn"></i>
+            <i className="ri-user-line nav__login"></i>
 
             {/* Toggle button */}
             <div className="nav__toggle" id="nav-toggle">
@@ -152,7 +152,7 @@ const Navbar = () => {
       </div>
 
       {/*==================== LOGIN ====================*/}
-      <div className="login" id="login">
+      {/* <div className="login" id="login">
         <form action="" className="login__form">
           <h2 className="login__title">Log In</h2>
 
@@ -180,7 +180,7 @@ const Navbar = () => {
           </div>
         </form>
         <i className="ri-close-line login__close" id="login-close"></i>
-      </div>
+      </div> */}
       
     </>
   );
