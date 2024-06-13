@@ -1,5 +1,5 @@
-import Home from '../components/home/Home';
-import OurApp from '../components/OurApp/OurApp';
+import Home from '../../components/home/Home';
+import OurApp from '../../components/OurApp/OurApp';
 
 function HomeLayout() {
   return (

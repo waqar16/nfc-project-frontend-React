@@ -6,7 +6,7 @@ const PersonalSignup = () => {
   return (
     <div className={styles.login}>
       <form action="" className={styles.login__form}>
-        <h2 className={styles.login__title}>Sign Up</h2>
+        <h2 className={styles.login__title}>Sign Up As Individual</h2>
 
         <div className={styles.login__group}>
           <div>

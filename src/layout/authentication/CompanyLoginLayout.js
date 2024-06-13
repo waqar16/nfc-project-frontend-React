@@ -1,4 +1,4 @@
-import CompanyLogin from '../components/companyLogin/CompanyLogin';
+import CompanyLogin from '../../components/companyLogin/CompanyLogin';
 
 const CompanyLoginLayout = () => {
     return (

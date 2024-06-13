@@ -1,4 +1,4 @@
-import CompanySignup from '../components/companySignup/CompanySignup';
+import CompanySignup from '../../components/companySignup/CompanySignup';
 
 const CompanySignupLayout = () => {
     return (

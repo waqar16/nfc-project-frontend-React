@@ -1,4 +1,4 @@
-import PersonalLogin from '../components/personalLogin/PersonalLogin';
+import PersonalLogin from '../../components/personalLogin/PersonalLogin';
 
 const PersonalLoginLayout = () => {
     return (

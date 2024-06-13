@@ -132,7 +132,7 @@ const Navbar = () => {
             <i className="ri-search-line nav__search" id="search-btn"></i>
 
             {/* Login button */}
-            <i className="ri-user-line nav__login"></i>
+            <Link to={'/user-profile'}> <i className="ri-user-line nav__login"></i></Link>
 
             {/* Toggle button */}
             <div className="nav__toggle" id="nav-toggle">
