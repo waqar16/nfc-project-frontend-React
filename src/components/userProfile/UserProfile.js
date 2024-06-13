@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import styles from '../../assets/css/UserProfile.module.css';
-import profilePic from '../../assets/img/bg-image.png';
+import profilePic from '../../assets/img/userPlaceholder.jpg';
 
 const UserProfile = () => {
   const [user, setUser] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phone: '123-456-7890',
-    address: '123 Main St, Springfield, IL',
-    bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.',
-    facebook: 'facebook.com',
-    instagram: 'instagram.com',
-    linkedin: 'linkedin.com',
+    name: 'Waqar Ahmed Khan',
+    email: 'wa4752928@gmail.com',
+    phone: '+92 316 2309308',
+    address: '123 Main St, Karachi, Pakistan',
+    bio: 'I am a full-stack web developer with 1 years of experience. I love to work on challenging projects.',
+    facebook: 'https://www.facebook.com/',
+    instagram: 'https://www.instagram.com/',
+    linkedin: 'https://www.linkedin.com/',
+    profilePic: profilePic,
   });
 
   const handleChange = (e) => {
@@ -20,6 +21,19 @@ const UserProfile = () => {
       ...prevUser,
       [name]: value,
     }));
+  };
+
+  const handleProfilePicChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUser((prevUser) => ({
+          ...prevUser,
+          profilePic: e.target.result,
+        }));
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -31,7 +45,18 @@ const UserProfile = () => {
   return (
     <div className={styles.userProfileContainer}>
       <div className={styles.previewCard}>
-        <img src={profilePic} alt="Profile" className={styles.profilePic} />
+        <div className={styles.profilePicContainer}>
+          <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
+          <label htmlFor="profilePicInput" className={styles.editIcon}>
+            <i className="ri-edit-2-fill"></i>
+          </label>
+          <input
+            type="file"
+            id="profilePicInput"
+            style={{ display: 'none' }}
+            onChange={handleProfilePicChange}
+          />
+        </div>
         <h2>{user.name}</h2>
         <p>Email: {user.email}</p>
         <p>Phone: {user.phone}</p>

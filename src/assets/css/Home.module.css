@@ -24,7 +24,7 @@
   background: linear-gradient(to right, rgb(11, 147, 193), purple, orange);
   -webkit-background-clip: text;
   color: transparent;
-  font-size: 3rem;
+  font-size: 3.3rem;
   margin-bottom: 20px;
 }
 
@@ -126,7 +126,8 @@
 
 @media (min-width: 1024px) {
   .heroContent h1 {
-    font-size: 3rem;
+    font-size: 3.4rem;
+    font-weight: 900;
   }
 
   .heroContent p {

@@ -14,33 +14,33 @@ const Footer = () => {
           <p>Our innovative NFC Business Card platform helps you manage profiles, write information to NFC cards, and schedule appointments seamlessly.</p>
         </div>
         <div className={styles.offices}>
-          <h3>Offices</h3>
+          <h3>Quick Links</h3>
           <ul>
-            <li>Salzburg</li>
-            <li>New York City</li>
-            <li>Copenhagen</li>
-            <li>Sydney</li>
-            <li>Berlin</li>
+            <li>Home</li>
+            <li>About us</li>
+            <li>FAQs</li>
+            <li>Contact</li>
+            <li>Terms & Conditions</li>
+          </ul>
+        </div>
+        <div className={styles.offices}>
+          <h3>Quick Actions</h3>
+          <ul>
+            <li>Shedule an Appointment</li>
+            <li>Schedule Metting</li>
+            <li>Bussiness Cards</li>
+            <li>Pricing</li>
+            <li>Support</li>
           </ul>
         </div>
         <div className={styles.offices}>
           <h3>Offices</h3>
           <ul>
-            <li>Salzburg</li>
-            <li>New York City</li>
-            <li>Copenhagen</li>
-            <li>Sydney</li>
-            <li>Berlin</li>
-          </ul>
-        </div>
-        <div className={styles.offices}>
-          <h3>Offices</h3>
-          <ul>
-            <li>Salzburg</li>
-            <li>New York City</li>
-            <li>Copenhagen</li>
-            <li>Sydney</li>
-            <li>Berlin</li>
+            <li>Karachi</li>
+            <li>Lahore</li>
+            <li>Islamabad</li>
+            <li>Rawalpindi</li>
+            <li>Kharian</li>
           </ul>
         </div>
         <div className={styles.followOneclick}>
