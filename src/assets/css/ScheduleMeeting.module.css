@@ -2,49 +2,49 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    padding-top: 8rem; 
-  }
-  
-  .title {
+    padding-top: 8rem;
+}
+
+.title {
     font-size: 2.5rem;
     text-align: center;
     margin-bottom: 20px;
-  }
-  
-  .calendarContainer {
+}
+
+.calendarContainer {
     display: flex;
     justify-content: center;
     margin-bottom: 30px;
-  }
-  
-  .form {
+}
+
+.form {
     display: flex;
     flex-direction: column;
     gap: 20px;
-  }
-  
-  .formGroup {
+}
+
+.formGroup {
     display: flex;
     flex-direction: column;
-  }
-  
-  .label {
+}
+
+.label {
     font-size: 1.2rem;
     margin-bottom: 5px;
-  }
-  
-  .input, .textarea {
+}
+
+.input, .textarea {
     padding: 10px;
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
-  }
-  
-  .textarea {
+}
+
+.textarea {
     resize: vertical;
-  }
-  
-  .button {
+}
+
+.button {
     padding: 15px 20px;
     font-size: 1.2rem;
     color: #fff;
@@ -53,18 +53,70 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  .button:hover {
-    background-color: #0056b3;
-  }
+}
 
-  @media (max-width: 768px) {
-    .scheduleMeeting {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        padding-top: 2rem; 
-      }
-  }
-  
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Additional CSS from login component */
+
+.login__form {
+    width: 30em;
+    background-color: var(--container-color);
+    padding: 2rem 1.5rem 2.5rem;
+    box-shadow: 0 8px 32px hsla(230, 75%, 15%, .2);
+    border-radius: 1rem;
+    row-gap: 1.25rem;
+    text-align: center;
+    transform: translateY(-1rem);
+    transition: transform .4s;
+}
+
+.login__label {
+    display: block;
+    text-align: initial;
+    color: var(--title-color);
+    font-weight: var(--font-medium);
+    margin-bottom: .25rem;
+}
+
+.login__input {
+    width: 100%;
+    background-color: var(--container-color);
+    border: 2px solid var(--border-color);
+    padding: 1rem;
+    border-radius: .5rem;
+    color: var(--text-color);
+}
+
+.login__input::placeholder {
+    color: var(--text-color);
+}
+
+.login__button {
+    display: inline-block;
+    background-color: var(--first-color);
+    width: 100%;
+    color: #fff;
+    font-weight: var(--font-semi-bold);
+    padding: 1rem;
+    border-radius: .5rem;
+    cursor: pointer;
+    transition: box-shadow .4s;
+}
+
+.login__button:hover {
+    box-shadow: 0 4px 24px hsla(230, 75%, 40%, .4);
+}
+
+textarea {
+    height: 5rem;
+    resize: vertical;
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
