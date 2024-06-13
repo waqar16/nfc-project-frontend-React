@@ -1,90 +1,122 @@
-.login{
-    display: flex;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    padding: 8rem 1.5rem 5rem;
-    transition: opacity .4s;
-    justify-content: center;
-    align-items: center;
+.scheduleMeeting {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-top: 8rem;
 }
 
-  
-  .login__form, 
-  .login__group {
-    display: grid;
-  }
-  
-  .login__form {
-    width: 30em;
-    background-color: var(--container-color);
-    padding: 2rem 1.5rem 2.5rem;
-    box-shadow: 0 8px 32px hsla(230, 75%, 15%, .2);
-    border-radius: 1rem;
-    row-gap: 1.25rem;
-    text-align: center;
-    transform: translateY(-1rem);
-    transition: transform .4s;
-  }
-  
-  .login__title {
-    font-size: var(--h2-font-size);
-    color: var(--title-color);
-  }
-  
-  .login__group {
-    row-gap: 1rem;
-  }
-  
-  .login__label {
-    display: block;
-    text-align: initial;
-    color: var(--title-color);
-    font-weight: var(--font-medium);
-    margin-bottom: .25rem;
-  }
-  
-  .login__input {
-    width: 100%;
-    background-color: var(--container-color);
-    border: 2px solid var(--border-color);
-    padding: 1rem;
-    border-radius: .5rem;
-    color: var(--text-color);
-  }
-  
-  .login__input::placeholder {
-    color: var(--text-color);
-  }
-  
-  .login__signup {
-    margin-bottom: .5rem;
-  }
-  
-  .login__signup a {
-    color: var(--first-color);
-  }
-  
-  .login__forgot {
-    display: inline-block;
-    color: var(--first-color);
-    margin-bottom: 1.25rem;
-  }
-  
-  .login__button {
-    display: inline-block;
-    background-color: var(--first-color);
-    width: 100%;
-    color: #fff;
-    font-weight: var(--font-semi-bold);
-    padding: 1rem;
-    border-radius: .5rem;
-    cursor: pointer;
-    transition: box-shadow .4s;
-  }
-  
-  .login__button:hover {
-    box-shadow: 0 4px 24px hsla(230, 75%, 40%, .4);
-  }
-  
+.title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.calendarContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.input, .textarea {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.button {
+  padding: 15px 20px;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+/* Additional CSS from login component */
+
+.login__form {
+  width: 30em;
+  background-color: var(--container-color);
+  padding: 2rem 1.5rem 2.5rem;
+  box-shadow: 0 8px 32px hsla(230, 75%, 15%, .2);
+  border-radius: 1rem;
+  row-gap: 1.25rem;
+  text-align: center;
+  transform: translateY(-1rem);
+  transition: transform .4s;
+}
+
+.login__label {
+  display: block;
+  text-align: initial;
+  color: var(--title-color);
+  font-weight: var(--font-medium);
+  margin-bottom: .25rem;
+}
+
+.login__input {
+  width: 100%;
+  background-color: var(--container-color);
+  border: 2px solid var(--border-color);
+  padding: 1rem;
+  border-radius: .5rem;
+  color: var(--text-color);
+}
+
+.login__input::placeholder {
+  color: var(--text-color);
+}
+
+.login__button {
+  display: inline-block;
+  background-color: var(--first-color);
+  width: 100%;
+  color: #fff;
+  font-weight: var(--font-semi-bold);
+  padding: 1rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  transition: box-shadow .4s;
+}
+
+.login__button:hover {
+  box-shadow: 0 4px 24px hsla(230, 75%, 40%, .4);
+}
+
+textarea {
+  height: 5rem;
+  resize: vertical;
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}

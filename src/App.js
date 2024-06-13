@@ -8,6 +8,9 @@ import PersonalLoginLayout from './layout/authentication/PersonalLoginLayout'
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import UserProfileLayout from  './layout/userProfile/UserProfileLayout'
+import FAQsLayout from  './layout/FAQs/FaqsLayout'
+import AboutUsLayout from  './layout/aboutus/AboutUsLayout'
+import ScheduleMeeting from './components/scheduleMeetings/ScheduleMeetings'; 
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
           <Route path="/company-login" element={<CompanyLoginLayout />} />
           <Route path="/personal-login" element={<PersonalLoginLayout />} />
           <Route path="/user-profile" element={<UserProfileLayout />} />
+          <Route path="/FAQs" element={<FAQsLayout />} />
+          <Route path="/about-us" element={<AboutUsLayout />} />
+          <Route path="/schedule-meeting" element={<ScheduleMeeting />} />
         </Routes>
         <Footer />
       </div>

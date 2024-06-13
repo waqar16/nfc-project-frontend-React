@@ -1,0 +1,70 @@
+.scheduleMeeting {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    padding-top: 8rem; 
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .calendarContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .label {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+  }
+  
+  .input, .textarea {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .textarea {
+    resize: vertical;
+  }
+  
+  .button {
+    padding: 15px 20px;
+    font-size: 1.2rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+
+  @media (max-width: 768px) {
+    .scheduleMeeting {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        padding-top: 2rem; 
+      }
+  }
+  

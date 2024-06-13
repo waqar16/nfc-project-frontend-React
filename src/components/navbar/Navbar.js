@@ -105,20 +105,20 @@ const Navbar = () => {
                 <Link className='nav__link' to="/">Home</Link>
               </li>
               <li className="nav__item">
-                <a href="#" className="nav__link">About Us</a>
+              <Link className='nav__link' to="/about-us">About Us</Link>
               </li>
               <li className="nav__item">
-                <a href="#" className="nav__link">Cards</a>
+                <Link to={'/schedule-meeting'} className="nav__link">Schedule a Meeting</Link>
               </li>
               <li className="nav__item">
-                <a href="#" className="nav__link">FAQs</a>
+                <Link className='nav__link' to="/FAQS">FAQs</Link>
               </li>
-              <li className="nav__item">
+              {/* <li className="nav__item">
                 <a href="#" className="nav__link">Pricing</a>
               </li>
               <li className="nav__item">
                 <a href="#" className="nav__link">Services</a>
-              </li>
+              </li> */}
             </ul>
 
             {/* Close button */}
