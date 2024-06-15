@@ -1,0 +1,121 @@
+.scheduleMeetingSection {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 40px;
+    background: linear-gradient(to right, rgb(11, 147, 193), purple, orange);
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    margin: 30px auto;
+    max-width: 1200px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .scheduleMeetingSection:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .content {
+    flex: 1;
+    padding-right: 40px;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  .title {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #fff;
+  }
+  
+  .description {
+    font-size: 1.4rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+  
+  .ctaButton {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #007bff;
+    background-color: #fff;
+    border: none;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .ctaButton:hover {
+    background-color: orange;
+    color: #fff;
+  }
+  
+  .calendarPreview {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .previewCalendar {
+    max-width: 100%;
+    border: none;
+    border-radius: 10px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+
+    .title {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+        color: #fff;
+      }
+      
+      .description {
+        text-align: center;
+        font-size: 1.4rem;
+        margin-bottom: 30px;
+        line-height: 1.6;
+      }
+    .scheduleMeetingSection {
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 35px;
+    }
+
+    .ctaButton {
+        margin: 50px;
+        padding: 15px 30px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #007bff;
+        background-color: #fff;
+        border: none;
+        border-radius: 30px;
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+  
+    .content {
+      padding-right: 0;
+      margin-bottom: 20px;
+    }
+  
+    .calendarPreview {
+        margin-top: 30px;
+      justify-content: flex-start;
+      width: 100%;
+    }
+  }
+  

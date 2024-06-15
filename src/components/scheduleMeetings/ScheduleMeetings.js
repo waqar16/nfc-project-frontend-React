@@ -33,7 +33,7 @@ const ScheduleMeeting = () => {
     <div className={styles.scheduleMeeting}>
       <h2 className={styles.title}>Schedule a Meeting</h2>
       <div className={styles.calendarContainer}>
-        <Calendar onChange={handleDateChange} value={date} />
+        <Calendar onChange={handleDateChange} value={date} className={styles.customCalendar} />
       </div>
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formGroup}>

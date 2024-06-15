@@ -97,7 +97,8 @@ const Navbar = () => {
       {/*==================== HEADER ====================*/}
       <header className="header" id="header">
         <nav className="nav container">
-            <img src={Logo}  alt="Logo" className="nav__logo" />
+          <Link to={'/'} ><img src={Logo}  alt="Logo" className="nav__logo" /></Link>
+            
         {/* <a href="#" className="nav__logo">Logo</a> */}
           <div className="nav__menu" id="nav-menu">
             <ul className="nav__list">
