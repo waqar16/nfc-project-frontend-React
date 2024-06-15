@@ -1,10 +1,12 @@
 /* FeaturesSection.module.css */
 .featuresSection {
     padding: 60px 20px;
+    /* background: linear-gradient(to right, rgb(11, 147, 193), purple, orange); */
+    /* color: #fff; */
+    text-align: center;
   }
   
   .title {
-    text-align: center;
     font-size: 2.5rem;
     margin-bottom: 40px;
   }
@@ -17,25 +19,32 @@
   
   .featureCard {
     padding: 20px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
   .featureCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(to right, rgb(11, 147, 193), purple, orange);
+    -webkit-background-clip: text;
+    color: transparent;
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+  
+  .icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    /* color: #fff; */
   }
   
   .featureTitle {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin-bottom: 10px;
   }
   
   .featureDescription {
     font-size: 1rem;
-    color: #666;
   }
   

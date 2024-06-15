@@ -1,28 +1,37 @@
 import React from 'react';
 import styles from '../../assets/css/ContactSection.module.css';
 
-const ContactSection = () => {
-  return (
-    <section className={styles.contactSection}>
-      <h2 className={styles.title}>Contact Us</h2>
-      <div className={styles.contactContent}>
-        <div className={styles.contactForm}>
-          <label className={styles.label} htmlFor="name">Name</label>
-          <input className={styles.input} type="text" id="name" placeholder="Your Name" />
-          <label className={styles.label} htmlFor="email">Email</label>
-          <input className={styles.input} type="email" id="email" placeholder="Your Email" />
-          <label className={styles.label} htmlFor="message">Message</label>
-          <textarea className={styles.textarea} id="message" placeholder="Your Message"></textarea>
-          <button className={styles.submitButton}>Submit</button>
-        </div>
-        {/* <div className={styles.contactInfo}>
-          <p>Email: info@example.com</p>
-          <p>Phone: (123) 456-7890</p>
-          <p>Address: 123 Main St, Anytown, USA</p>
-        </div> */}
-      </div>
-    </section>
-  );
-};
+const ContactUsSection = () => {
+    return (
+      <section className={styles.contactUsSection}>
+        <h2 className={styles.title}>Contact Us</h2>
+        <p className={styles.description}>We would love to hear from you! Please fill out the form below and we will get in touch with you shortly.</p>
+        <div className={styles.contactContainer}>
 
-export default ContactSection;
+          <form className={styles.contactForm}>
+            <div className={styles.formGroup}>
+              <label htmlFor="name" className={styles.label}>Name</label>
+              <input type="text" id="name" className={styles.input} placeholder="Your Name" />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="email" className={styles.label}>Email</label>
+              <input type="email" id="email" className={styles.input} placeholder="Your Email" />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="message" className={styles.label}>Message</label>
+              <textarea id="message" className={styles.textarea} placeholder="Your Message"></textarea>
+            </div>
+            <button type="submit" className={styles.button}>Send Message</button>
+          </form>
+          <div className={styles.contactInfo}>
+            <h3 className={styles.contactTitle}>Get in Touch</h3>
+            <p className={styles.contactDetail}><i className="ri-map-pin-line"></i> 123 Main St, Springfield, IL</p>
+            <p className={styles.contactDetail}><i className="ri-phone-line"></i> (123) 456-7890</p>
+            <p className={styles.contactDetail}><i className="ri-mail-line"></i> contact@example.com</p>
+          </div>
+        </div>
+      </section>
+    );
+  };
+  
+  export default ContactUsSection;
