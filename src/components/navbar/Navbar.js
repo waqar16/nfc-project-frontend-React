@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import Logo from '../../assets/img/logo.png';
 
-
 const Navbar = () => {
   useEffect(() => {
     const navMenu = document.getElementById('nav-menu'),
@@ -12,9 +11,13 @@ const Navbar = () => {
       search = document.getElementById('search'),
       searchBtn = document.getElementById('search-btn'),
       searchClose = document.getElementById('search-close'),
-      login = document.getElementById('login'),
-      loginBtn = document.getElementById('login-btn'),
-      loginClose = document.getElementById('login-close');
+      profile = document.getElementById('profile'),
+      profileBtn = document.getElementById('profile-btn'),
+      profileClose = document.getElementById('profile-close');
+
+    const closeProfile = () => {
+      profile.classList.remove('show-profile');
+    };
 
     if (navToggle) {
       navToggle.addEventListener('click', () => {
@@ -40,17 +43,20 @@ const Navbar = () => {
       });
     }
 
-    if (loginBtn) {
-      loginBtn.addEventListener('click', () => {
-        login.classList.add('show-login');
+    if (profileBtn) {
+      profileBtn.addEventListener('click', () => {
+        profile.classList.add('show-profile');
       });
     }
 
-    if (loginClose) {
-      loginClose.addEventListener('click', () => {
-        login.classList.remove('show-login');
-      });
+    if (profileClose) {
+      profileClose.addEventListener('click', closeProfile);
     }
+
+    const profileItems = profile.querySelectorAll('.profile__item');
+    profileItems.forEach(item => {
+      item.addEventListener('click', closeProfile);
+    });
 
     // Cleanup event listeners on component unmount
     return () => {
@@ -78,35 +84,37 @@ const Navbar = () => {
         });
       }
 
-      if (loginBtn) {
-        loginBtn.removeEventListener('click', () => {
-          login.classList.add('show-login');
+      if (profileBtn) {
+        profileBtn.removeEventListener('click', () => {
+          profile.classList.add('show-profile');
         });
       }
 
-      if (loginClose) {
-        loginClose.removeEventListener('click', () => {
-          login.classList.remove('show-login');
-        });
+      if (profileClose) {
+        profileClose.removeEventListener('click', closeProfile);
       }
+
+      profileItems.forEach(item => {
+        item.removeEventListener('click', closeProfile);
+      });
     };
   }, []);
+
 
   return (
     <>
       {/*==================== HEADER ====================*/}
       <header className="header" id="header">
         <nav className="nav container">
-          <Link to={'/'} ><img src={Logo}  alt="Logo" className="nav__logo" /></Link>
-            
-        {/* <a href="#" className="nav__logo">Logo</a> */}
+          <Link to={'/'}><img src={Logo} alt="Logo" className="nav__logo" /></Link>
+          
           <div className="nav__menu" id="nav-menu">
             <ul className="nav__list">
               <li className="nav__item">
                 <Link className='nav__link' to="/">Home</Link>
               </li>
               <li className="nav__item">
-              <Link className='nav__link' to="/about-us">About Us</Link>
+                <Link className='nav__link' to="/about-us">About Us</Link>
               </li>
               <li className="nav__item">
                 <Link to={'/schedule-meeting'} className="nav__link">Schedule a Meeting</Link>
@@ -114,14 +122,7 @@ const Navbar = () => {
               <li className="nav__item">
                 <Link className='nav__link' to="/FAQS">FAQs</Link>
               </li>
-              {/* <li className="nav__item">
-                <a href="#" className="nav__link">Pricing</a>
-              </li>
-              <li className="nav__item">
-                <a href="#" className="nav__link">Services</a>
-              </li> */}
             </ul>
-
             {/* Close button */}
             <div className="nav__close" id="nav-close">
               <i className="ri-close-line"></i>
@@ -132,8 +133,8 @@ const Navbar = () => {
             {/* Search button */}
             <i className="ri-search-line nav__search" id="search-btn"></i>
 
-            {/* Login button */}
-            <Link to={'/user-profile'}> <i className="ri-user-line nav__login"></i></Link>
+            {/* Profile button */}
+            <i className="ri-user-line nav__login" id="profile-btn"></i>
 
             {/* Toggle button */}
             <div className="nav__toggle" id="nav-toggle">
@@ -152,37 +153,16 @@ const Navbar = () => {
         <i className="ri-close-line search__close" id="search-close"></i>
       </div>
 
-      {/*==================== LOGIN ====================*/}
-      {/* <div className="login" id="login">
-        <form action="" className="login__form">
-          <h2 className="login__title">Log In</h2>
-
-          <div className="login__group">
-            <div>
-              <label htmlFor="email" className="login__label">Email</label>
-              <input type="email" placeholder="Write your email" id="email" className="login__input" />
-            </div>
-            <div>
-              <label htmlFor="password" className="login__label">Password</label>
-              <input type="password" placeholder="Enter your password" id="password" className="login__input" />
-            </div>
-          </div>
-
-          <div>
-            <p className="login__signup">
-              You do not have an account? <a href="#">Sign up</a>
-            </p>
-
-            <a href="#" className="login__forgot">
-              You forgot your password
-            </a>
-
-            <button type="submit" className="login__button">Log In</button>
-          </div>
-        </form>
-        <i className="ri-close-line login__close" id="login-close"></i>
-      </div> */}
-      
+      {/*==================== PROFILE ====================*/}
+      <div className="profile" id="profile">
+        <ul className="profile__list">
+          <Link to={'user-profile'}><li className="profile__item">View Profile</li></Link>
+          <Link to={'settings'}><li className="profile__item">Settings</li></Link>
+          <Link to={'help'}><li className="profile__item">Help</li></Link>
+          <Link to={'/'}><li className="profile__item">Logout</li></Link>
+        </ul>
+        <i className="ri-close-line profile__close" id="profile-close"></i>
+      </div>
     </>
   );
 };

@@ -1,7 +1,7 @@
 .scheduleMeetingSection {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 40px 50px;
     background: linear-gradient(to right, rgb(11, 147, 193), purple, orange);
@@ -25,6 +25,7 @@
 }
 
 .title {
+    text-align: center;
     font-size: 3rem;
     margin-bottom: 20px;
     font-weight: 700;
@@ -32,16 +33,19 @@
 }
 
 .description {
+    text-align: center;
     font-size: 1.4rem;
     margin-bottom: 30px;
     line-height: 1.6;
 }
 
+
 .ctaButton {
-    float: left;
-    width: 50%;
+    align-items: center;
+    float: none; /* Remove the float */
+    width: 30%;
     padding: 15px 30px;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: #007bff;
     background-color: #fff;
@@ -49,8 +53,8 @@
     border-radius: 30px;
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
-    display: block;
-    margin: auto;
+    display: block; /* Change to block */
+    margin: auto; /* Center the block */
     text-align: center;
 }
 

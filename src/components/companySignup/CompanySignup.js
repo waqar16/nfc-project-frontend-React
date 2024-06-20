@@ -97,7 +97,7 @@ const CompanySignup = () => {
           </div>
         </div>
 
-        <div className={styles.login__group}>
+        {/* <div className={styles.login__group}>
           <div>
             <label htmlFor="adminName" className={styles.login__label}>Admin Name</label>
             <input type="text" name="adminName" placeholder="Admin Name" value={formData.adminName} onChange={handleChange} className={styles.login__input} required />
@@ -110,13 +110,13 @@ const CompanySignup = () => {
             <label htmlFor="adminPhoneNumber" className={styles.login__label}>Admin Phone Number</label>
             <input type="text" name="adminPhoneNumber" placeholder="Admin Phone Number" value={formData.adminPhoneNumber} onChange={handleChange} className={styles.login__input} required />
           </div>
-        </div>
+        </div> */}
 
         <div className={styles.login__group}>
-          <div>
+          {/* <div>
             <label htmlFor="username" className={styles.login__label}>Username</label>
             <input type="text" name="username" placeholder="Username" value={formData.username} onChange={handleChange} className={styles.login__input} required />
-          </div>
+          </div> */}
           <div>
             <label htmlFor="password" className={styles.login__label}>Password</label>
             <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} className={styles.login__input} required />
@@ -151,26 +151,26 @@ const CompanySignup = () => {
             <label htmlFor="logo" className={styles.login__label}>Upload Logo</label>
             <input type="file" name="logo" onChange={handleChange} className={styles.login__input} />
           </div>
-          <div>
+          {/* <div>
             <label htmlFor="nfcCardRequirements" className={styles.login__label}>NFC Card Requirements</label>
             <textarea name="nfcCardRequirements" placeholder="NFC Card Requirements" value={formData.nfcCardRequirements} onChange={handleChange} className={styles.login__textarea}></textarea>
           </div>
           <div>
             <label htmlFor="appointmentSchedulingPreferences" className={styles.login__label}>Appointment Scheduling Preferences</label>
             <textarea name="appointmentSchedulingPreferences" placeholder="Appointment Scheduling Preferences" value={formData.appointmentSchedulingPreferences} onChange={handleChange} className={styles.login__textarea}></textarea>
-          </div>
+          </div> */}
         </div>
 
         <div className={styles.login__group}>
-          <div>
+          {/* <div>
             <label htmlFor="facebook" className={styles.login__label}>Facebook URL</label>
             <input type="url" name="facebook" placeholder="Facebook URL" value={formData.facebook} onChange={handleChange} className={styles.login__input} />
-          </div>
+          </div> */}
           <div>
             <label htmlFor="linkedin" className={styles.login__label}>LinkedIn URL</label>
             <input type="url" name="linkedin" placeholder="LinkedIn URL" value={formData.linkedin} onChange={handleChange} className={styles.login__input} />
           </div>
-          <div>
+          {/* <div>
             <label htmlFor="instagram" className={styles.login__label}>Instagram URL</label>
             <input type="url" name="instagram" placeholder="Instagram URL" value={formData.instagram} onChange={handleChange} className={styles.login__input} />
           </div>
@@ -181,7 +181,7 @@ const CompanySignup = () => {
           <div>
             <label htmlFor="referralCode" className={styles.login__label}>Referral Code</label>
             <input type="text" name="referralCode" placeholder="Referral Code" value={formData.referralCode} onChange={handleChange} className={styles.login__input} />
-          </div>
+          </div> */}
         </div>
 
         <div className={styles.login__group}>

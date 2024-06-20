@@ -1,4 +1,3 @@
-import './assets/css/Global.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomeLayout from './layout/home/HomeLayout'
 import CompanySignupLayout from './layout/authentication/CompanySignupLayout'
@@ -8,6 +7,7 @@ import PersonalLoginLayout from './layout/authentication/PersonalLoginLayout'
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import UserProfileLayout from  './layout/userProfile/UserProfileLayout'
+import CompanyProfileLayout from  './layout/companyProfile/CompanyProfileLayout'
 import FAQsLayout from  './layout/FAQs/FaqsLayout'
 import AboutUsLayout from  './layout/aboutus/AboutUsLayout'
 import ScheduleMeeting from './components/scheduleMeetings/ScheduleMeetings'; 
@@ -27,6 +27,7 @@ function App() {
           <Route path="/FAQs" element={<FAQsLayout />} />
           <Route path="/about-us" element={<AboutUsLayout />} />
           <Route path="/schedule-meeting" element={<ScheduleMeeting />} />
+          <Route path="/company-profile" element={<CompanyProfileLayout />} />
         </Routes>
         <Footer />
       </div>

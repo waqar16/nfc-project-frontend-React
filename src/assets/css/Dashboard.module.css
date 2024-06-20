@@ -1,0 +1,35 @@
+.dashboardContainer {
+    padding: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 8rem;
+  }
+  
+  .analyticsCard {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+  }
+  
+  .analyticsItem {
+    text-align: center;
+  }
+  
+  .analyticsItem i {
+    font-size: 2rem;
+    color: hsl(230, 75%, 56%);
+    margin-bottom: 0.5rem;
+  }
+  
+  .analyticsItem p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  .analyticsItem h4 {
+    font-size: 1.5rem;
+    color: #333;
+  }
+  

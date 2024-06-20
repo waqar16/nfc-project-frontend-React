@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../../assets/css/UserProfile.module.css';
-import profilePic from '../../assets/img/userPlaceholder.jpg';
+import profilePic from '../../assets/img/bg-image.png'; 
+import Dashboard from '../dashboard/Dashboard';
 
 const UserProfile = () => {
   const [user, setUser] = useState({
@@ -23,6 +24,12 @@ const UserProfile = () => {
     }));
   };
 
+  const [analytics, setAnalytics] = useState({
+    nfc: 120,
+    digitalCard: 75,
+    total: 195,
+  });
+
   const handleProfilePicChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
@@ -38,49 +45,13 @@ const UserProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
     alert('Profile updated successfully!');
   };
 
   return (
+    <>
     <div className={styles.userProfileContainer}>
-      <div className={styles.previewCard}>
-        <div className={styles.profilePicContainer}>
-          <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
-          <label htmlFor="profilePicInput" className={styles.editIcon}>
-            <i className="ri-edit-2-fill"></i>
-          </label>
-          <input
-            type="file"
-            id="profilePicInput"
-            style={{ display: 'none' }}
-            onChange={handleProfilePicChange}
-          />
-        </div>
-        <h2>{user.name}</h2>
-        <p>Email: {user.email}</p>
-        <p>Phone: {user.phone}</p>
-        <p>Address: {user.address}</p>
-        <p>Bio: {user.bio}</p>
-        <div className={styles.socialIcons}>
-          {user.facebook && (
-            <a href={user.facebook} target="_blank" rel="noopener noreferrer">
-              <i className="ri-facebook-circle-fill"></i>
-            </a>
-          )}
-          {user.instagram && (
-            <a href={user.instagram} target="_blank" rel="noopener noreferrer">
-              <i className="ri-instagram-fill"></i>
-            </a>
-          )}
-          {user.linkedin && (
-            <a href={user.linkedin} target="_blank" rel="noopener noreferrer">
-              <i className="ri-linkedin-box-fill"></i>
-            </a>
-          )}
-        </div>
-      </div>
-      <div className={styles.formContainer}>
+            <div className={styles.formContainer}>
         <h2>User Profile Management</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
           <label className={styles.label}>
@@ -167,7 +138,50 @@ const UserProfile = () => {
           </button>
         </form>
       </div>
+      <div className={styles.previewCard}>
+        <div className={styles.profilePicContainer}>
+          <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
+          <label htmlFor="profilePicInput" className={styles.editIcon}>
+            <i className="ri-edit-2-fill"></i>
+          </label>
+          <input
+            type="file"
+            id="profilePicInput"
+            style={{ display: 'none' }}
+            onChange={handleProfilePicChange}
+          />
+        </div>
+        <h2>{user.name}</h2>
+        <p>{user.bio}</p>
+        <div className={styles.contactInfo}>
+          <p><i className="ri-mail-fill"></i> {user.email}</p>
+          <p><i className="ri-phone-fill"></i> {user.phone}</p>
+          <p><i className="ri-map-pin-fill"></i> {user.address}</p>
+        </div>
+        <div className={styles.socialIcons}>
+          {user.facebook && (
+            <a href={user.facebook} target="_blank" rel="noopener noreferrer">
+              <i className="ri-facebook-circle-fill"></i>
+            </a>
+          )}
+          {user.instagram && (
+            <a href={user.instagram} target="_blank" rel="noopener noreferrer">
+              <i className="ri-instagram-fill"></i>
+            </a>
+          )}
+          {user.linkedin && (
+            <a href={user.linkedin} target="_blank" rel="noopener noreferrer">
+              <i className="ri-linkedin-box-fill"></i>
+            </a>
+          )}
+          <i className={`ri-share-forward-line ${styles.shareIcon}`}></i>
+        </div>
+      </div>
+
     </div>
+    <Dashboard analytics={analytics} /> 
+
+    </>
   );
 };
 

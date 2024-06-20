@@ -102,3 +102,37 @@ textarea {
     box-shadow: 0 4px 24px hsla(230, 75%, 40%, .4);
   }
   
+
+  .socialSignup {
+    margin-top: 1rem;
+    text-align: center;
+  }
+  
+  .socialSignup__title {
+    color: var(--text-color);
+    margin-bottom: .5rem;
+  }
+  
+  .socialSignup__button {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    display: inline-block;
+    color: red;
+    /* background-color: var(--first-color); */
+    border: none;
+    padding: .5rem 2rem;
+    margin-bottom: 1rem;
+    border-radius: .25rem;
+    cursor: pointer;
+    transition: background-color .3s;
+  }
+  
+  .socialSignup__button:hover {
+    /* background-color: blue; */
+  }
+  
+  .socialSignup__button i {
+    margin-right: .5rem;
+  }
