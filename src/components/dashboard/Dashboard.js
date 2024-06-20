@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../assets/css/Dashboard.module.css';
+import styles from '../../assets/css/profiles/Dashboard.module.css';
 
 const Dashboard = ({ analytics }) => {
   return (

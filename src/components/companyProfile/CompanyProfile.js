@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../../assets/css/CompanyProfile.module.css';
+import styles from '../../assets/css/profiles/CompanyProfile.module.css';
 import Dashboard from '../dashboard/Dashboard'; // Reusing the Dashboard component for analytics
 
 const CompanyProfile = () => {

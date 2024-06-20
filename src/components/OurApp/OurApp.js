@@ -1,7 +1,7 @@
 import React from 'react';
 import googlePlayBadge from '../../assets/img/play.png'; 
 import appStoreBadge from '../../assets/img/ios.png'; 
-import styles from '../../assets/css/OurApp.module.css'; 
+import styles from '../../assets/css/index/OurApp.module.css'; 
 const DownloadSection = () => {
   return (
     <section className={styles.downloadSection}>

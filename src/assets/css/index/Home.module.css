@@ -23,6 +23,7 @@
 .heroContent h1 {
   background: linear-gradient(to right, rgb(11, 147, 193), purple, orange);
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
   font-size: 3.3rem;
   margin-bottom: 20px;

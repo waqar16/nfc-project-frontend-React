@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../assets/css/FeatureSection.module.css';
+import styles from '../../assets/css/index/FeatureSection.module.css';
 
 const features = [
   {

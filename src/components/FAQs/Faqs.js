@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../../assets/css/Faqs.module.css';
+import styles from '../../assets/css/FAQs/Faqs.module.css';
 
 const Faq = () => {
   const [open, setOpen] = useState({});

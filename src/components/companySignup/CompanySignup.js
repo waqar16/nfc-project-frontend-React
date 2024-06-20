@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../../assets/css/PersonalSignup.module.css';
+import styles from '../../assets/css/authentication/Authentication.module.css';
 import { Link } from 'react-router-dom';
 
 const CompanySignup = () => {

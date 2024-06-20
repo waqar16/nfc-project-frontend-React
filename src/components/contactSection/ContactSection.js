@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../assets/css/ContactSection.module.css';
+import styles from '../../assets/css/index/ContactSection.module.css';
 
 const ContactUsSection = () => {
     return (

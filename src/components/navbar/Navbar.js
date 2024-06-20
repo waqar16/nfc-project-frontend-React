@@ -1,4 +1,4 @@
-import '../../assets/css/styles.css';
+import '../../assets/css/index/styles.css';
 import { Link } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import Logo from '../../assets/img/logo.png';

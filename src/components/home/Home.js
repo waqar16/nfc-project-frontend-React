@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from '../../assets/css/Home.module.css';
+import styles from '../../assets/css/index/Home.module.css';
 import main from'../../assets/img/banner.png'
 // import airbnbLogo from './images/airbnb-logo.png';
 // import slackLogo from './images/slack-logo.png';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../../assets/css/UserProfile.module.css';
+import styles from '../../assets/css/profiles/UserProfile.module.css';
 import profilePic from '../../assets/img/bg-image.png'; 
 import Dashboard from '../dashboard/Dashboard';
 

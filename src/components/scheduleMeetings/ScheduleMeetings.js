@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import styles from '../../assets/css/ScheduleMeeting.module.css';
+import styles from '../../assets/css/profiles/ScheduleMeeting.module.css';
 
 const ScheduleMeeting = () => {
   const [date, setDate] = useState(new Date());

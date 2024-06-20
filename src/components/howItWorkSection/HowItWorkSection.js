@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../assets/css/HowItWorksSection.module.css';
+import styles from '../../assets/css/index/HowItWorksSection.module.css';
 
 const steps = [
   { icon: 'ri-user-add-line', title: 'Sign Up', description: 'Create your account to get started.' },

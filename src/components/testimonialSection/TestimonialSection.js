@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../assets/css/TestimonialsSection.module.css';
+import styles from '../../assets/css/index/TestimonialsSection.module.css';
 
 const testimonials = [
   { name: 'John Doe', feedback: 'This platform has transformed the way I manage my schedule and profiles!' },
