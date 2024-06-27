@@ -9,6 +9,16 @@
     justify-content: center;
     align-items: center;
 }
+.marginCustom{
+    margin-top: 17rem !important;
+
+}
+
+.disabled {
+  background-color: grey; /* Apply grey background when disabled */
+  cursor: not-allowed; /* Optional: Change cursor to not-allowed */
+  opacity: 0.7; /* Optional: Reduce opacity when disabled */
+}
 
 textarea {
   height: 5rem;

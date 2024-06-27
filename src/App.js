@@ -11,6 +11,10 @@ import CompanyProfileLayout from  './layout/companyProfile/CompanyProfileLayout'
 import FAQsLayout from  './layout/FAQs/FaqsLayout'
 import AboutUsLayout from  './layout/aboutus/AboutUsLayout'
 import ScheduleMeeting from './components/scheduleMeetings/ScheduleMeetings'; 
+import ResetPasswordLayout from './layout/authentication/ResetPasswordLayout';
+import ConfirmResetPasswordLayout from './layout/authentication/ConfirmResetPasswordLayout';
+import Activation from './components/accountActivate/activation';
+import ActivationSentTemplate from './components/accountActivate/ActivationSentTemplate';
 
 function App() {
   return (
@@ -28,6 +32,13 @@ function App() {
           <Route path="/about-us" element={<AboutUsLayout />} />
           <Route path="/schedule-meeting" element={<ScheduleMeeting />} />
           <Route path="/company-profile" element={<CompanyProfileLayout />} />
+          <Route path="/reset-password" element={<ResetPasswordLayout />} />
+          <Route path="/password/reset/confirm/:uid/:token" element={<ConfirmResetPasswordLayout />} />
+          <Route path="/activate/:uid/:token" element={<Activation />} />
+          <Route path="/activation-sent" element={<ActivationSentTemplate />} />
+
+
+
         </Routes>
         <Footer />
       </div>
