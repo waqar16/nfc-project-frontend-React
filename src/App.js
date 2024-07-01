@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomeLayout from './layout/home/HomeLayout'
 import CompanySignupLayout from './layout/authentication/CompanySignupLayout'
 import PersonalSignupLayout from './layout/authentication/PersonalSignupLayout'
-import CompanyLoginLayout from './layout/authentication/CompanyLoginLayout'
 import PersonalLoginLayout from './layout/authentication/PersonalLoginLayout'
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
@@ -26,7 +25,6 @@ function App() {
           <Route path="/" element={<HomeLayout />} />
           <Route path="/company-signup" element={<CompanySignupLayout />} />
           <Route path="/personal-signup" element={<PersonalSignupLayout />} />
-          <Route path="/company-login" element={<CompanyLoginLayout />} />
           <Route path="/personal-login" element={<PersonalLoginLayout />} />
           <Route path="/user-profile" element={<UserProfileLayout />} />
           <Route path="/FAQs" element={<FAQsLayout />} />
@@ -38,8 +36,6 @@ function App() {
           <Route path="/activate/:uid/:token" element={<Activation />} />
           <Route path="/activation-sent" element={<ActivationSentTemplate />} />
           <Route path="/digital-profile" element={<DigitalProfileLayout />} />
-
-
 
         </Routes>
         <Footer />

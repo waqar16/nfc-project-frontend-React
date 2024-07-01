@@ -125,7 +125,7 @@ const CompanySignup = () => {
         </div>
         <div>
           <p className={styles.login__signup}>
-            Already have an account? <Link to={"/company-login"}>Log In</Link>
+            Already have an account? <Link to={"/personal-login"}>Log In</Link>
           </p>
           <button type="submit" className={styles.login__button}>Sign Up</button>
         </div>
