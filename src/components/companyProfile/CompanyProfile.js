@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../../assets/css/profiles/CompanyProfile.module.css';
-import Dashboard from '../dashboard/Dashboard'; // Reusing the Dashboard component for analytics
+import Dashboard from '../dashboard/Dashboard';
 
 const CompanyProfile = () => {
   const [company, setCompany] = useState({
-    name: 'Tech Innovators Inc.',
-    email: 'info@techinnovators.com',
-    phone: '+1 800 123 4567',
-    address: '456 Innovation Drive, San Francisco, CA, USA',
-    bio: 'We are a leading tech company specializing in innovative digital solutions.',
-    website: 'https://www.techinnovators.com',
-    profilePic: 'path/to/company-logo.png', // Update with your uploaded image path
+    companyName: '',
+    adminName: '',
+    email: '',
+    phone: '',
+    address: '',
+    bio: '',
+    website: '',
+    profilePic: '', 
     employees: [
       { id: 1, name: 'John Doe', position: 'Software Engineer' },
       { id: 2, name: 'Jane Smith', position: 'Product Manager' },
@@ -24,6 +25,19 @@ const CompanyProfile = () => {
     digitalCard: 200,
     total: 500,
   });
+
+  useEffect(() => {
+    const storedCompany = {
+      companyName: localStorage.getItem('first_name') || '',
+      adminName: localStorage.getItem('last_name') || '',
+      email: localStorage.getItem('email') || '',
+      username: localStorage.getItem('username') || '',
+    };
+    setCompany((prevCompany) => ({
+      ...prevCompany,
+      ...storedCompany,
+    }));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

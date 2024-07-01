@@ -5,8 +5,7 @@ import axios from 'axios';
 
 const CompanySignup = () => {
   const [companyName, setCompanyName] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [adminName, setAdminName] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -16,9 +15,9 @@ const CompanySignup = () => {
   const [passwordError, setPasswordError] = useState('');
   const navigate = useNavigate();
 
-  const handleCompanyNameChange = (e) => setCompanyName(e.target.value);
-  const handleFirstNameChange = (e) => setFirstName(e.target.value);
-  const handleLasttNameChange = (e) => setLastName(e.target.value);
+  // const handleCompanyNameChange = (e) => setCompanyName(e.target.value);
+  const handleFirstNameChange = (e) => setCompanyName(e.target.value);
+  const handleLasttNameChange = (e) => setAdminName(e.target.value);
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
     setUsernameError('');
@@ -54,9 +53,8 @@ const CompanySignup = () => {
 
     try {
       const response = await axios.post('http://127.0.0.1:8000/auth/users/', {
-        company_name: companyName,
-        first_name: firstName,
-        last_name: lastName,
+        first_name: companyName,
+        last_name: adminName,
         email,
         username,
         password,
@@ -64,6 +62,7 @@ const CompanySignup = () => {
 
       if (response.status === 201) { // Check if user was successfully created
         console.log('User registered successfully:', response.data);
+        
         navigate('/activation-sent');
         // Optionally, navigate to a different route or show a success message
       }
@@ -92,17 +91,17 @@ const CompanySignup = () => {
       <h2 className={styles.login__title}>Signup As Company</h2>
 
       <div className={styles.login__group}>
-      <div>
+      {/* <div>
             <label htmlFor="companyName" className={styles.login__label}>Company Name</label>
             <input type="text" name="companyName" placeholder="Company Name" value={companyName} onChange={handleCompanyNameChange} className={styles.login__input} required />
+          </div> */}
+          <div>
+            <label htmlFor="first_name" className={styles.login__label}>Company Name</label>
+            <input required type="text" placeholder="First name" id="firstName" className={styles.login__input} value={companyName} onChange={handleFirstNameChange} />
           </div>
           <div>
-            <label htmlFor="first_name" className={styles.login__label}>First Name</label>
-            <input required type="text" placeholder="First name" id="firstName" className={styles.login__input} value={firstName} onChange={handleFirstNameChange} />
-          </div>
-          <div>
-            <label htmlFor="last_name" className={styles.login__label}>Last Name</label>
-            <input required type="text" placeholder="Last Name" id="lastName" className={styles.login__input} value={lastName} onChange={handleLasttNameChange} />
+            <label htmlFor="last_name" className={styles.login__label}>Admin Name</label>
+            <input required type="text" placeholder="Last Name" id="lastName" className={styles.login__input} value={adminName} onChange={handleLasttNameChange} />
           </div>
           <div>
             <label htmlFor="email" className={styles.login__label}>Email</label>

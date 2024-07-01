@@ -61,8 +61,12 @@ const PersonalSignup = () => {
 
       if (response.status === 201) { // Check if user was successfully created
         console.log('User registered successfully:', response.data);
+        const userInfo = response.data;
+        localStorage.setItem('first_name', userInfo.first_name);
+        localStorage.setItem('last_name', userInfo.last_name);
+        localStorage.setItem('email', userInfo.email);
+        localStorage.setItem('username', userInfo.username);
         navigate('/activation-sent');
-        // Optionally, navigate to a different route or show a success message
       }
     } catch (error) {
       if (error.response && error.response.data) {

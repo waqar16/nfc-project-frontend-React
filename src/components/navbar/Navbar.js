@@ -189,11 +189,11 @@ const Navbar = () => {
             <Link to={'user-profile'}>
               <li className="profile__item">View Profile</li>
             </Link>
-            <Link to={'settings'}>
-              <li className="profile__item">Settings</li>
+            <Link to={'manage-card'}>
+              <li className="profile__item">Manage Card</li>
             </Link>
-            <Link to={'help'}>
-              <li className="profile__item">Help</li>
+            <Link to={'digital-profile'}>
+              <li className="profile__item">Manage Digital Profile</li>
             </Link>
             <Link to={'/'}>
               <li onClick={handleLogout} className="profile__item">

@@ -9,7 +9,7 @@ const Home = () => {
 
   const handleCompanyButtonClick = () => {
     if (authToken) {
-      navigate('/company-profile'); // Change this to your company's profile route
+      navigate('/company-signup'); // Change this to your company's profile route
     } else {
       navigate('/company-signup');
     }
@@ -17,7 +17,7 @@ const Home = () => {
 
   const handleIndividualButtonClick = () => {
     if (authToken) {
-      navigate('/user-profile'); // Change this to your individual's profile route
+      navigate('/personal-signup'); // Change this to your individual's profile route
     } else {
       navigate('/personal-signup');
     }

@@ -15,6 +15,7 @@ import ResetPasswordLayout from './layout/authentication/ResetPasswordLayout';
 import ConfirmResetPasswordLayout from './layout/authentication/ConfirmResetPasswordLayout';
 import Activation from './components/accountActivate/activation';
 import ActivationSentTemplate from './components/accountActivate/ActivationSentTemplate';
+import DigitalProfileLayout from './layout/userProfile/DigitalProfileLayout';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="/password/reset/confirm/:uid/:token" element={<ConfirmResetPasswordLayout />} />
           <Route path="/activate/:uid/:token" element={<Activation />} />
           <Route path="/activation-sent" element={<ActivationSentTemplate />} />
+          <Route path="/digital-profile" element={<DigitalProfileLayout />} />
 
 
 

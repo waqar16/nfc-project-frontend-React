@@ -29,16 +29,17 @@ const PersonalLogin = () => {
       });
       
       if (response.status === 200) {
-        const { token } = response.data;
-        localStorage.setItem('authToken', token);
+        const token = response.data;
+        localStorage.setItem('authToken', token.auth_token);
         console.log('User logged in successfully:', response.data);
+        console.log('Token:', token.auth_token);
 
         // Dispatch custom event to update Navbar state
         const event = new Event('authStatusChanged');
         window.dispatchEvent(event);
-        navigate('/user-profile')
+        navigate('/')
         // Hard refresh the page
-        window.location.reload();
+        // window.location.reload();
 
       }
     } catch (error) {

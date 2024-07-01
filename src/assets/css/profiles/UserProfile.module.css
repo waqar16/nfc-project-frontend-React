@@ -1,102 +1,13 @@
 .userProfileContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   padding: 2rem;
   margin-top: 75px;
 }
 
-.previewCard {
-  height: fit-content;
-  flex: 1;
-  padding: 2rem;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  margin-left: 2rem;
-  position: relative;
-}
-
-.profilePicContainer {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.profilePic {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.editIcon {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background-color: #fff;
-  border-radius: 50%;
-  padding: 0.5rem;
-  cursor: pointer;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-}
-
-.editIcon i {
-  font-size: 1.2rem;
-  color: hsl(230, 75%, 56%);
-}
-
-.contactInfo {
-  margin-top: 1rem;
-}
-
-.contactInfo p {
-  display: flex;
-  align-items: center;
-  font-size: 1em;
-  color: #666;
-  margin: 0.5rem 0;
-}
-
-.contactInfo i {
-  margin-right: 0.5rem;
-}
-
-.socialIcons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.socialIcons a {
-  font-size: 2rem;
-  color: #333;
-}
-
-.socialIcons a:hover {
-  color: hsl(230, 69%, 61%);
-
-}
-.shareIcon {
-  border-radius: 50%;
-  padding: 8px 10px;
-  background-color:hsl(230, 69%, 61%);
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  font-size: 2rem;
-  color: white;
-  cursor: pointer;
-}
-
-.shareIcon:hover {
-  background-color: hsl(230, 77%, 65%);
-}
-
 .formContainer {
-  flex: 2;
+  flex: 1;
+  max-width: 600px;
   padding: 2rem;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -122,9 +33,10 @@ h2 {
 }
 
 .input,
-.textarea {
+.textarea,
+.button {
   width: 100%;
-  padding: 0.5rem;
+  padding: 10px;
   margin-top: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -149,39 +61,4 @@ h2 {
 
 .button:hover {
   background-color: hsl(230, 79%, 61%);
-}
-
-
-
-@media (max-width: 768px) {
-
-  .shareIcon {
-    border-radius: 50%;
-    padding: 8px 10px;
-    background-color:hsl(230, 69%, 61%);
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    font-size: 1.2rem;
-    color: white;
-    cursor: pointer;
-  }
-
-  .userProfileContainer {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .previewCard {
-    position: relative;
-    margin-top: 50px;
-    margin-right: 0;
-    margin-bottom: 2rem;
-    width: 100%;
-    max-width: 400px;
-  }
-
-  .formContainer {
-    width: 100%;
-  }
 }

@@ -1,20 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styles from '../../assets/css/profiles/UserProfile.module.css';
-import profilePic from '../../assets/img/bg-image.png'; 
-import Dashboard from '../dashboard/Dashboard';
+import profilePic from '../../assets/img/bg-image.png';
 
 const UserProfile = () => {
   const [user, setUser] = useState({
-    name: 'Waqar Ahmed Khan',
-    email: 'wa4752928@gmail.com',
-    phone: '+92 316 2309308',
-    address: '123 Main St, Karachi, Pakistan',
-    bio: 'I am a full-stack web developer with 1 years of experience. I love to work on challenging projects.',
-    facebook: 'https://www.facebook.com/',
-    instagram: 'https://www.instagram.com/',
-    linkedin: 'https://www.linkedin.com/',
-    profilePic: profilePic,
+    // firstname: '',
+    // lastname: '',
+    // email: '',
+    phone: '',
+    address: '',
+    bio: '',
+    facebook: '',
+    instagram: '',
+    linkedin: '',
+    profilePic: '',
   });
+
+  useEffect(() => {
+    const storedUser = {
+      firstname: localStorage.getItem('first_name') || '',
+      lastname: localStorage.getItem('last_name') || '',
+      email: localStorage.getItem('email') || '',
+      username: localStorage.getItem('username') || '',
+    };
+    setUser((prevUser) => ({
+      ...prevUser,
+      ...storedUser,
+    }));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,12 +37,6 @@ const UserProfile = () => {
       [name]: value,
     }));
   };
-
-  const [analytics, setAnalytics] = useState({
-    nfc: 120,
-    digitalCard: 75,
-    total: 195,
-  });
 
   const handleProfilePicChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -43,37 +51,30 @@ const UserProfile = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Profile updated successfully!');
+    try {
+      const authToken = localStorage.getItem('authToken');
+      console.log(authToken)
+      await axios.post('http://127.0.0.1:8000/api/profiles/', user, {
+        headers: {
+          Authorization: `Token ${authToken}`
+        }
+      });
+      localStorage.setItem('userProfile', JSON.stringify(user));
+      alert('Profile updated successfully!');
+    }catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile.');
+    }
   };
 
   return (
-    <>
     <div className={styles.userProfileContainer}>
-            <div className={styles.formContainer}>
+      <div className={styles.formContainer}>
         <h2>User Profile Management</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
-          <label className={styles.label}>
-            Name:
-            <input
-              type="text"
-              name="name"
-              value={user.name}
-              onChange={handleChange}
-              className={styles.input}
-            />
-          </label>
-          <label className={styles.label}>
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={user.email}
-              onChange={handleChange}
-              className={styles.input}
-            />
-          </label>
+
           <label className={styles.label}>
             Phone:
             <input
@@ -102,6 +103,15 @@ const UserProfile = () => {
               onChange={handleChange}
               className={styles.textarea}
             ></textarea>
+          </label>
+          <label className={styles.label}>
+            Upload Profile Picture:
+            <input
+              type="file"
+              id="profilePicInput"
+              onChange={handleProfilePicChange}
+              className={styles.input}
+            />
           </label>
           <label className={styles.label}>
             Facebook:
@@ -138,50 +148,7 @@ const UserProfile = () => {
           </button>
         </form>
       </div>
-      <div className={styles.previewCard}>
-        <div className={styles.profilePicContainer}>
-          <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
-          <label htmlFor="profilePicInput" className={styles.editIcon}>
-            <i className="ri-edit-2-fill"></i>
-          </label>
-          <input
-            type="file"
-            id="profilePicInput"
-            style={{ display: 'none' }}
-            onChange={handleProfilePicChange}
-          />
-        </div>
-        <h2>{user.name}</h2>
-        <p>{user.bio}</p>
-        <div className={styles.contactInfo}>
-          <p><i className="ri-mail-fill"></i> {user.email}</p>
-          <p><i className="ri-phone-fill"></i> {user.phone}</p>
-          <p><i className="ri-map-pin-fill"></i> {user.address}</p>
-        </div>
-        <div className={styles.socialIcons}>
-          {user.facebook && (
-            <a href={user.facebook} target="_blank" rel="noopener noreferrer">
-              <i className="ri-facebook-circle-fill"></i>
-            </a>
-          )}
-          {user.instagram && (
-            <a href={user.instagram} target="_blank" rel="noopener noreferrer">
-              <i className="ri-instagram-fill"></i>
-            </a>
-          )}
-          {user.linkedin && (
-            <a href={user.linkedin} target="_blank" rel="noopener noreferrer">
-              <i className="ri-linkedin-box-fill"></i>
-            </a>
-          )}
-          <i className={`ri-share-forward-line ${styles.shareIcon}`}></i>
-        </div>
-      </div>
-
     </div>
-    <Dashboard analytics={analytics} /> 
-
-    </>
   );
 };
 
