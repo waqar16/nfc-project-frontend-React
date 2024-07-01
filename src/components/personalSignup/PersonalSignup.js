@@ -13,6 +13,7 @@ const PersonalSignup = () => {
   const [emailError, setEmailError] = useState('');
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [loading, setLoading] = useState(false); // Added loading state
   const navigate = useNavigate();
 
   const handleFirstNameChange = (e) => setFirstName(e.target.value);
@@ -44,8 +45,11 @@ const PersonalSignup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     if (password !== confirmPassword) {
       setPasswordError('Passwords do not match.');
+      setLoading(false);
       return;
     }
     setPasswordError('');
@@ -59,7 +63,7 @@ const PersonalSignup = () => {
         password,
       });
 
-      if (response.status === 201) { // Check if user was successfully created
+      if (response.status === 201) {
         console.log('User registered successfully:', response.data);
         const userInfo = response.data;
         localStorage.setItem('first_name', userInfo.first_name);
@@ -83,12 +87,13 @@ const PersonalSignup = () => {
       } else {
         console.error('Error registering user:', error.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={`${styles.login} ${styles.marginCustom}`}>
-
       <form className={styles.login__form} onSubmit={handleSubmit}>
         <h2 className={styles.login__title}>Sign Up As Individual</h2>
         <div className={styles.login__group}>
@@ -124,7 +129,9 @@ const PersonalSignup = () => {
           <p className={styles.login__signup}>
             Already have an account? <Link to={"/personal-login"}>Log In</Link>
           </p>
-          <button type="submit" className={styles.login__button}>Sign Up</button>
+          <button type="submit" className={styles.login__button} disabled={loading}>
+            {loading ? 'Signing Up...' : 'Sign Up'}
+          </button>
         </div>
       </form>
     </div>

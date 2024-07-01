@@ -19,7 +19,8 @@ const PersonalLogin = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
+    window.location.reload();
     setLoading(true);
 
     try {
@@ -39,7 +40,7 @@ const PersonalLogin = () => {
         window.dispatchEvent(event);
         navigate('/')
         // Hard refresh the page
-        // window.location.reload();
+        window.location.reload();
 
       }
     } catch (error) {

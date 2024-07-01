@@ -1,9 +1,10 @@
 import React from 'react';
 import styles from '../../assets/css/profiles/Dashboard.module.css';
-
+import Sidebar from '../sidebar/Sidebar';
 const Dashboard = ({ analytics }) => {
   return (
     <div className={styles.dashboardContainer}>
+      <Sidebar />
       <h3>Profile Visit Analytics</h3>
       <div className={styles.analyticsCard}>
         <div className={styles.analyticsItem}>

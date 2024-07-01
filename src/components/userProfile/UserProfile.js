@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Sidebar from '../sidebar/Sidebar'; // Import the Sidebar component
 import styles from '../../assets/css/profiles/UserProfile.module.css';
 import profilePic from '../../assets/img/bg-image.png';
 
 const UserProfile = () => {
   const [user, setUser] = useState({
-    // firstname: '',
-    // lastname: '',
-    // email: '',
     phone: '',
     address: '',
     bio: '',
@@ -55,15 +53,15 @@ const UserProfile = () => {
     e.preventDefault();
     try {
       const authToken = localStorage.getItem('authToken');
-      console.log(authToken)
+      console.log(authToken);
       await axios.post('http://127.0.0.1:8000/api/profiles/', user, {
         headers: {
-          Authorization: `Token ${authToken}`
-        }
+          Authorization: `Token ${authToken}`,
+        },
       });
       localStorage.setItem('userProfile', JSON.stringify(user));
       alert('Profile updated successfully!');
-    }catch (error) {
+    } catch (error) {
       console.error('Error updating profile:', error);
       alert('Failed to update profile.');
     }
@@ -71,10 +69,40 @@ const UserProfile = () => {
 
   return (
     <div className={styles.userProfileContainer}>
+      <Sidebar />
       <div className={styles.formContainer}>
         <h2>User Profile Management</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
-
+          <label className={styles.label}>
+            First Name:
+            <input
+              type="text"
+              name="firstname"
+              value={user.firstname}
+              onChange={handleChange}
+              className={styles.input}
+            />
+          </label>
+          <label className={styles.label}>
+            Last Name:
+            <input
+              type="text"
+              name="lastname"
+              value={user.lastname}
+              onChange={handleChange}
+              className={styles.input}
+            />
+          </label>
+          <label className={styles.label}>
+            Email:
+            <input
+              type="text"
+              name="email"
+              value={user.email}
+              onChange={handleChange}
+              className={styles.input}
+            />
+          </label>
           <label className={styles.label}>
             Phone:
             <input

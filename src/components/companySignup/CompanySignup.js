@@ -13,9 +13,9 @@ const CompanySignup = () => {
   const [emailError, setEmailError] = useState('');
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [loading, setLoading] = useState(false); // Added loading state
   const navigate = useNavigate();
 
-  // const handleCompanyNameChange = (e) => setCompanyName(e.target.value);
   const handleFirstNameChange = (e) => setCompanyName(e.target.value);
   const handleLasttNameChange = (e) => setAdminName(e.target.value);
   const handleUsernameChange = (e) => {
@@ -45,8 +45,11 @@ const CompanySignup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     if (password !== confirmPassword) {
       setPasswordError('Passwords do not match.');
+      setLoading(false);
       return;
     }
     setPasswordError('');
@@ -60,11 +63,9 @@ const CompanySignup = () => {
         password,
       });
 
-      if (response.status === 201) { // Check if user was successfully created
-        console.log('User registered successfully:', response.data);
-        
+      if (response.status === 201) {
+        console.log('Company registered successfully:', response.data);
         navigate('/activation-sent');
-        // Optionally, navigate to a different route or show a success message
       }
     } catch (error) {
       if (error.response && error.response.data) {
@@ -79,29 +80,25 @@ const CompanySignup = () => {
           setPasswordError(data.password[0]);
         }
       } else {
-        console.error('Error registering user:', error.message);
+        console.error('Error registering company:', error.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
-
   return (
     <div className={`${styles.login} ${styles.marginCustom}`}>
-    <form action="" className={styles.login__form} onSubmit={handleSubmit}>
-      <h2 className={styles.login__title}>Signup As Company</h2>
-
-      <div className={styles.login__group}>
-      {/* <div>
-            <label htmlFor="companyName" className={styles.login__label}>Company Name</label>
-            <input type="text" name="companyName" placeholder="Company Name" value={companyName} onChange={handleCompanyNameChange} className={styles.login__input} required />
-          </div> */}
+      <form className={styles.login__form} onSubmit={handleSubmit}>
+        <h2 className={styles.login__title}>Signup As Company</h2>
+        <div className={styles.login__group}>
           <div>
             <label htmlFor="first_name" className={styles.login__label}>Company Name</label>
-            <input required type="text" placeholder="First name" id="firstName" className={styles.login__input} value={companyName} onChange={handleFirstNameChange} />
+            <input required type="text" placeholder="Company name" id="companyName" className={styles.login__input} value={companyName} onChange={handleFirstNameChange} />
           </div>
           <div>
             <label htmlFor="last_name" className={styles.login__label}>Admin Name</label>
-            <input required type="text" placeholder="Last Name" id="lastName" className={styles.login__input} value={adminName} onChange={handleLasttNameChange} />
+            <input required type="text" placeholder="Admin name" id="adminName" className={styles.login__input} value={adminName} onChange={handleLasttNameChange} />
           </div>
           <div>
             <label htmlFor="email" className={styles.login__label}>Email</label>
@@ -127,7 +124,9 @@ const CompanySignup = () => {
           <p className={styles.login__signup}>
             Already have an account? <Link to={"/personal-login"}>Log In</Link>
           </p>
-          <button type="submit" className={styles.login__button}>Sign Up</button>
+          <button type="submit" className={styles.login__button} disabled={loading}>
+            {loading ? 'Signing Up...' : 'Sign Up'}
+          </button>
         </div>
       </form>
     </div>

@@ -1,0 +1,63 @@
+/* EmployeeProfile.module.css */
+
+.employeeProfileContainer {
+    width: 100%;
+    max-width: 800px;
+    margin: 7rem auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .active {
+    color: green; 
+  }
+  
+  .profileSummary {
+    margin-bottom: 20px;
+  }
+  
+  .profileSummaryContent {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profilePicContainer {
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+  
+  .profilePic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .profileInfo {
+    flex: 1;
+  }
+  
+  .section {
+    margin-bottom: 20px;
+  }
+  
+  .section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+  
+  .interactionsList,
+  .appointmentsList {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .interactionsList li,
+  .appointmentsList li {
+    margin-bottom: 10px;
+  }
+  

@@ -20,11 +20,6 @@ const CompanyProfile = () => {
 
   const [newEmployee, setNewEmployee] = useState({ name: '', position: '' });
   const [editingEmployee, setEditingEmployee] = useState(null);
-  const [analytics, setAnalytics] = useState({
-    nfc: 300,
-    digitalCard: 200,
-    total: 500,
-  });
 
   useEffect(() => {
     const storedCompany = {
@@ -270,7 +265,6 @@ const CompanyProfile = () => {
           </form>
         )}
       </div>
-      <Dashboard analytics={analytics} />
     </div>
   );
 };

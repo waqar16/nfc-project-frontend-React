@@ -19,12 +19,20 @@ const Navbar = () => {
     localStorage.removeItem('authToken');
     setIsAuthenticated(false);
     navigate('/');
+    window.location.reload();
   };
 
   const closeProfile = useCallback(() => {
     const profile = document.getElementById('profile');
     if (profile) {
       profile.classList.remove('show-profile');
+    }
+  }, []);
+
+  const closeNotifications = useCallback(() => {
+    const notifications = document.getElementById('notifications');
+    if (notifications) {
+      notifications.classList.remove('show-notifications');
     }
   }, []);
 
@@ -38,6 +46,9 @@ const Navbar = () => {
     const profile = document.getElementById('profile');
     const profileBtn = document.getElementById('profile-btn');
     const profileClose = document.getElementById('profile-close');
+    const notifications = document.getElementById('notifications');
+    const notificationsBtn = document.getElementById('notifications-btn');
+    const notificationsClose = document.getElementById('notifications-close');
 
     if (navToggle) {
       navToggle.addEventListener('click', () => {
@@ -71,6 +82,16 @@ const Navbar = () => {
 
     if (profileClose) {
       profileClose.addEventListener('click', closeProfile);
+    }
+
+    if (notificationsBtn) {
+      notificationsBtn.addEventListener('click', () => {
+        notifications.classList.add('show-notifications');
+      });
+    }
+
+    if (notificationsClose) {
+      notificationsClose.addEventListener('click', closeNotifications);
     }
 
     const profileItems = document.querySelectorAll('.profile__item');
@@ -114,11 +135,21 @@ const Navbar = () => {
         profileClose.removeEventListener('click', closeProfile);
       }
 
+      if (notificationsBtn) {
+        notificationsBtn.removeEventListener('click', () => {
+          notifications.classList.add('show-notifications');
+        });
+      }
+
+      if (notificationsClose) {
+        notificationsClose.removeEventListener('click', closeNotifications);
+      }
+
       profileItems.forEach((item) => {
         item.removeEventListener('click', closeProfile);
       });
     };
-  }, [closeProfile]);
+  }, [closeProfile, closeNotifications]);
 
   return (
     <>
@@ -162,6 +193,9 @@ const Navbar = () => {
             {/* Search button */}
             <i className="ri-search-line nav__search" id="search-btn"></i>
 
+            {/* Notification button */}
+            <i className="ri-notification-line nav__search" id="notifications-btn"></i>
+
             {/* Profile button */}
             <i className="ri-user-line nav__login" id="profile-btn"></i>
 
@@ -187,13 +221,13 @@ const Navbar = () => {
         {isAuthenticated ? (
           <ul className="profile__list">
             <Link to={'user-profile'}>
-              <li className="profile__item">View Profile</li>
+              <li className="profile__item">Manage Profile</li>
             </Link>
             <Link to={'manage-card'}>
-              <li className="profile__item">Manage Card</li>
+              <li className="profile__item">NFC Card</li>
             </Link>
             <Link to={'digital-profile'}>
-              <li className="profile__item">Manage Digital Profile</li>
+              <li className="profile__item">Digital Profile</li>
             </Link>
             <Link to={'/'}>
               <li onClick={handleLogout} className="profile__item">
@@ -215,6 +249,22 @@ const Navbar = () => {
           </div>
         )}
         <i className="ri-close-line profile__close" id="profile-close"></i>
+      </div>
+
+      {/*==================== NOTIFICATIONS ====================*/}
+      <div className="notifications" id="notifications">
+        <div className="notifications-container">
+          <ul className="notifications__list">
+            <li className="notifications__item"><i style={{color:"black", padding:"8px"}} className="ri-notification-line "></i> Digital card sent successfully to user 125</li>
+          </ul>
+          <ul className="notifications__list">
+          <li className="notifications__item"><i style={{color:"black", padding:"8px"}} className="ri-notification-line "></i> Digital card sent successfully to user 125</li>
+          </ul>
+          <ul className="notifications__list">
+          <li className="notifications__item"><i style={{color:"black", padding:"8px"}} className="ri-notification-line "></i> Digital card sent successfully to user 125</li>
+          </ul>
+        </div>
+        <i className="ri-close-line notifications__close" id="notifications-close"></i>
       </div>
     </>
   );
