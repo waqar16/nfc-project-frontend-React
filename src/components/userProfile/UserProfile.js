@@ -2,30 +2,80 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from '../sidebar/Sidebar'; // Import the Sidebar component
 import styles from '../../assets/css/profiles/UserProfile.module.css';
-import profilePic from '../../assets/img/bg-image.png';
 
 const UserProfile = () => {
   const [user, setUser] = useState({
+    user: '',
+    first_name: '',
+    last_name: '',
+    email: '',
     phone: '',
     address: '',
     bio: '',
     facebook: '',
     instagram: '',
     linkedin: '',
-    profilePic: '',
   });
+  const [profileExists, setProfileExists] = useState(false);
 
   useEffect(() => {
-    const storedUser = {
-      firstname: localStorage.getItem('first_name') || '',
-      lastname: localStorage.getItem('last_name') || '',
-      email: localStorage.getItem('email') || '',
-      username: localStorage.getItem('username') || '',
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        const userResponse = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        });
+
+        const { id, first_name, last_name, email } = userResponse.data;
+
+        try {
+          const profileResponse = await axios.get(`http://127.0.0.1:8000/api/profiles/${id}/`, {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          });
+
+          setUser({
+            user: id,
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            phone: profileResponse.data.phone || '',
+            address: profileResponse.data.address || '',
+            bio: profileResponse.data.bio || '',
+            facebook: profileResponse.data.facebook || '',
+            instagram: profileResponse.data.instagram || '',
+            linkedin: profileResponse.data.linkedin || '',
+          });
+          setProfileExists(true);
+        } catch (error) {
+          if (error.response && error.response.status === 404) {
+            // Profile does not exist
+            setUser({
+              user: id,
+              first_name: first_name,
+              last_name: last_name,
+              email: email,
+              phone: '',
+              address: '',
+              bio: '',
+              facebook: '',
+              instagram: '',
+              linkedin: '',
+            });
+            setProfileExists(false);
+          } else {
+            console.error('Error fetching profile:', error);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
     };
-    setUser((prevUser) => ({
-      ...prevUser,
-      ...storedUser,
-    }));
+
+    fetchUserData();
   }, []);
 
   const handleChange = (e) => {
@@ -36,49 +86,60 @@ const UserProfile = () => {
     }));
   };
 
-  const handleProfilePicChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setUser((prevUser) => ({
-          ...prevUser,
-          profilePic: e.target.result,
-        }));
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const authToken = localStorage.getItem('authToken');
-      console.log(authToken);
-      await axios.post('http://127.0.0.1:8000/api/profiles/', user, {
+      if (profileExists) {
+        await axios.put(`http://127.0.0.1:8000/api/profiles/${user.user}/`, user, {
+          headers: {
+            Authorization: `Token ${authToken}`,
+          },
+        });
+        alert('Profile updated successfully!');
+      } else {
+        await axios.post('http://127.0.0.1:8000/api/profiles/', user, {
+          headers: {
+            Authorization: `Token ${authToken}`,
+          },
+        });
+        alert('Profile created successfully!');
+      }
+      
+      // Fetch updated profile data
+      const profileResponse = await axios.get(`http://127.0.0.1:8000/api/profiles/${user.user}/`, {
         headers: {
           Authorization: `Token ${authToken}`,
         },
       });
-      localStorage.setItem('userProfile', JSON.stringify(user));
-      alert('Profile updated successfully!');
+
+      setUser(profileResponse.data);
+      setProfileExists(true);
     } catch (error) {
-      console.error('Error updating profile:', error);
-      alert('Failed to update profile.');
+      console.error('Error updating/creating profile:', error);
+      alert('Failed to update/create profile.');
     }
   };
 
   return (
     <div className={styles.userProfileContainer}>
-      <Sidebar />
+      <Sidebar profileType="individual" />
       <div className={styles.formContainer}>
         <h2>User Profile Management</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
+          <input
+            type="hidden"
+            name="user"
+            value={user.user}
+            onChange={handleChange}
+            className={styles.input}
+          />
           <label className={styles.label}>
             First Name:
             <input
               type="text"
-              name="firstname"
-              value={user.firstname}
+              name="first_name"
+              value={user.first_name}
               onChange={handleChange}
               className={styles.input}
             />
@@ -87,8 +148,8 @@ const UserProfile = () => {
             Last Name:
             <input
               type="text"
-              name="lastname"
-              value={user.lastname}
+              name="last_name"
+              value={user.last_name}
               onChange={handleChange}
               className={styles.input}
             />
@@ -101,6 +162,7 @@ const UserProfile = () => {
               value={user.email}
               onChange={handleChange}
               className={styles.input}
+              readOnly // Assuming email is not editable
             />
           </label>
           <label className={styles.label}>
@@ -133,15 +195,6 @@ const UserProfile = () => {
             ></textarea>
           </label>
           <label className={styles.label}>
-            Upload Profile Picture:
-            <input
-              type="file"
-              id="profilePicInput"
-              onChange={handleProfilePicChange}
-              className={styles.input}
-            />
-          </label>
-          <label className={styles.label}>
             Facebook:
             <input
               type="url"
@@ -172,7 +225,7 @@ const UserProfile = () => {
             />
           </label>
           <button type="submit" className={styles.button}>
-            Update Profile
+            {profileExists ? 'Update Profile' : 'Create Profile'}
           </button>
         </form>
       </div>

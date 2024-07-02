@@ -6,6 +6,7 @@
 }
 
 .formContainer {
+  background: #fff;
   flex: 1;
   max-width: 600px;
   padding: 2rem;

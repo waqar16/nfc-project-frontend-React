@@ -1,20 +1,30 @@
 .digitalProfileContainer {
-  margin-top: 40px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
-  /* background-color: #f0f0f0; */
+  padding: 2rem;
+  margin-top: 75px;
 }
 
 .profileCard {
   width: 400px;
   background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.profileCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.profileHeader {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
   padding: 20px;
-  /* text-align: center; */
+  border-bottom: 1px solid #ddd;
 }
 
 .profilePic {
@@ -22,6 +32,7 @@
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
+  border: 4px solid #fff;
   margin-bottom: 10px;
 }
 
@@ -36,42 +47,97 @@
 }
 
 .contactInfo p {
-  color: #666;
+  color: #eee;
   margin: 5px 0;
 }
 
 .bio {
   font-size: 0.9em;
   line-height: 1.5;
-  margin-bottom: 20px;
+  margin: 20px;
+  color: #333;
 }
 
 .socialIcons {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 15px;
+  padding: 20px;
+  border-top: 1px solid #ddd;
 }
 
 .socialIcons a {
-  font-size: 1.5em;
-  color: #333;
+  font-size: 1.9em;
+  color: #555;
+  transition: color 0.3s;
+}
+
+.socialIcons a:hover {
+  color: #000;
 }
 
 .cardActions {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin-top: 20px;
 }
 
 .actionButton {
-  padding: 10px 20px;
+  margin: 10px;
+  padding: 10px;
+  width: 50px;
+  height: 50px;
   font-size: 1em;
   color: #fff;
-  background-color: #007bff;
+  background-color: #667eea;
   border: none;
-  border-radius: 5px;
+  border-radius: 50%; /* Keeps the button round initially */
   cursor: pointer;
-  margin: 8px 10px;
+  overflow: hidden; /* Ensures that the text is hidden initially */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: width 0.6s ease, border-radius 0.3s ease; /* Smooth transition for width and border-radius */
 }
 
 .actionButton:hover {
-  background-color: #0056b3;
+  width: 160px; /* Expanded width to fit the text */
+  border-radius: 20px; /* Adjusts the border-radius to make it less round and more like a traditional button */
+  padding: 15px 20px; /* Adjust padding if needed */
+}
+
+.actionButton span {
+  display: none;
+  transition: display 0.3s ease;
+}
+
+.actionButton:hover span {
+  display: inline;
+}
+
+@media (max-width: 768px) {
+  .profileCard {
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .digitalProfileContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cardActions {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    /* margin-top: 20px; */
+  }
+
 }

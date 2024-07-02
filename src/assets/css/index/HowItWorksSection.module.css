@@ -1,5 +1,6 @@
 /* HowItWorksSection.module.css */
 .howItWorksSection {
+  background: white;
   padding: 60px 20px;
   text-align: center;
 }
@@ -16,6 +17,7 @@
 }
 
 .stepCard {
+  background: white;
   padding: 20px;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 10px;

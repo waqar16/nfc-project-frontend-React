@@ -4,7 +4,7 @@ import Sidebar from '../sidebar/Sidebar';
 const Dashboard = ({ analytics }) => {
   return (
     <div className={styles.dashboardContainer}>
-      <Sidebar />
+      <Sidebar profileType="individual" />
       <h3>Profile Visit Analytics</h3>
       <div className={styles.analyticsCard}>
         <div className={styles.analyticsItem}>

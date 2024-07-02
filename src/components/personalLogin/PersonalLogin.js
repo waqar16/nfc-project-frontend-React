@@ -19,8 +19,8 @@ const PersonalLogin = () => {
   };
 
   const handleSubmit = async (e) => {
-    // e.preventDefault();
-    window.location.reload();
+    e.preventDefault();
+    // window.location.reload();
     setLoading(true);
 
     try {
@@ -38,6 +38,7 @@ const PersonalLogin = () => {
         // Dispatch custom event to update Navbar state
         const event = new Event('authStatusChanged');
         window.dispatchEvent(event);
+        
         navigate('/')
         // Hard refresh the page
         window.location.reload();
@@ -47,6 +48,9 @@ const PersonalLogin = () => {
       setLoading(false);
       if (error.response && error.response.data) {
         const data = error.response.data;
+        if (data.non_field_errors) {
+          setError(data.non_field_errors[0]);
+        }
         if (data.error) {
           setError(data.error[0]);
         }

@@ -1,0 +1,76 @@
+
+.nfcContainer {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    margin-top: 90px;
+  }
+
+  .nfcTitle{
+    align-items: center;
+    /* flex-direction: row; */
+    font-size: 2rem;
+    text-align: center;
+  }
+  
+  .card {
+    position: relative;
+    width: 3.5in;
+    height: 2in;
+    background: linear-gradient(135deg, #d9e5f8 0%, #d0d1fa 33%, #ca96fa 66%, #f6975c 100%);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+
+  }
+
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .active{
+    color: green;
+  }
+
+  .notActive{
+    color: red;
+  }
+  
+  .logo {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .userInfo {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    color: black;
+  }
+  
+  .name {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin: 4px 0;
+  }
+  
+  .wifiIcon {
+    rotate: 90deg;
+    position: absolute;
+    top: 40%;
+    right: 50px;
+    transform: translateY(-50%);
+    font-size: 2.1em;
+    color: black;
+  }
+  

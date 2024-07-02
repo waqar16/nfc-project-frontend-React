@@ -1,37 +1,78 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Sidebar from '../sidebar/Sidebar';
 import styles from '../../assets/css/profiles/CompanyProfile.module.css';
-import Dashboard from '../dashboard/Dashboard';
 
 const CompanyProfile = () => {
   const [company, setCompany] = useState({
-    companyName: '',
-    adminName: '',
+    id: null, // Initially null, will be set from Djoser endpoint
+    company_name: '',
+    admin_name: '',
     email: '',
     phone: '',
     address: '',
-    bio: '',
+    company_description: '',
     website: '',
-    profilePic: '', 
-    employees: [
-      { id: 1, name: 'John Doe', position: 'Software Engineer' },
-      { id: 2, name: 'Jane Smith', position: 'Product Manager' },
-    ],
+    employees: [],
   });
-
-  const [newEmployee, setNewEmployee] = useState({ name: '', position: '' });
-  const [editingEmployee, setEditingEmployee] = useState(null);
+  const [profileExists, setProfileExists] = useState(false);
 
   useEffect(() => {
-    const storedCompany = {
-      companyName: localStorage.getItem('first_name') || '',
-      adminName: localStorage.getItem('last_name') || '',
-      email: localStorage.getItem('email') || '',
-      username: localStorage.getItem('username') || '',
+    const fetchCompanyData = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        const userResponse = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+
+        const { id, first_name, last_name, email } = userResponse.data;
+
+        try {
+          const companyResponse = await axios.get(`http://127.0.0.1:8000/api/companies/${id}/`, {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          });
+
+          setCompany({
+            id: companyResponse.data.id, // Assign company id from endpoint response
+            company_name: companyResponse.data.company_name || '',
+            admin_name: companyResponse.data.admin_name || '',
+            email: email || '',
+            phone: companyResponse.data.phone || '',
+            address: companyResponse.data.address || '',
+            company_description: companyResponse.data.company_description || '',
+            website: companyResponse.data.website || '',
+            employees: companyResponse.data.employees || [],
+          });
+          setProfileExists(true);
+        } catch (error) {
+          if (error.response && error.response.status === 404) {
+            // Company profile does not exist
+            setCompany({
+              id, // Assign user id as company id if profile doesn't exist
+              company_name: first_name || '',
+              admin_name: last_name || '',
+              email: email || '',
+              phone: '',
+              address: '',
+              company_description: '',
+              website: '',
+              employees: [],
+            });
+            setProfileExists(false);
+          } else {
+            console.error('Error fetching company profile:', error);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
     };
-    setCompany((prevCompany) => ({
-      ...prevCompany,
-      ...storedCompany,
-    }));
+
+    fetchCompanyData();
   }, []);
 
   const handleChange = (e) => {
@@ -42,86 +83,88 @@ const CompanyProfile = () => {
     }));
   };
 
-  const handleProfilePicChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setCompany((prevCompany) => ({
-          ...prevCompany,
-          profilePic: e.target.result,
-        }));
-      };
-      reader.readAsDataURL(e.target.files[0]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const authToken = localStorage.getItem('authToken');
+
+      if (profileExists) {
+        await axios.put(`http://127.0.0.1:8000/api/companies/${company.id}/`, company, {
+          headers: {
+            Authorization: `Token ${authToken}`,
+          },
+        });
+        alert('Company profile updated successfully!');
+      } else {
+        const createResponse = await axios.post('http://127.0.0.1:8000/api/companies/', company, {
+          headers: {
+            Authorization: `Token ${authToken}`,
+          },
+        });
+
+        // Assign company id from the create response
+        setCompany({
+          ...company,
+          id: createResponse.data.id,
+        });
+
+        alert('Company profile created successfully!');
+      }
+
+      // Fetch updated profile data
+      const updatedCompanyResponse = await axios.get(`http://127.0.0.1:8000/api/companies/${company.id}/`, {
+        headers: {
+          Authorization: `Token ${authToken}`,
+        },
+      });
+
+      setCompany(updatedCompanyResponse.data);
+      setProfileExists(true);
+    } catch (error) {
+      console.error('Error updating/creating company profile:', error);
+      alert('Failed to update/create company profile.');
     }
-  };
-
-  const handleEmployeeChange = (e) => {
-    const { name, value } = e.target;
-    setNewEmployee((prevEmployee) => ({
-      ...prevEmployee,
-      [name]: value,
-    }));
-  };
-
-  const handleAddEmployee = (e) => {
-    e.preventDefault();
-    setCompany((prevCompany) => ({
-      ...prevCompany,
-      employees: [...prevCompany.employees, { ...newEmployee, id: Date.now() }],
-    }));
-    setNewEmployee({ name: '', position: '' });
-  };
-
-  const handleEditEmployee = (employee) => {
-    setEditingEmployee(employee);
-  };
-
-  const handleUpdateEmployee = (e) => {
-    e.preventDefault();
-    setCompany((prevCompany) => ({
-      ...prevCompany,
-      employees: prevCompany.employees.map((emp) =>
-        emp.id === editingEmployee.id ? editingEmployee : emp
-      ),
-    }));
-    setEditingEmployee(null);
-  };
-
-  const handleEmployeeEditChange = (e) => {
-    const { name, value } = e.target;
-    setEditingEmployee((prevEmployee) => ({
-      ...prevEmployee,
-      [name]: value,
-    }));
-  };
-
-  const handleDeleteEmployee = (id) => {
-    setCompany((prevCompany) => ({
-      ...prevCompany,
-      employees: prevCompany.employees.filter((emp) => emp.id !== id),
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert('Company profile updated successfully!');
   };
 
   return (
     <div className={styles.companyProfileContainer}>
+      <Sidebar profileType="company" />
       <div className={styles.formContainer}>
         <h2>Company Profile Management</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
+          {/* Hidden input for company ID */}
+          <input
+            type="hidden"
+            name="id"
+            value={company.id}
+            onChange={handleChange}
+            className={styles.input}
+          />
+          {/* Company Name */}
           <label className={styles.label}>
             Company Name:
             <input
               type="text"
-              name="name"
-              value={company.name}
+              name="company_name"
+              value={company.company_name}
               onChange={handleChange}
               className={styles.input}
+              required
             />
           </label>
+          {/* Admin Name */}
+          <label className={styles.label}>
+            Admin Name:
+            <input
+              type="text"
+              name="admin_name"
+              value={company.admin_name}
+              onChange={handleChange}
+              className={styles.input}
+              readOnly // Assuming admin name is not editable
+            />
+          </label>
+          {/* Email */}
           <label className={styles.label}>
             Email:
             <input
@@ -130,18 +173,23 @@ const CompanyProfile = () => {
               value={company.email}
               onChange={handleChange}
               className={styles.input}
+              readOnly // Assuming email is not editable
+              required
             />
           </label>
+          {/* Phone */}
           <label className={styles.label}>
             Phone:
             <input
-              type="text"
+              type="tel"
               name="phone"
               value={company.phone}
               onChange={handleChange}
               className={styles.input}
+              required
             />
           </label>
+          {/* Address */}
           <label className={styles.label}>
             Address:
             <input
@@ -150,17 +198,20 @@ const CompanyProfile = () => {
               value={company.address}
               onChange={handleChange}
               className={styles.input}
+              required
             />
           </label>
+          {/* Company Description */}
           <label className={styles.label}>
-            Bio:
+            Company Description:
             <textarea
-              name="bio"
-              value={company.bio}
+              name="company_description"
+              value={company.company_description}
               onChange={handleChange}
               className={styles.textarea}
             ></textarea>
           </label>
+          {/* Website */}
           <label className={styles.label}>
             Website:
             <input
@@ -171,99 +222,22 @@ const CompanyProfile = () => {
               className={styles.input}
             />
           </label>
+          {/* Submit Button */}
           <button type="submit" className={styles.button}>
-            Update Profile
+            {profileExists ? 'Update Profile' : 'Create Profile'}
           </button>
         </form>
       </div>
+      {/* Preview Card */}
       <div className={styles.previewCard}>
-        <div className={styles.profilePicContainer}>
-          <img src={company.profilePic} alt="Company Logo" className={styles.profilePic} />
-          <label htmlFor="profilePicInput" className={styles.editIcon}>
-            <i className="ri-edit-2-fill"></i>
-          </label>
-          <input
-            type="file"
-            id="profilePicInput"
-            style={{ display: 'none' }}
-            onChange={handleProfilePicChange}
-          />
-        </div>
-        <h2>{company.name}</h2>
-        <p>{company.bio}</p>
+        <h2>{company.company_name}</h2>
+        <p>{company.company_description}</p>
         <div className={styles.contactInfo}>
           <p><i className="ri-mail-fill"></i> {company.email}</p>
           <p><i className="ri-phone-fill"></i> {company.phone}</p>
           <p><i className="ri-map-pin-fill"></i> {company.address}</p>
           <p><i className="ri-global-fill"></i> <a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p>
         </div>
-      </div>
-      <div className={styles.employeesContainer}>
-        <h3>Employees</h3>
-        <ul className={styles.employeeList}>
-          {company.employees.map((employee) => (
-            <li key={employee.id} className={styles.employeeItem}>
-              {employee.name} - {employee.position}
-              <button onClick={() => handleEditEmployee(employee)}>Edit</button>
-              <button onClick={() => handleDeleteEmployee(employee.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-        {editingEmployee ? (
-          <form onSubmit={handleUpdateEmployee} className={styles.form}>
-            <h3>Edit Employee</h3>
-            <label className={styles.label}>
-              Name:
-              <input
-                type="text"
-                name="name"
-                value={editingEmployee.name}
-                onChange={handleEmployeeEditChange}
-                className={styles.input}
-              />
-            </label>
-            <label className={styles.label}>
-              Position:
-              <input
-                type="text"
-                name="position"
-                value={editingEmployee.position}
-                onChange={handleEmployeeEditChange}
-                className={styles.input}
-              />
-            </label>
-            <button type="submit" className={styles.button}>
-              Update Employee
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={handleAddEmployee} className={styles.form}>
-            <h3>Add Employee</h3>
-            <label className={styles.label}>
-              Name:
-              <input
-                type="text"
-                name="name"
-                value={newEmployee.name}
-                onChange={handleEmployeeChange}
-                className={styles.input}
-              />
-            </label>
-            <label className={styles.label}>
-              Position:
-              <input
-                type="text"
-                name="position"
-                value={newEmployee.position}
-                onChange={handleEmployeeChange}
-                className={styles.input}
-              />
-            </label>
-            <button type="submit" className={styles.button}>
-              Add Employee
-            </button>
-          </form>
-        )}
       </div>
     </div>
   );

@@ -1,0 +1,80 @@
+.profileSummaryContainer {
+    display: flex;
+    justify-content: center; /* Centers children horizontally */
+    align-items: center; /* Centers children vertically */
+    height: 100vh; /* Full viewport height */
+    width: 600px; /* Fixed width */
+    padding: 20px;
+    margin: auto; /* Centers the container horizontally in the viewport */
+    /* Optional: Uncomment and adjust the following properties as needed */
+    /* background-color: #fff; */
+    /* border-radius: 10px; */
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  }
+
+
+  .content {
+    transition: margin-left 0.3s ease;
+    margin-left: 0;
+  }
+  
+  .contentShift {
+    margin-left: 250px; /* Adjust this value based on your sidebar width */
+  }
+  
+  .profilePicContainer {
+    position: relative;
+    margin-right: 20px;
+  }
+  
+  .profilePic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+  }
+  
+  .editIcon {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+  }
+  
+  .profilePicInput {
+    display: none;
+  }
+  
+  .profileDetails {
+    flex: 1;
+  }
+  
+  .fullName {
+    color: black;
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .username {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  .summary {
+    color: #666;
+  }
+
+  @media screen and (max-width: 600px) {
+    .profileSummaryContainer {
+      width: 100%;
+    }
+    
+  }
+  
+  

@@ -17,6 +17,8 @@ import ActivationSentTemplate from './components/accountActivate/ActivationSentT
 import DigitalProfileLayout from './layout/userProfile/DigitalProfileLayout';
 import AnalyticsLayout from './layout/analytics/AnalyticsLayout';
 import EmployeeProfileLayout from './layout/emplyeeProfile/EmployeeProfileLayout';
+import ProfileSummaryLayout from './layout/profileSummary/ProfileSummaryLayout';
+import NfcCardLayout from './layout/nfcCard/NfcCardLayout';
 
 function App() {
   return (
@@ -40,6 +42,8 @@ function App() {
           <Route path="/digital-profile" element={<DigitalProfileLayout />} />
           <Route path="/analytics" element={<AnalyticsLayout/>}/>
           <Route path="/employee-profile" element={<EmployeeProfileLayout/>}/>
+          <Route path="/profile-summary" element={<ProfileSummaryLayout/>}/>
+          <Route path="/nfc-management" element={<NfcCardLayout/>}/>
 
         </Routes>
         <Footer />

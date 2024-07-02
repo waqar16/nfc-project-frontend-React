@@ -1,17 +1,21 @@
 .companyProfileContainer {
-    display: flex;
-    flex-direction: column;
-    padding: 2rem;
-    margin-top: 75px;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  margin-top: 75px;
+
   }
   
   .formContainer {
+    margin: 6px auto 20px;
+    background: #fff;
     flex: 1;
+    max-width: 600px;
     padding: 2rem;
     border: 1px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
   }
   
   .previewCard {

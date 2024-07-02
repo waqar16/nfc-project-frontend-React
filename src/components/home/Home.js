@@ -9,7 +9,7 @@ const Home = () => {
 
   const handleCompanyButtonClick = () => {
     if (authToken) {
-      navigate('/company-profile');
+      navigate('/company-profile'); // Change this to your company's profile route
     } else {
       navigate('/company-signup');
     }
@@ -27,7 +27,7 @@ const Home = () => {
     <div className={styles.home}>
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <h1>Revolutionize Your Traditional Business Card to NFC Card </h1>
+          <h1>Revolutionize Your Business Cards</h1>
           <p>Our innovative NFC Business Card platform helps you manage profiles, write information to NFC cards, and schedule appointments seamlessly. Say goodbye to traditional business cards and embrace the future.</p>
           <div className={styles.btnDiv}>
             <button className={styles.ctaButton1} onClick={handleCompanyButtonClick}>

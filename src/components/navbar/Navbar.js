@@ -220,15 +220,15 @@ const Navbar = () => {
       <div className="profile" id="profile">
         {isAuthenticated ? (
           <ul className="profile__list">
-            <Link to={'user-profile'}>
+            <Link to={'profile-summary'}>
               <li className="profile__item">Manage Profile</li>
             </Link>
-            <Link to={'manage-card'}>
+            {/* <Link to={'manage-card'}>
               <li className="profile__item">NFC Card</li>
             </Link>
             <Link to={'digital-profile'}>
               <li className="profile__item">Digital Profile</li>
-            </Link>
+            </Link> */}
             <Link to={'/'}>
               <li onClick={handleLogout} className="profile__item">
                 Logout
