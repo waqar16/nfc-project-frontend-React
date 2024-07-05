@@ -50,7 +50,7 @@ const Sidebar = ({ profileType }) => {
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
-                <Link to="/analytics">
+                <Link to="/user-analytics">
                   <i className="ri-bar-chart-line"></i>
                   Analytics
                 </Link>
@@ -59,10 +59,16 @@ const Sidebar = ({ profileType }) => {
           )}
           {profileType === 'company' && (
             <>
-              <li className={styles.sidebar__item}>
+              {/* <li className={styles.sidebar__item}>
                 <Link to="/company-overview">
                   <i className="ri-building-line"></i>
                   Company Overview
+                </Link>
+              </li> */}
+                            <li className={styles.sidebar__item}>
+                <Link to="/company-profile">
+                  <i className="ri-profile-line"></i>
+                  Company Profile
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
@@ -71,28 +77,23 @@ const Sidebar = ({ profileType }) => {
                   Team Management
                 </Link>
               </li>
-              <li className={styles.sidebar__item}>
+              {/* <li className={styles.sidebar__item}>
                 <Link to="/project-management">
                   <i className="ri-projector-line"></i>
                   Project Management
                 </Link>
-              </li>
-              <li className={styles.sidebar__item}>
-                <Link to="/company-profile">
-                  <i className="ri-profile-line"></i>
-                  Company Profile
-                </Link>
-              </li>
-              <li className={styles.sidebar__item}>
+              </li> */}
+
+              {/* <li className={styles.sidebar__item}>
                 <Link to="/client-management">
                   <i className="ri-customer-service-line"></i>
                   Client Management
                 </Link>
-              </li>
+              </li> */}
               <li className={styles.sidebar__item}>
                 <Link to="/company-analytics">
                   <i className="ri-bar-chart-line"></i>
-                  Company Analytics
+                  Analytics
                 </Link>
               </li>
             </>

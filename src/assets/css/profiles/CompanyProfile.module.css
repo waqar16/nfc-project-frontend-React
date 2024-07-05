@@ -19,6 +19,7 @@
   }
   
   .previewCard {
+    background-color: white;
     flex: 1;
     padding: 2rem;
     border: 1px solid #ddd;

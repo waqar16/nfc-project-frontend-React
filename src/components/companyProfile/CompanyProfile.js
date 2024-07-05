@@ -129,6 +129,17 @@ const CompanyProfile = () => {
   return (
     <div className={styles.companyProfileContainer}>
       <Sidebar profileType="company" />
+            {/* Preview Card */}
+            <div className={styles.previewCard}>
+        <h2>{company.company_name}</h2>
+        <p>{company.company_description}</p>
+        <div className={styles.contactInfo}>
+          <p><i className="ri-mail-fill"></i> {company.email}</p>
+          <p><i className="ri-phone-fill"></i> {company.phone}</p>
+          <p><i className="ri-map-pin-fill"></i> {company.address}</p>
+          <p><i className="ri-global-fill"></i> <a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p>
+        </div>
+      </div>
       <div className={styles.formContainer}>
         <h2>Company Profile Management</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -228,17 +239,7 @@ const CompanyProfile = () => {
           </button>
         </form>
       </div>
-      {/* Preview Card */}
-      <div className={styles.previewCard}>
-        <h2>{company.company_name}</h2>
-        <p>{company.company_description}</p>
-        <div className={styles.contactInfo}>
-          <p><i className="ri-mail-fill"></i> {company.email}</p>
-          <p><i className="ri-phone-fill"></i> {company.phone}</p>
-          <p><i className="ri-map-pin-fill"></i> {company.address}</p>
-          <p><i className="ri-global-fill"></i> <a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p>
-        </div>
-      </div>
+
     </div>
   );
 };

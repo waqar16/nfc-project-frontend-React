@@ -194,7 +194,7 @@ const Navbar = () => {
             <i className="ri-search-line nav__search" id="search-btn"></i>
 
             {/* Notification button */}
-            <i className="ri-notification-line nav__search" id="notifications-btn"></i>
+            {/*<i className="ri-notification-line nav__search" id="notifications-btn"></i> */}
 
             {/* Profile button */}
             <i className="ri-user-line nav__login" id="profile-btn"></i>

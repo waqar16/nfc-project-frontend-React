@@ -91,6 +91,7 @@ const UserProfile = () => {
     try {
       const authToken = localStorage.getItem('authToken');
       if (profileExists) {
+        
         await axios.put(`http://127.0.0.1:8000/api/profiles/${user.user}/`, user, {
           headers: {
             Authorization: `Token ${authToken}`,

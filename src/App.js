@@ -19,6 +19,8 @@ import AnalyticsLayout from './layout/analytics/AnalyticsLayout';
 import EmployeeProfileLayout from './layout/emplyeeProfile/EmployeeProfileLayout';
 import ProfileSummaryLayout from './layout/profileSummary/ProfileSummaryLayout';
 import NfcCardLayout from './layout/nfcCard/NfcCardLayout';
+import TeamManagementLayout from './layout/teamManagement/TeamManagementLayout';
+import CompanyAnalyticsLayout from './layout/analytics/CompanyAnalyticsLayout';
 
 function App() {
   return (
@@ -40,10 +42,12 @@ function App() {
           <Route path="/activate/:uid/:token" element={<Activation />} />
           <Route path="/activation-sent" element={<ActivationSentTemplate />} />
           <Route path="/digital-profile" element={<DigitalProfileLayout />} />
-          <Route path="/analytics" element={<AnalyticsLayout/>}/>
+          <Route path="/user-analytics" element={<AnalyticsLayout/>}/>
           <Route path="/employee-profile" element={<EmployeeProfileLayout/>}/>
           <Route path="/profile-summary" element={<ProfileSummaryLayout/>}/>
           <Route path="/nfc-management" element={<NfcCardLayout/>}/>
+          <Route path="/team-management" element={<TeamManagementLayout/>}/>
+          <Route path="/company-analytics" element={<CompanyAnalyticsLayout/>}/>
 
         </Routes>
         <Footer />

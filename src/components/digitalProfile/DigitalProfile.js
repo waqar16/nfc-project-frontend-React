@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../sidebar/Sidebar';
+import ShareProfileModal from '../shareProfileModal/ShareProfileModal';
 import styles from '../../assets/css/profiles/DigitalProfile.module.css';
 
 const DigitalProfile = () => {
@@ -14,11 +16,15 @@ const DigitalProfile = () => {
     facebook: '',
     instagram: '',
     linkedin: '',
-    profilePic: 'https://via.placeholder.com/150', // Example placeholder image URL
+    profilePic: 'https://via.placeholder.com/150',
   });
+  const [receivedCards, setReceivedCards] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUserData();
+    fetchReceivedCards();
   }, []);
 
   const fetchUserData = async () => {
@@ -32,7 +38,6 @@ const DigitalProfile = () => {
 
       const { first_name, last_name, email } = response.data;
 
-      // Fetch the profile data if exists
       const profileResponse = await axios.get(`http://127.0.0.1:8000/api/profiles/${response.data.id}/`, {
         headers: {
           Authorization: `Token ${token}`,
@@ -59,20 +64,75 @@ const DigitalProfile = () => {
     }
   };
 
-  const handleShareToCard = () => {
-    // Implement share to digital card functionality
-    console.log('Shared to digital card');
+  const fetchReceivedCards = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await axios.get('http://127.0.0.1:8000/api/received-cards/', {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      });
+      const cards = await Promise.all(response.data.map(async (card) => {
+        const userResponse = await axios.get(`http://127.0.0.1:8000/auth/users/${card.shared_from}/`, {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        });
+        return {
+          ...card,
+          shared_from_user: userResponse.data
+        };
+      }));
+      setReceivedCards(cards);
+      console.log('Received cards:', cards);
+    } catch (error) {
+      console.error('Error fetching received cards:', error);
+    }
   };
 
-  const handleWriteToNFC = () => {
-    // Implement write to NFC functionality
-    console.log('Written to NFC');
+  const handleShareToCard = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleWriteToNFC = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      axios.post('http://127.0.0.1:8000/api/nfc-write/', user, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      alert('Profile written to NFC successfully!');
+    } catch (error) {
+      console.error('Error writing to NFC:', error);
+      alert('Failed to write profile to NFC.');
+    }
+  };
+
+  const handleShareProfile = async (recipient) => {
+    try {
+      const token = localStorage.getItem('authToken');
+     const response = await axios.post('http://127.0.0.1:8000/api/share-profile/', { shared_to: recipient }, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      alert('Profile shared successfully!', response.data);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error sharing profile:', error);
+      alert('Failed to share profile.');
+    }
+  };
+
+  const handleShowDetails = (profileId) => {
+    navigate(`/profile/${profileId}`);
   };
 
   return (
     <>
       <div className={styles.digitalProfileContainer}>
-      <Sidebar profileType="individual" />
+        <Sidebar profileType="individual" />
         <div className={styles.profileCard}>
           <div className={styles.profileHeader}>
             <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
@@ -104,14 +164,41 @@ const DigitalProfile = () => {
             </div>
           </div>
         </div>
-        <div className={styles.cardActions}>
-  <button onClick={handleShareToCard} className={styles.actionButton}>
-    <i className="ri-share-forward-line"></i> <span>Share Profile</span>
-  </button>
-  <button onClick={handleWriteToNFC} className={styles.actionButton}>
-    <i className="ri-wifi-line"></i> <span>Write to NFC</span>
-  </button>
-</div>
+
+        <ShareProfileModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onShare={handleShareProfile}
+        />
+        <div className={styles.receivedCardsSection}>
+          <h2>Received Digital Cards</h2>
+          <div className={styles.receivedCardsList}>
+            {receivedCards.length > 0 ? (
+              receivedCards.map(card => (
+                <div key={card.id} className={styles.receivedCard}>
+                  <img src={card.shared_from_user.profilePic || 'https://via.placeholder.com/150'} alt="Profile" className={styles.receivedCardPic} />
+                  <div className={styles.receivedCardDetails}>
+                    <div className={styles.receivedCardName}>{`${card.shared_from_user.first_name} ${card.shared_from_user.last_name}`}</div>
+                    <div className={styles.receivedCardDate}>Received on: {new Date(card.shared_at).toLocaleDateString()}</div>
+                    <span onClick={() => handleShowDetails(card.id)} className={styles.showDetailsButton}>
+                      View Card
+                    </span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No received digital cards.</p>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className={styles.cardActions}>
+        <button onClick={handleShareToCard} className={styles.actionButton}>
+          <i className="ri-share-forward-line"></i> <span>Share Profile</span>
+        </button>
+        <button onClick={handleWriteToNFC} className={styles.actionButton}>
+          <i className="ri-wifi-line"></i> <span>Write to NFC</span>
+        </button>
       </div>
     </>
   );
