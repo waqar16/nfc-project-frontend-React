@@ -28,6 +28,11 @@ const PersonalLogin = () => {
         email,
         password,
       });
+
+      // const response2 = await axios.get('http://127.0.0.1:8000/api/profile_type/', {
+      // });
+
+      // console.log(response2.data.profile_type);
       
       if (response.status === 200) {
         const token = response.data;

@@ -5,11 +5,11 @@ import styles from '../../assets/css/profiles/CompanyProfile.module.css';
 
 const CompanyProfile = () => {
   const [company, setCompany] = useState({
-    id: null, // Initially null, will be set from Djoser endpoint
+    id:'', 
     company_name: '',
     admin_name: '',
     email: '',
-    phone: '',
+    phone: '',  
     address: '',
     company_description: '',
     website: '',
@@ -27,7 +27,7 @@ const CompanyProfile = () => {
           },
         });
 
-        const { id, first_name, last_name, email } = userResponse.data;
+        const { id, company_name, admin_name, last_name, email } = userResponse.data;
 
         try {
           const companyResponse = await axios.get(`http://127.0.0.1:8000/api/companies/${id}/`, {
@@ -53,8 +53,8 @@ const CompanyProfile = () => {
             // Company profile does not exist
             setCompany({
               id, // Assign user id as company id if profile doesn't exist
-              company_name: first_name || '',
-              admin_name: last_name || '',
+              company_name: company_name || '',
+              admin_name: admin_name || '',
               email: email || '',
               phone: '',
               address: '',

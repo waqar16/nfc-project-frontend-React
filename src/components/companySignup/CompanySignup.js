@@ -56,15 +56,25 @@ const CompanySignup = () => {
 
     try {
       const response = await axios.post('http://127.0.0.1:8000/auth/users/', {
-        first_name: companyName,
-        last_name: adminName,
+        company_name: companyName,
+        admin_name: adminName,
         email,
         username,
         password,
+        profile_type: 'company', 
       });
 
+
       if (response.status === 201) {
+        // localStorage.setItem('id', response.id);
         console.log('Company registered successfully:', response.data);
+        const CompanyInfo = response.data;
+        // localStorage.setItem('company_name', CompanyInfo.first_name);
+        // localStorage.setItem('admin_name', CompanyInfo.last_name);
+        localStorage.setItem('email', CompanyInfo.email);
+        // localStorage.setItem('username', CompanyInfo.username);
+        // localStorage.setItem('password', password);
+        // localStorage.setItem('profile_type', 'company');
         navigate('/activation-sent');
       }
     } catch (error) {
@@ -93,11 +103,11 @@ const CompanySignup = () => {
         <h2 className={styles.login__title}>Signup As Company</h2>
         <div className={styles.login__group}>
           <div>
-            <label htmlFor="first_name" className={styles.login__label}>Company Name</label>
+            <label htmlFor="company_name" className={styles.login__label}>Company Name</label>
             <input required type="text" placeholder="Company name" id="companyName" className={styles.login__input} value={companyName} onChange={handleFirstNameChange} />
           </div>
           <div>
-            <label htmlFor="last_name" className={styles.login__label}>Admin Name</label>
+            <label htmlFor="admin_name" className={styles.login__label}>Admin Name</label>
             <input required type="text" placeholder="Admin name" id="adminName" className={styles.login__input} value={adminName} onChange={handleLasttNameChange} />
           </div>
           <div>

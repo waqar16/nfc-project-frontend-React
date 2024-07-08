@@ -3,16 +3,40 @@ import { Link } from 'react-router-dom';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/img/logo.png';
+import axios from 'axios';
+
 
 const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [profileType, setProfileType] = useState('');
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      setIsAuthenticated(true);
-    }
+    const userInfo = async () => {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        setIsAuthenticated(true);
+        try {
+          const response = await axios.get('http://127.0.0.1:8000/auth/users/me', {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          });
+
+          setProfileType(response.data.profile_type);
+
+          setLoading(false); // Data fetching complete
+        } catch (error) {
+          console.error('Error fetching profile type:', error);
+          setLoading(false); // Data fetching complete even if there is an error
+        }
+      } else {
+        setLoading(false); // No token found, data fetching complete
+      }
+    };
+
+    userInfo();
   }, []);
 
   const handleLogout = () => {
@@ -20,6 +44,25 @@ const Navbar = () => {
     setIsAuthenticated(false);
     navigate('/');
     window.location.reload();
+  };
+
+  const manageProfile = () => {
+    if (loading) {
+      console.log('Profile type is still loading.');
+      return;
+    }
+
+    if (!profileType) {
+      console.log('Profile type is not set yet.');
+      return;
+    }
+
+    console.log(profileType);
+    if (profileType === 'individual') {
+      navigate('/profile-summary');
+    } else if (profileType === 'company'){
+      navigate('/company-profile');
+    }
   };
 
   const closeProfile = useCallback(() => {
@@ -220,9 +263,9 @@ const Navbar = () => {
       <div className="profile" id="profile">
         {isAuthenticated ? (
           <ul className="profile__list">
-            <Link to={'profile-summary'}>
-              <li className="profile__item">Manage Profile</li>
-            </Link>
+            <span >
+              <li onClick={manageProfile} className="profile__item">Manage Profile</li>
+            </span>
             {/* <Link to={'manage-card'}>
               <li className="profile__item">NFC Card</li>
             </Link>

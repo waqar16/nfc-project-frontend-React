@@ -61,6 +61,7 @@ const PersonalSignup = () => {
         email,
         username,
         password,
+        profile_type: 'individual', 
       });
 
       if (response.status === 201) {
@@ -70,6 +71,7 @@ const PersonalSignup = () => {
         localStorage.setItem('last_name', userInfo.last_name);
         localStorage.setItem('email', userInfo.email);
         localStorage.setItem('username', userInfo.username);
+        localStorage.setItem('profile_type', userInfo.profile_type);
         navigate('/activation-sent');
       }
     } catch (error) {
