@@ -34,6 +34,27 @@ textarea {
   border-radius: 5px;
   font-size: 1em;
 }
+
+.login__checkbox {
+  margin-right: 8px;
+
+}
+
+.login__agreement {
+  /* padding: 10px; */
+  display: flex;
+  /* align-items: center; */
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #666;
+}
+
+.login__agreement a {
+  color: #000;
+  text-decoration: underline;
+  margin-left: 4px;
+}
+
   
   .login__form, 
   .login__group {
@@ -51,10 +72,40 @@ textarea {
     transform: translateY(-1rem);
     transition: transform .4s;
   }
+
+  .google__icon {
+    height: 20px;
+    margin-right: 8px; /* Space between icon and text */
+    vertical-align: middle; /* Align icon vertically with text */
+  }
+  
+  .login__google {
+    margin-bottom: 15px;
+    width: 100%;
+    border: 1px solid #f59194;
+    border-radius: 10px;
+    background-color: #ffffff;
+    padding: 10px;
+    display: flex;
+    align-items: center; /* Align items vertically in the center */
+    justify-content: center; /* Center the content horizontally */
+    cursor: pointer; /* Add pointer cursor on hover */
+  }
+
+  .login__google:hover {
+    background-color: #e0dddd;
+    transition: background-color 0.3s;
+
+  }
+  
   
   .login__title {
-    font-size: var(--h2-font-size);
-    color: var(--title-color);
+    margin: 0;
+    background: linear-gradient(to right, rgb(11, 147, 193), purple, orange);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 2rem;
   }
   
   .login__group {
@@ -81,9 +132,14 @@ textarea {
   .login__input::placeholder {
     color: var(--text-color);
   }
+
+  .auth__logo{
+    margin: auto;
+    height: 40px;
+  }
   
   .login__signup {
-    margin-bottom: .5rem;
+    margin: .9rem;
   }
   
   .login__signup a {
@@ -91,14 +147,16 @@ textarea {
   }
   
   .login__forgot {
-    display: inline-block;
+    float: right;
+    /* display: inline-block; */
     color: var(--first-color);
     margin-bottom: 1.25rem;
   }
   
   .login__button {
     display: inline-block;
-    background-color: var(--first-color);
+    /* background-color: var(--first-color); */
+    background: linear-gradient(to right, #6660FB, #FC4D53);
     width: 100%;
     color: #fff;
     font-weight: var(--font-semi-bold);

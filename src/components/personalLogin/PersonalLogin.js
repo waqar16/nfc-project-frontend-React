@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styles from '../../assets/css/authentication/Authentication.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import logo from '../../assets/img/logo.png';
+import google from '../../assets/img/socials/google.png';
 
 const PersonalLogin = () => {
   const [email, setEmail] = useState('');
@@ -35,16 +37,31 @@ const PersonalLogin = () => {
       // console.log(response2.data.profile_type);
       
       if (response.status === 200) {
-        const token = response.data;
-        localStorage.setItem('authToken', token.auth_token);
+        const authToken = response.data;
+        localStorage.setItem('authToken', authToken.auth_token);
         console.log('User logged in successfully:', response.data);
-        console.log('Token:', token.auth_token);
+        console.log('Token:', authToken.auth_token);
 
         // Dispatch custom event to update Navbar state
         const event = new Event('authStatusChanged');
         window.dispatchEvent(event);
+
+        const token = localStorage.getItem('authToken');
+        const userResponse = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        });
+
+        const { id, username, profile_type } = userResponse.data;
+
+        if (profile_type === 'company'){
+          navigate(`/company-analytics/${id}/${username}`);
+        }
+        else if (profile_type === 'individual'){
+          navigate(`/user-analytics/${id}/${username}`);
+        }
         
-        navigate('/')
         // Hard refresh the page
         window.location.reload();
 
@@ -68,10 +85,13 @@ const PersonalLogin = () => {
   return (
     <div className={`${styles.login} ${styles.marginCustom}`}>
       <form action="" className={styles.login__form} onSubmit={handleSubmit}>
-        <h2 className={styles.login__title}>Log In</h2>
-
+        <img src={logo} alt="Logo" className={styles.auth__logo} />
+        <h2 className={styles.login__title}>Hi, Welcome Back!</h2>
+        <p className={styles.login__subtitle}>Please enter your credentials to log in and access your account.</p>
         <div className={styles.login__group}>
           <div>
+            <div className={styles.login__google}><img className={styles.google__icon} src={google}></img>Log in with Google </div>
+            <p className={styles.login__or}>or</p>
             <label htmlFor="email" className={styles.login__label}>Email</label>
             <input required type="email" placeholder="Write your email" id="email" className={styles.login__input} value={email} onChange={handleEmailChange} />
           </div>
@@ -81,18 +101,18 @@ const PersonalLogin = () => {
           </div>
         </div>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p style={{ textAlign:'left', color: 'red' }}>{error}</p>}
 
         <div>
-          <p className={styles.login__signup}>
-            You do not have an account? <Link to={"/personal-signup"}>Signup</Link>
-          </p>
 
-          <Link className={styles.login__forgot} to={"/reset-password"}>You forgot your password</Link>
+          <Link className={styles.login__forgot} to={"/reset-password"}>Forgot Password?</Link>
 
           <button type="submit" className={styles.login__button} disabled={loading}>
             {loading ? 'Logging in...' : 'Log In'}
           </button>
+          <p className={styles.login__signup}>
+            You do not have an account? <Link to={"/personal-signup"}>Sign up as individual</Link> or <Link to={"/company-signup"}>Sign up as a company</Link>
+          </p>
         </div>
       </form>
     </div>

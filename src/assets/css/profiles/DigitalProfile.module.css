@@ -3,11 +3,14 @@
   flex-direction: row;
   gap: 33px;
   justify-content: space-evenly;
-  padding: 2rem;
+  padding: 4rem;
   margin-top: 75px;
+    /* padding: 20px; */
+
 }
 
 .profileCard {
+  height: 100%;
   width: 400px;
   background-color: #fff;
   border: 1px solid #ddd;

@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import styles from '../../assets/css/profiles/DigitalProfile.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import ShareProfileModal from '../shareProfileModal/ShareProfileModal';
-import styles from '../../assets/css/profiles/DigitalProfile.module.css';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const DigitalProfile = () => {
+  const { userId, username } = useParams();
+  const navigate = useNavigate();
+
   const [user, setUser] = useState({
-    firstname: '',
-    lastname: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
     address: '',
@@ -18,53 +21,53 @@ const DigitalProfile = () => {
     linkedin: '',
     profilePic: 'https://via.placeholder.com/150',
   });
+
   const [receivedCards, setReceivedCards] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchUserData();
-    fetchReceivedCards();
-  }, []);
-
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
+      const userResponse = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
       });
 
-      const { first_name, last_name, email } = response.data;
+      const { id, first_name, last_name, email, username: authenticatedUsername, profile_type } = userResponse.data;
 
-      const profileResponse = await axios.get(`http://127.0.0.1:8000/api/profiles/${response.data.id}/`, {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      });
+      // Check if the user ID or username from URL parameters does not match the authenticated user's details
+      if (profile_type !== 'individual' || userId !== id.toString() || username !== authenticatedUsername) {
+        navigate('/not-authorized'); // Redirect to not authorized page
+      } else {
+        const profileResponse = await axios.get(`http://127.0.0.1:8000/api/profiles/${id}/`, {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        });
 
-      const profileData = profileResponse.data;
+        const profileData = profileResponse.data;
 
-      setUser({
-        firstname: first_name,
-        lastname: last_name,
-        email: email,
-        phone: profileData.phone || '',
-        address: profileData.address || '',
-        bio: profileData.bio || '',
-        facebook: profileData.facebook || '',
-        instagram: profileData.instagram || '',
-        linkedin: profileData.linkedin || '',
-        profilePic: profileData.profilePic || 'https://via.placeholder.com/150',
-      });
-
+        setUser({
+          firstName: first_name,
+          lastName: last_name,
+          email: email,
+          phone: profileData.phone || '',
+          address: profileData.address || '',
+          bio: profileData.bio || '',
+          facebook: profileData.facebook || '',
+          instagram: profileData.instagram || '',
+          linkedin: profileData.linkedin || '',
+          profilePic: profileData.profilePic || 'https://via.placeholder.com/150',
+        });
+      }
     } catch (error) {
       console.error('Error fetching user data:', error);
+      // Handle errors, e.g., redirect to login page or show error message
     }
-  };
+  }, [navigate, userId, username]);
 
-  const fetchReceivedCards = async () => {
+  const fetchReceivedCards = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
       const response = await axios.get('http://127.0.0.1:8000/api/received-cards/', {
@@ -88,7 +91,16 @@ const DigitalProfile = () => {
     } catch (error) {
       console.error('Error fetching received cards:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchUserData();
+      await fetchReceivedCards();
+    };
+
+    fetchData();
+  }, [fetchUserData, fetchReceivedCards]);
 
   const handleShareToCard = () => {
     setIsModalOpen(true);
@@ -112,7 +124,7 @@ const DigitalProfile = () => {
   const handleShareProfile = async (recipient) => {
     try {
       const token = localStorage.getItem('authToken');
-     const response = await axios.post('http://127.0.0.1:8000/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('http://127.0.0.1:8000/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -136,7 +148,7 @@ const DigitalProfile = () => {
         <div className={styles.profileCard}>
           <div className={styles.profileHeader}>
             <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
-            <div className={styles.name}>{`${user.firstname} ${user.lastname}`}</div>
+            <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
             <div className={styles.contactInfo}>
               <p><i className="ri-mail-fill"></i> {user.email}</p>
               <p><i className="ri-phone-fill"></i> {user.phone}</p>
@@ -180,7 +192,7 @@ const DigitalProfile = () => {
                   <div className={styles.receivedCardDetails}>
                     <div className={styles.receivedCardName}>{`${card.shared_from_user.first_name} ${card.shared_from_user.last_name}`}</div>
                     <div className={styles.receivedCardDate}>Received on: {new Date(card.shared_at).toLocaleDateString()}</div>
-                    <span onClick={() => handleShowDetails(card.id)} className={styles.showDetailsButton}>
+                    <span onClick={() => handleShowDetails(card.shared_from_user.id)} className={styles.showDetailsButton}>
                       View Card
                     </span>
                   </div>

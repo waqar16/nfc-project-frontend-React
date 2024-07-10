@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styles from '../../assets/css/authentication/Authentication.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import logo from '../../assets/img/logo.png';
+import google from '../../assets/img/socials/google.png';
 
 const PersonalSignup = () => {
   const [firstName, setFirstName] = useState('');
@@ -97,9 +99,13 @@ const PersonalSignup = () => {
   return (
     <div className={`${styles.login} ${styles.marginCustom}`}>
       <form className={styles.login__form} onSubmit={handleSubmit}>
-        <h2 className={styles.login__title}>Sign Up As Individual</h2>
-        <div className={styles.login__group}>
+      <img src={logo} alt="Logo" className={styles.auth__logo} />
+        <h2 className={styles.login__title}>Hi, Welcome Back!</h2>
+        <p className={styles.login__subtitle}>Please enter your credentials to sign up and create your account.</p>        <div className={styles.login__group}>
           <div>
+          <div className={styles.login__google}><img className={styles.google__icon} src={google}></img>Log in with Google </div>
+          <p className={styles.login__or}>or</p>
+
             <label htmlFor="first_name" className={styles.login__label}>First Name</label>
             <input required type="text" placeholder="First name" id="firstName" className={styles.login__input} value={firstName} onChange={handleFirstNameChange} />
           </div>
@@ -110,12 +116,12 @@ const PersonalSignup = () => {
           <div>
             <label htmlFor="email" className={styles.login__label}>Email</label>
             <input required type="email" placeholder="Write your email" id="email" className={styles.login__input} value={email} onChange={handleEmailChange} />
-            {emailError && <p style={{ color: 'red' }}>{emailError}</p>}
+            {emailError && <p style={{textAlign:'left', color: 'red' }}>{emailError}</p>}
           </div>
           <div>
             <label htmlFor="username" className={styles.login__label}>Username</label>
             <input required type="text" placeholder="Write your username" id="username" className={styles.login__input} value={username} onChange={handleUsernameChange} />
-            {usernameError && <p style={{ color: 'red' }}>{usernameError}</p>}
+            {usernameError && <p style={{textAlign:'left', color: 'red' }}>{usernameError}</p>}
           </div>
           <div>
             <label htmlFor="password" className={styles.login__label}>Password</label>
@@ -124,16 +130,24 @@ const PersonalSignup = () => {
           <div>
             <label htmlFor="confirmpassword" className={styles.login__label}>Confirm Password</label>
             <input required type="password" placeholder="Confirm password" id="confirmpassword" className={styles.login__input} value={confirmPassword} onChange={handleConfirmPasswordChange} />
-            {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>}
+            {passwordError && <p style={{textAlign:'left', color: 'red' }}>{passwordError}</p>}
           </div>
         </div>
         <div>
-          <p className={styles.login__signup}>
-            Already have an account? <Link to={"/personal-login"}>Log In</Link>
-          </p>
+          <div className={styles.login__agreement}>
+        <input required type="checkbox" id="agreement" className={styles.login__checkbox} />
+        <label htmlFor="agreement">
+          I agree with
+          <a href="/terms-of-service">Terms of Service</a>,
+          <a href="/privacy-policy">Privacy Policy</a>
+        </label>
+      </div>
           <button type="submit" className={styles.login__button} disabled={loading}>
-            {loading ? 'Signing Up...' : 'Sign Up'}
+            {loading ? 'Signing Up...' : 'Sign Up as Individual'}
           </button>
+          <p className={styles.login__signup}>
+            Already have an account? <Link to={"/personal-login"}>Log in here</Link>
+          </p>
         </div>
       </form>
     </div>

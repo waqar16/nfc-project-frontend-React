@@ -1,16 +1,43 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-// import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import {React, useState, useEffect } from 'react';
+import {useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import styles from '../../assets/css/index/ScheduleMeetingSection.module.css';
 
 const ScheduleMeetingSection = () => {
   const navigate = useNavigate();
-  const authToken = localStorage.getItem('authToken');
+  const [profileType, setProfileType] = useState('');
+  const [username, setUsername] = useState('');
+  const [userId, setUserId] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const userInfo = async () => {
+      if (token) {
+        setIsAuthenticated(true);
+        try {
+          const response = await axios.get('http://127.0.0.1:8000/auth/users/me', {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          });
+
+          setProfileType(response.data.profile_type);
+          setUserId(response.data.id);
+          setUsername(response.data.username)
+
+        } catch (error) {
+          console.error('Error fetching user info:', error);
+        }
+      }
+    };
+
+    userInfo();
+  }, []);
 
   const handleCreateNowButtonClick = () => {
-    if (authToken) {
-      navigate('/digital-profile'); // Change this to your company's profile route
+    if (isAuthenticated & profileType === 'individual') {
+      navigate(`/digital-profile/${userId}/${username}`);
     } else {
       navigate('/personal-login');
     }

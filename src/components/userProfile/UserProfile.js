@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Sidebar from '../sidebar/Sidebar'; // Import the Sidebar component
+import Sidebar from '../sidebar/Sidebar'; 
 import styles from '../../assets/css/profiles/UserProfile.module.css';
 
 const UserProfile = () => {
+  const { userId, username } = useParams();  // Assuming your route includes username and userId
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     user: '',
     first_name: '',
@@ -28,7 +31,16 @@ const UserProfile = () => {
           }
         });
 
-        const { id, first_name, last_name, email } = userResponse.data;
+        const { id, first_name, last_name, email, profile_type, username: authenticatedUsername } = userResponse.data;
+        console.log(profile_type)
+
+        // Check if the userId and username from the URL match the authenticated user
+        if (profile_type !== 'individual' || userId !== id.toString() || username !== authenticatedUsername) {
+          console.log(`UserId from URL: ${userId}, User ID from response: ${id}`);
+          console.log(`Username from URL: ${username}, Authenticated Username: ${authenticatedUsername}`);
+          navigate('/not-authorized');
+          return;
+        }
 
         try {
           const profileResponse = await axios.get(`http://127.0.0.1:8000/api/profiles/${id}/`, {
@@ -76,7 +88,7 @@ const UserProfile = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [navigate, userId, username]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

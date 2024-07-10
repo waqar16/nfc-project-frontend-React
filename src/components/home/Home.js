@@ -1,23 +1,52 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../../assets/css/index/Home.module.css';
 import main from '../../assets/img/banner.png';
+import axios from 'axios';
 
 const Home = () => {
   const navigate = useNavigate();
-  const authToken = localStorage.getItem('authToken');
+  const [profileType, setProfileType] = useState('');
+  const [username, setUsername] = useState('');
+  const [userId, setUserId] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const userInfo = async () => {
+      if (token) {
+        setIsAuthenticated(true);
+        try {
+          const response = await axios.get('http://127.0.0.1:8000/auth/users/me', {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          });
+
+          setProfileType(response.data.profile_type);
+          setUserId(response.data.id);
+          setUsername(response.data.username)
+
+        } catch (error) {
+          console.error('Error fetching user info:', error);
+        }
+      }
+    };
+
+    userInfo();
+  }, []);
 
   const handleCompanyButtonClick = () => {
-    if (authToken) {
-      navigate('/company-profile'); // Change this to your company's profile route
+    if (isAuthenticated & profileType === 'company') {
+      navigate(`/company-profile/${userId}/${username}`);
     } else {
       navigate('/company-signup');
     }
   };
 
   const handleIndividualButtonClick = () => {
-    if (authToken) {
-      navigate('/user-profile'); // Change this to your individual's profile route
+    if (isAuthenticated & profileType === 'individual') {
+      navigate(`/user-profile/${userId}/${username}`);
     } else {
       navigate('/personal-signup');
     }

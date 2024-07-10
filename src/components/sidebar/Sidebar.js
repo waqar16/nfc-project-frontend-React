@@ -1,9 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import styles from '../../assets/css/index/Sidebar.module.css'; // Import the CSS module
+import styles from '../../assets/css/index/Sidebar.module.css';
+import axios from 'axios';
 
 const Sidebar = ({ profileType }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      });
+      setUserData(response.data);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      // Handle errors, e.g., redirect to login page or show error message
+    }
+  };
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -12,45 +33,42 @@ const Sidebar = ({ profileType }) => {
   return (
     <div>
       <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
-        <div className={styles.sidebar__header}>
-          {/* <h3>Menu</h3> */}
-          {/* <i className={`ri-close-line ${styles.sidebar__close}`} onClick={toggleSidebar}></i> */}
-        </div>
+        <div className={styles.sidebar__header}></div>
         <ul className={styles.sidebar__list}>
           {profileType === 'individual' && (
             <>
               <li className={styles.sidebar__item}>
-                <Link to="/profile-summary">
+                <Link to={`/profile-summary/${userData.id}/${userData.username}`}>
                   <i className="ri-user-line"></i>
                   Profile Summary
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
-                <Link to="/user-profile">
+                <Link to={`/user-profile/${userData.id}/${userData.username}`}>
                   <i className="ri-profile-line"></i>
                   Profile Management
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
-                <Link to="/nfc-management">
+                <Link to={`/nfc-management/${userData.id}/${userData.username}`}>
                   <i className="ri-wifi-line"></i>
                   NFC Card Management
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
-                <Link to="/digital-profile">
+                <Link to={`/digital-profile/${userData.id}/${userData.username}`}>
                   <i className="ri-file-text-line"></i>
                   Digital Card Management
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
-                <Link to="/schedule-meeting">
+                <Link to={`/schedule-meeting/${userData.id}/${userData.username}`}>
                   <i className="ri-calendar-line"></i>
                   Appointment Scheduling
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
-                <Link to="/user-analytics">
+                <Link to={`/user-analytics/${userData.id}/${userData.username}`}>
                   <i className="ri-bar-chart-line"></i>
                   Analytics
                 </Link>
@@ -59,39 +77,20 @@ const Sidebar = ({ profileType }) => {
           )}
           {profileType === 'company' && (
             <>
-              {/* <li className={styles.sidebar__item}>
-                <Link to="/company-overview">
-                  <i className="ri-building-line"></i>
-                  Company Overview
-                </Link>
-              </li> */}
-                            <li className={styles.sidebar__item}>
-                <Link to="/company-profile">
+              <li className={styles.sidebar__item}>
+                <Link to={`/company-profile/${userData.id}/${userData.username}`}>
                   <i className="ri-profile-line"></i>
                   Company Profile
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
-                <Link to="/team-management">
+                <Link to={`/team-management/${userData.id}/${userData.username}`}>
                   <i className="ri-team-line"></i>
                   Team Management
                 </Link>
               </li>
-              {/* <li className={styles.sidebar__item}>
-                <Link to="/project-management">
-                  <i className="ri-projector-line"></i>
-                  Project Management
-                </Link>
-              </li> */}
-
-              {/* <li className={styles.sidebar__item}>
-                <Link to="/client-management">
-                  <i className="ri-customer-service-line"></i>
-                  Client Management
-                </Link>
-              </li> */}
               <li className={styles.sidebar__item}>
-                <Link to="/company-analytics">
+                <Link to={`/company-analytics/${userData.id}/${userData.username}`}>
                   <i className="ri-bar-chart-line"></i>
                   Analytics
                 </Link>

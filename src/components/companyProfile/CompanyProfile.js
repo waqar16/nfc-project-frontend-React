@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../sidebar/Sidebar';
 import styles from '../../assets/css/profiles/CompanyProfile.module.css';
 
 const CompanyProfile = () => {
+  const { userId, username } = useParams();
+  const navigate = useNavigate();
   const [company, setCompany] = useState({
-    id:'', 
+    id: userId,
     company_name: '',
     admin_name: '',
     email: '',
@@ -27,7 +30,14 @@ const CompanyProfile = () => {
           },
         });
 
-        const { id, company_name, admin_name, last_name, email } = userResponse.data;
+        const { id, company_name, admin_name, email, profile_type, username: authenticatedUsername } = userResponse.data;
+
+        
+        if (profile_type !== 'company' || userId !== id.toString() || username !== authenticatedUsername) {
+          console.log(`UserId from URL: ${userId}, User ID from response: ${id}`);
+          navigate('/not-authorized');
+          return;
+        }
 
         try {
           const companyResponse = await axios.get(`http://127.0.0.1:8000/api/companies/${id}/`, {
@@ -37,7 +47,7 @@ const CompanyProfile = () => {
           });
 
           setCompany({
-            id: companyResponse.data.id, // Assign company id from endpoint response
+            id: userId,
             company_name: companyResponse.data.company_name || '',
             admin_name: companyResponse.data.admin_name || '',
             email: email || '',
@@ -52,7 +62,7 @@ const CompanyProfile = () => {
           if (error.response && error.response.status === 404) {
             // Company profile does not exist
             setCompany({
-              id, // Assign user id as company id if profile doesn't exist
+              id: userId,
               company_name: company_name || '',
               admin_name: admin_name || '',
               email: email || '',
@@ -73,7 +83,7 @@ const CompanyProfile = () => {
     };
 
     fetchCompanyData();
-  }, []);
+  }, [navigate, userId, username]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,7 +97,7 @@ const CompanyProfile = () => {
     e.preventDefault();
     try {
       const authToken = localStorage.getItem('authToken');
-
+  
       if (profileExists) {
         await axios.put(`http://127.0.0.1:8000/api/companies/${company.id}/`, company, {
           headers: {
@@ -101,25 +111,19 @@ const CompanyProfile = () => {
             Authorization: `Token ${authToken}`,
           },
         });
-
-        // Assign company id from the create response
-        setCompany({
-          ...company,
-          id: createResponse.data.id,
-        });
-
+  
+        const createdCompanyId = createResponse.data.id;
+  
+        // Update state with newly created profile's ID
+        setCompany((prevCompany) => ({
+          ...prevCompany,
+          id: createdCompanyId,
+        }));
+  
         alert('Company profile created successfully!');
+        setProfileExists(true); // Update profile existence state
       }
-
-      // Fetch updated profile data
-      const updatedCompanyResponse = await axios.get(`http://127.0.0.1:8000/api/companies/${company.id}/`, {
-        headers: {
-          Authorization: `Token ${authToken}`,
-        },
-      });
-
-      setCompany(updatedCompanyResponse.data);
-      setProfileExists(true);
+  
     } catch (error) {
       console.error('Error updating/creating company profile:', error);
       alert('Failed to update/create company profile.');

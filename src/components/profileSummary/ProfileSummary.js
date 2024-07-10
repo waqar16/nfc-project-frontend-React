@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import styles from '../../assets/css/profiles/ProfileSummary.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ProfileSummary = () => {
+  const { userId, username } = useParams();  // Assuming your route includes username and userId
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     profilePic: 'https://via.placeholder.com/150', // Example placeholder image URL
     fullName: '',
@@ -15,13 +18,20 @@ const ProfileSummary = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
+        const userResponse = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
         });
 
-        const { first_name, last_name, username } = response.data;
+        const { id, first_name, last_name, profile_type, username: authenticatedUsername } = userResponse.data;
+  
+        if (profile_type !== 'individual' || userId !== id.toString() || username !== authenticatedUsername) {
+          console.log(`UserId from URL: ${userId}, User ID: ${id}`);
+          navigate('/not-authorized');
+        }
+
+
         setUser((prevUser) => ({
           ...prevUser,
           fullName: `${first_name} ${last_name}`,
@@ -33,7 +43,7 @@ const ProfileSummary = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [navigate, userId, username]);
 
   const handleProfilePicChange = (event) => {
     const file = event.target.files[0];

@@ -11,6 +11,8 @@ const Navbar = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [profileType, setProfileType] = useState('');
+  const [username, setUsername] = useState('');
+  const [userId, setUserId] = useState('');
 
   useEffect(() => {
     const userInfo = async () => {
@@ -25,6 +27,8 @@ const Navbar = () => {
           });
 
           setProfileType(response.data.profile_type);
+          setUserId(response.data.id);
+          setUsername(response.data.username)
 
           setLoading(false); // Data fetching complete
         } catch (error) {
@@ -59,9 +63,9 @@ const Navbar = () => {
 
     console.log(profileType);
     if (profileType === 'individual') {
-      navigate('/profile-summary');
+      navigate(`/profile-summary/${userId}/${username}`);
     } else if (profileType === 'company'){
-      navigate('/company-profile');
+      navigate(`/company-profile/${userId}/${username}`);
     }
   };
 

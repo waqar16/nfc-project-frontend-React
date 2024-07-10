@@ -217,7 +217,7 @@ img {
 }
 
 .nav__logo {
-  height: 150px;
+  height: 40px;
   color: var(--title-color);
   font-weight: var(--font-semi-bold);
   transition: color .4s;
@@ -246,7 +246,7 @@ img {
 /* Navigation for mobile devices */
 @media screen and (max-width: 1023px) {
   .nav__logo {
-    height: 160px;
+    height: 40px;
     color: var(--title-color);
     font-weight: var(--font-semi-bold);
     transition: color .4s;
@@ -458,15 +458,23 @@ img {
 
 .login__btn {
   margin: 1rem;
-  background-color: var(--first-color);
+  background: linear-gradient(to right, #6660FB, #FC4D53);
   width: 15rem;
   color: #fff;
   font-weight: var(--font-semi-bold);
   padding: 1rem;
-  border-radius: .5rem;
+  border-radius: 5rem; /* Ensure this is set */
   cursor: pointer;
-  transition: box-shadow .4s;
-  text-align: center; /* Center text inside button */
+  text-align: center; 
+  transition: transform 0.3s ease;
+}
+
+.login__btn:hover {
+  transform: translateX(-7px);
+  color: #cf0abb;
+  border: 2px solid #cf0abb;
+  background: none;
+  border-radius: 5rem; 
 }
 
 .login__button {
