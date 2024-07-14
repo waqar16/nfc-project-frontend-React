@@ -57,6 +57,8 @@ const Analytics = () => {
   const [networkingEffectiveness, setNetworkingEffectiveness] = useState([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     // Set dummy data for development
     setCardDistribution(cardDistributionDummyData);
     setEngagementMetrics(engagementMetricsDummyData);

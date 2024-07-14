@@ -49,7 +49,7 @@ h2 {
   resize: vertical;
 }
 
-.button {
+/* .button {
   padding: 0.75rem 1rem;
   font-size: 1em;
   color: #fff;
@@ -58,8 +58,103 @@ h2 {
   border-radius: 5px;
   cursor: pointer;
   margin-top: 1.5rem;
+} */
+
+.buttonSaveProfile {
+  margin-top: 20px;
+  background: linear-gradient(to right, #6660FB, #FC4D53);
+  width: 100%;
+  color: #fff;
+  font-weight: var(--font-semi-bold);
+  padding: 1rem;
+  border-radius: 5rem; /* Ensure this is set */
+  cursor: pointer;
+  text-align: center; 
+  transition: transform 0.3s ease;
 }
 
-.button:hover {
-  background-color: hsl(230, 79%, 61%);
+.buttonSaveProfile:hover {
+  background: linear-gradient(to right, #7773fc, #f5676b);
+  border-radius: 5rem; 
 }
+
+
+
+/* Profile summary */
+
+.profileSummaryContainer {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  height: 40vh;
+  width: 600px; 
+  padding: 20px;
+  padding: 0;
+  /* margin: auto;  */
+}
+
+
+.content {
+  transition: margin-left 0.3s ease;
+  margin-left: 0;
+}
+
+.contentShift {
+  margin-left: 250px; 
+}
+
+.profilePicContainer {
+  position: relative;
+  margin-right: 20px;
+}
+
+.profilePic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+.editIcon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.profilePicInput {
+  display: none;
+}
+
+.profileDetails {
+  flex: 1;
+}
+
+.fullName {
+  color: black;
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.username {
+  margin: 5px 0;
+  color: #555;
+}
+
+.summary {
+  color: #666;
+}
+
+@media screen and (max-width: 600px) {
+  .profileSummaryContainer {
+    width: 100%;
+  }
+  
+}
+

@@ -19,6 +19,8 @@ const TeamManagement = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
+    // window.scrollTo(0, 0);
+
     fetchCompanyAndEmployees();
   }, []);
 
@@ -182,7 +184,7 @@ const TeamManagement = () => {
               className={styles.input}
             />
           </label>
-          <button type="submit" className={styles.button}>
+          <button type="submit" className={styles.buttonSaveProfile}>
             {isEditing ? 'Update Employee' : 'Create Employee'}
           </button>
         </form>

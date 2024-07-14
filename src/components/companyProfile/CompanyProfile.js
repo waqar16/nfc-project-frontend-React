@@ -5,6 +5,7 @@ import Sidebar from '../sidebar/Sidebar';
 import styles from '../../assets/css/profiles/CompanyProfile.module.css';
 
 const CompanyProfile = () => {
+
   const { userId, username } = useParams();
   const navigate = useNavigate();
   const [company, setCompany] = useState({
@@ -12,15 +13,18 @@ const CompanyProfile = () => {
     company_name: '',
     admin_name: '',
     email: '',
-    phone: '',  
+    phone: '',
+    companyLogo: '',
     address: '',
     company_description: '',
     website: '',
+    linkedin: '',
     employees: [],
   });
   const [profileExists, setProfileExists] = useState(false);
 
   useEffect(() => {
+    
     const fetchCompanyData = async () => {
       try {
         const token = localStorage.getItem('authToken');
@@ -32,7 +36,7 @@ const CompanyProfile = () => {
 
         const { id, company_name, admin_name, email, profile_type, username: authenticatedUsername } = userResponse.data;
 
-        
+
         if (profile_type !== 'company' || userId !== id.toString() || username !== authenticatedUsername) {
           console.log(`UserId from URL: ${userId}, User ID from response: ${id}`);
           navigate('/not-authorized');
@@ -52,9 +56,11 @@ const CompanyProfile = () => {
             admin_name: companyResponse.data.admin_name || '',
             email: email || '',
             phone: companyResponse.data.phone || '',
+            companyLogo: companyResponse.data.companyLogo || '',
             address: companyResponse.data.address || '',
             company_description: companyResponse.data.company_description || '',
             website: companyResponse.data.website || '',
+            linkedin: companyResponse.data.linkedin || '',
             employees: companyResponse.data.employees || [],
           });
           setProfileExists(true);
@@ -66,10 +72,12 @@ const CompanyProfile = () => {
               company_name: company_name || '',
               admin_name: admin_name || '',
               email: email || '',
+              companyLogo: '',
               phone: '',
               address: '',
               company_description: '',
               website: '',
+              linkedin: '',
               employees: [],
             });
             setProfileExists(false);
@@ -93,48 +101,61 @@ const CompanyProfile = () => {
     }));
   };
 
+  const handlecompanyLogoChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setCompany((prevCompany) => ({
+        ...prevCompany,
+        companyLogo: reader.result,
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const authToken = localStorage.getItem('authToken');
-  
+
       if (profileExists) {
         await axios.put(`http://127.0.0.1:8000/api/companies/${company.id}/`, company, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
         });
-        alert('Company profile updated successfully!');
+        // alert('Company profile updated successfully!');
       } else {
         const createResponse = await axios.post('http://127.0.0.1:8000/api/companies/', company, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
         });
-  
+
         const createdCompanyId = createResponse.data.id;
-  
+
         // Update state with newly created profile's ID
         setCompany((prevCompany) => ({
           ...prevCompany,
           id: createdCompanyId,
         }));
-  
-        alert('Company profile created successfully!');
+
+        // alert('Company profile created successfully!');
         setProfileExists(true); // Update profile existence state
       }
-  
+
     } catch (error) {
       console.error('Error updating/creating company profile:', error);
-      alert('Failed to update/create company profile.');
+      // alert('Failed to update/create company profile.');
     }
   };
 
   return (
     <div className={styles.companyProfileContainer}>
       <Sidebar profileType="company" />
-            {/* Preview Card */}
-            <div className={styles.previewCard}>
+      {/* Preview Card */}
+      <div className={styles.previewCard}>
         <h2>{company.company_name}</h2>
         <p>{company.company_description}</p>
         <div className={styles.contactInfo}>
@@ -204,6 +225,16 @@ const CompanyProfile = () => {
               required
             />
           </label>
+          <label className={styles.label}>
+            Compnay Logo:
+            <input
+              type="file"
+              id="companyLogo"
+              className={styles.input}
+              onChange={handlecompanyLogoChange}
+            />
+          </label>
+
           {/* Address */}
           <label className={styles.label}>
             Address:
@@ -224,11 +255,12 @@ const CompanyProfile = () => {
               value={company.company_description}
               onChange={handleChange}
               className={styles.textarea}
+              required
             ></textarea>
           </label>
           {/* Website */}
           <label className={styles.label}>
-            Website:
+            Website (Optional):
             <input
               type="url"
               name="website"
@@ -237,10 +269,21 @@ const CompanyProfile = () => {
               className={styles.input}
             />
           </label>
+          <label>
+            LinkedIn (Optional):
+            <input
+              type="url"
+              name="linkedin"
+              value={company.linkedin}
+              onChange={handleChange}
+              className={styles.input}
+            />
+          </label>
           {/* Submit Button */}
-          <button type="submit" className={styles.button}>
+          <button type='submit' onClick={handleSubmit} className={styles.buttonSaveProfile}>
             {profileExists ? 'Update Profile' : 'Create Profile'}
           </button>
+
         </form>
       </div>
 

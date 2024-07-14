@@ -8,6 +8,8 @@ const Sidebar = ({ profileType }) => {
   const [userData, setUserData] = useState({});
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     fetchUserData();
   }, []);
 
@@ -37,12 +39,12 @@ const Sidebar = ({ profileType }) => {
         <ul className={styles.sidebar__list}>
           {profileType === 'individual' && (
             <>
-              <li className={styles.sidebar__item}>
+              {/* <li className={styles.sidebar__item}>
                 <Link to={`/profile-summary/${userData.id}/${userData.username}`}>
                   <i className="ri-user-line"></i>
                   Profile Summary
                 </Link>
-              </li>
+              </li> */}
               <li className={styles.sidebar__item}>
                 <Link to={`/user-profile/${userData.id}/${userData.username}`}>
                   <i className="ri-profile-line"></i>
@@ -73,6 +75,12 @@ const Sidebar = ({ profileType }) => {
                   Analytics
                 </Link>
               </li>
+              <li className={styles.sidebar__item}>
+                <Link to={`/account-deletion/`}>
+                  <i className="ri-delete-3-line"></i>
+                  Account Deletion
+                </Link>
+              </li>
             </>
           )}
           {profileType === 'company' && (
@@ -93,6 +101,12 @@ const Sidebar = ({ profileType }) => {
                 <Link to={`/company-analytics/${userData.id}/${userData.username}`}>
                   <i className="ri-bar-chart-line"></i>
                   Analytics
+                </Link>
+              </li>
+              <li className={styles.sidebar__item}>
+                <Link to={`/account-deletion/`}>
+                  <i className="ri-settings-3-line"></i>
+                  Account Deletetion
                 </Link>
               </li>
             </>

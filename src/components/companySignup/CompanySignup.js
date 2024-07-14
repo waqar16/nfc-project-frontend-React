@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../../assets/css/authentication/Authentication.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -17,6 +17,10 @@ const CompanySignup = () => {
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false); // Added loading state
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleFirstNameChange = (e) => setCompanyName(e.target.value);
   const handleLasttNameChange = (e) => setAdminName(e.target.value);

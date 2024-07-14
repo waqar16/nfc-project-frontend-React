@@ -4,6 +4,10 @@ import styles from '../../assets/css/profiles/DigitalProfile.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import ShareProfileModal from '../shareProfileModal/ShareProfileModal';
 import { useParams, useNavigate } from 'react-router-dom';
+import facebook from '../../assets/img/socials/facebook.png';
+import instagram from '../../assets/img/socials/instagram.png';
+import linkedin from '../../assets/img/socials/linkedin.png';
+import whatsapp from '../../assets/img/socials/whatsapp.png';
 
 const DigitalProfile = () => {
   const { userId, username } = useParams();
@@ -94,6 +98,7 @@ const DigitalProfile = () => {
   }, []);
 
   useEffect(() => {
+
     const fetchData = async () => {
       await fetchUserData();
       await fetchReceivedCards();
@@ -147,37 +152,45 @@ const DigitalProfile = () => {
         <Sidebar profileType="individual" />
         <div className={styles.profileCard}>
           <div className={styles.profileHeader}>
-            <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
-            <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
+          <div className={styles.profileinfo}>
+          <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
+          <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
+          <div className={styles.position}>Full Stack Developer</div>
+          </div>
+          </div>
+
+          <div className={styles.profileBody}>
+            <div className={styles.profileAbout}>
+              <p className={styles.titleText}>About Me</p>
+              <p className={styles.bio}>{user.bio}</p>
+              </div>
+              <p className={styles.titleText}>Contact me</p>
             <div className={styles.contactInfo}>
               <p><i className="ri-mail-fill"></i> {user.email}</p>
               <p><i className="ri-phone-fill"></i> {user.phone}</p>
               <p><i className="ri-map-pin-fill"></i> {user.address}</p>
             </div>
-          </div>
-          <div className={styles.profileBody}>
-            <p className={styles.bio}>{user.bio}</p>
             <div className={styles.socialIcons}>
               {user.facebook && (
                 <a href={user.facebook} target="_blank" rel="noopener noreferrer">
-                  <i className="ri-facebook-circle-fill"></i>
+                  <img className={styles.icon} src={facebook} alt="Facebook" />
                 </a>
               )}
               {user.instagram && (
                 <a href={user.instagram} target="_blank" rel="noopener noreferrer">
-                  <i className="ri-instagram-fill"></i>
+                  <img className={styles.icon} src={instagram} alt="Instagram" />
                 </a>
               )}
               {user.linkedin && (
                 <a href={user.linkedin} target="_blank" rel="noopener noreferrer">
-                  <i className="ri-linkedin-box-fill"></i>
+                  <img className={styles.icon} src={linkedin} alt="LinkedIn" />
                 </a>
               )}
             </div>
           </div>
         </div>
 
-        <ShareProfileModal
+        {/* <ShareProfileModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onShare={handleShareProfile}
@@ -202,7 +215,7 @@ const DigitalProfile = () => {
               <p>No received digital cards.</p>
             )}
           </div>
-        </div>
+        </div> */}
       </div>
       <div className={styles.cardActions}>
         <button onClick={handleShareToCard} className={styles.actionButton}>

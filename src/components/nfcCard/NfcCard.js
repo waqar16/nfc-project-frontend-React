@@ -44,6 +44,8 @@ const NfcCard = () => {
   }, [navigate, userId, username]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     fetchUserData();
   }, [fetchUserData]); // Only re-run the effect if fetchUserData changes
 

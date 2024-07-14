@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
 import NotFoundPage from './components/404Page/404Page';
 import NotAuthorizedPage from './components/404Page/notAuthorized';
 import HomeLayout from './layout/home/HomeLayout'
@@ -24,13 +25,23 @@ import ProfileSummaryLayout from './layout/profileSummary/ProfileSummaryLayout';
 import NfcCardLayout from './layout/nfcCard/NfcCardLayout';
 import TeamManagementLayout from './layout/teamManagement/TeamManagementLayout';
 import CompanyAnalyticsLayout from './layout/analytics/CompanyAnalyticsLayout';
+import SignupForm from './components/signup/Signup';
+import LoginLayout from './components/login/Login';
+import AccountDeletion from './components/accountDeletion/AccountDeletion';
 
 function App() {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Router>
       <div className="App">
         <Navbar />
         <Routes>
+          <Route path="/account-deletion" element={<AccountDeletion />} />
+          <Route path="/login" element={<LoginLayout />} />
+          <Route path="/signup" element={<SignupForm />} />
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/not-authorized" element={<NotAuthorizedPage />} />
           <Route path="/" element={<HomeLayout />} />

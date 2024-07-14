@@ -11,6 +11,8 @@ const ScheduleMeetingSection = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const token = localStorage.getItem('authToken');
     const userInfo = async () => {
       if (token) {

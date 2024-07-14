@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../sidebar/Sidebar'; 
 import styles from '../../assets/css/profiles/UserProfile.module.css';
+// import ProfilSummary from '../profileSummary/ProfileSummary'
+// import styles from '../../assets/css/profiles/ProfileSummary.module.css';
+
 
 const UserProfile = () => {
   const { userId, username } = useParams();  // Assuming your route includes username and userId
@@ -15,13 +18,18 @@ const UserProfile = () => {
     phone: '',
     address: '',
     bio: '',
+    website: '',
     facebook: '',
     instagram: '',
     linkedin: '',
+    whatsapp: '',
+    github: '', 
+    profile_pic: 'https://placehold.co/150x150',
   });
   const [profileExists, setProfileExists] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
@@ -41,6 +49,12 @@ const UserProfile = () => {
           navigate('/not-authorized');
           return;
         }
+        setUser({
+          user: id,
+          first_name: first_name,
+          last_name: last_name,
+          email: email
+        })
 
         try {
           const profileResponse = await axios.get(`http://127.0.0.1:8000/api/profiles/${id}/`, {
@@ -57,9 +71,13 @@ const UserProfile = () => {
             phone: profileResponse.data.phone || '',
             address: profileResponse.data.address || '',
             bio: profileResponse.data.bio || '',
+            website: profileResponse.data.website || '',
             facebook: profileResponse.data.facebook || '',
             instagram: profileResponse.data.instagram || '',
             linkedin: profileResponse.data.linkedin || '',
+            whatsapp: profileResponse.data.whatsapp || '',
+            github: profileResponse.data.github || '',
+            profile_pic: profileResponse.data.profile_pic || 'https://placehold.co/150x150',
           });
           setProfileExists(true);
         } catch (error) {
@@ -73,9 +91,13 @@ const UserProfile = () => {
               phone: '',
               address: '',
               bio: '',
+              website: '',
               facebook: '',
               instagram: '',
               linkedin: '',
+              whatsapp: '',
+              github: '', 
+              profile_pic: 'https://placehold.co/150x150',
             });
             setProfileExists(false);
           } else {
@@ -98,22 +120,55 @@ const UserProfile = () => {
     }));
   };
 
+  const handleProfilePicChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUser((prevUser) => ({
+          ...prevUser,
+          profile_pic: reader.result
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append('user', user.user);
+    formData.append('first_name', user.first_name);
+    formData.append('last_name', user.last_name);
+    formData.append('email', user.email);
+    formData.append('phone', user.phone);
+    formData.append('address', user.address);
+    formData.append('bio', user.bio);
+    formData.append('facebook', user.facebook);
+    formData.append('instagram', user.instagram);
+    formData.append('linkedin', user.linkedin);
+    formData.append('whatsapp', user.whatsapp);
+    formData.append('github', user.github);
+    formData.append('website', user.website);
+    if (user.profilePic) {
+      formData.append('profile_pic', user.profile_pic);
+    }
     try {
       const authToken = localStorage.getItem('authToken');
       if (profileExists) {
         
-        await axios.put(`http://127.0.0.1:8000/api/profiles/${user.user}/`, user, {
+        await axios.put(`http://127.0.0.1:8000/api/profiles/${user.user}/`, formData, {
           headers: {
             Authorization: `Token ${authToken}`,
+            'Content-Type': 'multipart/form-data',
           },
         });
         alert('Profile updated successfully!');
       } else {
-        await axios.post('http://127.0.0.1:8000/api/profiles/', user, {
+        await axios.post('http://127.0.0.1:8000/api/profiles/', formData, {
           headers: {
             Authorization: `Token ${authToken}`,
+            'Content-Type': 'multipart/form-data',
           },
         });
         alert('Profile created successfully!');
@@ -138,7 +193,28 @@ const UserProfile = () => {
     <div className={styles.userProfileContainer}>
       <Sidebar profileType="individual" />
       <div className={styles.formContainer}>
-        <h2>User Profile Management</h2>
+        {/* <h2>User Profile Management</h2> */}
+        <div className={styles.profileSummaryContainer}>
+      <Sidebar profileType="individual" />
+      <div className={styles.profilePicContainer}>
+        <img src={user.profile_pic} className={styles.profilePic} />
+        <label htmlFor="profilePicInput" className={styles.editIcon}>
+          <i className="ri-edit-2-line"></i>
+        </label>
+        <input
+          type="file"
+          id="profilePicInput"
+          className={styles.profilePicInput}
+          onChange={handleProfilePicChange}
+        />
+      </div>
+      <div className={styles.profileDetails}>
+        <p className={styles.fullName}>{user.first_name} {user.last_name}</p>
+        <p className={styles.username}>@{username}</p>
+        {/* <p className={styles.summary}>{user.summary}</p> */}
+      </div>
+    </div>
+
         <form onSubmit={handleSubmit} className={styles.form}>
           <input
             type="hidden"
@@ -155,6 +231,7 @@ const UserProfile = () => {
               value={user.first_name}
               onChange={handleChange}
               className={styles.input}
+              required
             />
           </label>
           <label className={styles.label}>
@@ -165,6 +242,7 @@ const UserProfile = () => {
               value={user.last_name}
               onChange={handleChange}
               className={styles.input}
+              required
             />
           </label>
           <label className={styles.label}>
@@ -175,7 +253,8 @@ const UserProfile = () => {
               value={user.email}
               onChange={handleChange}
               className={styles.input}
-              readOnly // Assuming email is not editable
+              readOnly 
+              required
             />
           </label>
           <label className={styles.label}>
@@ -186,6 +265,7 @@ const UserProfile = () => {
               value={user.phone}
               onChange={handleChange}
               className={styles.input}
+              required
             />
           </label>
           <label className={styles.label}>
@@ -196,6 +276,7 @@ const UserProfile = () => {
               value={user.address}
               onChange={handleChange}
               className={styles.input}
+              required
             />
           </label>
           <label className={styles.label}>
@@ -205,10 +286,21 @@ const UserProfile = () => {
               value={user.bio}
               onChange={handleChange}
               className={styles.textarea}
+              required
             ></textarea>
           </label>
           <label className={styles.label}>
-            Facebook:
+            Website (Optional):
+            <input
+              type="url"
+              name="website"
+              value={user.website}
+              onChange={handleChange}
+              className={styles.input}
+            />
+          </label>
+          <label className={styles.label}>
+            Facebook (Optional):
             <input
               type="url"
               name="facebook"
@@ -218,7 +310,7 @@ const UserProfile = () => {
             />
           </label>
           <label className={styles.label}>
-            Instagram:
+            Instagram (Optional):
             <input
               type="url"
               name="instagram"
@@ -228,7 +320,7 @@ const UserProfile = () => {
             />
           </label>
           <label className={styles.label}>
-            LinkedIn:
+            LinkedIn (Optional):
             <input
               type="url"
               name="linkedin"
@@ -237,8 +329,28 @@ const UserProfile = () => {
               className={styles.input}
             />
           </label>
-          <button type="submit" className={styles.button}>
-            {profileExists ? 'Update Profile' : 'Create Profile'}
+          <label className={styles.label}>
+            Github (Optional):
+            <input
+              type="url"
+              name="github"
+              value={user.github}
+              onChange={handleChange}
+              className={styles.input}
+            />
+          </label>
+          <label className={styles.label}>
+            Whatsapp (Optional):
+            <input
+              type='number'
+              name="whatsapp"
+              value={user.whatsapp}
+              onChange={handleChange}
+              className={styles.input}
+            />
+          </label>
+          <button type="submit" className={styles.buttonSaveProfile}>
+            {profileExists ? 'Update Profile' : 'Save Profile'}
           </button>
         </form>
       </div>

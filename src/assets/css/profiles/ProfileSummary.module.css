@@ -1,15 +1,12 @@
 .profileSummaryContainer {
     display: flex;
-    justify-content: center; /* Centers children horizontally */
-    align-items: center; /* Centers children vertically */
-    height: 100vh; /* Full viewport height */
-    width: 600px; /* Fixed width */
+    justify-content: center; 
+    align-items: center; 
+    height: 40vh;
+    width: 600px; 
     padding: 20px;
-    margin: auto; /* Centers the container horizontally in the viewport */
-    /* Optional: Uncomment and adjust the following properties as needed */
-    /* background-color: #fff; */
-    /* border-radius: 10px; */
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    padding: 0;
+    /* margin: auto;  */
   }
 
 
@@ -19,7 +16,7 @@
   }
   
   .contentShift {
-    margin-left: 250px; /* Adjust this value based on your sidebar width */
+    margin-left: 250px; 
   }
   
   .profilePicContainer {

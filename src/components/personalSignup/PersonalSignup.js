@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../../assets/css/authentication/Authentication.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -17,6 +17,10 @@ const PersonalSignup = () => {
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false); // Added loading state
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleFirstNameChange = (e) => setFirstName(e.target.value);
   const handleLasttNameChange = (e) => setLastName(e.target.value);
@@ -101,10 +105,12 @@ const PersonalSignup = () => {
       <form className={styles.login__form} onSubmit={handleSubmit}>
       <img src={logo} alt="Logo" className={styles.auth__logo} />
         <h2 className={styles.login__title}>Hi, Welcome Back!</h2>
-        <p className={styles.login__subtitle}>Please enter your credentials to sign up and create your account.</p>        <div className={styles.login__group}>
-          <div>
-          <div className={styles.login__google}><img className={styles.google__icon} src={google}></img>Log in with Google </div>
+        <p className={styles.login__subtitle}>Please enter your credentials to sign up and create your account.</p>    
+        <div className={styles.login__google}><img className={styles.google__icon} src={google}></img>Log in with Google </div>
           <p className={styles.login__or}>or</p>
+          
+            <div className={styles.login__group}>
+          <div>
 
             <label htmlFor="first_name" className={styles.login__label}>First Name</label>
             <input required type="text" placeholder="First name" id="firstName" className={styles.login__input} value={firstName} onChange={handleFirstNameChange} />

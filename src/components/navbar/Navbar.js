@@ -6,6 +6,8 @@ import Logo from '../../assets/img/logo.png';
 import axios from 'axios';
 
 
+
+
 const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -14,7 +16,11 @@ const Navbar = () => {
   const [username, setUsername] = useState('');
   const [userId, setUserId] = useState('');
 
+
+
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const userInfo = async () => {
       const token = localStorage.getItem('authToken');
       if (token) {
@@ -63,7 +69,7 @@ const Navbar = () => {
 
     console.log(profileType);
     if (profileType === 'individual') {
-      navigate(`/profile-summary/${userId}/${username}`);
+      navigate(`/user-profile/${userId}/${username}`);
     } else if (profileType === 'company'){
       navigate(`/company-profile/${userId}/${username}`);
     }
@@ -84,6 +90,8 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const navMenu = document.getElementById('nav-menu');
     const navToggle = document.getElementById('nav-toggle');
     const navClose = document.getElementById('nav-close');
@@ -219,11 +227,11 @@ const Navbar = () => {
                   About Us
                 </Link>
               </li>
-              <li className="nav__item">
+              {/* <li className="nav__item">
                 <Link to={'/schedule-meeting'} className="nav__link">
                   Schedule a Meeting
                 </Link>
-              </li>
+              </li> */}
               <li className="nav__item">
                 <Link className="nav__link" to="/FAQS">
                   FAQs
@@ -281,18 +289,19 @@ const Navbar = () => {
                 Logout
               </li>
             </Link>
+
+
           </ul>
         ) : (
           <div className="nonAuthbtns">
-            <Link to={'/personal-login'}>
-              <button className="login__btn">Login</button>
+            <Link to={'/login'}><i className='ri-user-line'></i> Login / Signup?
             </Link>
-            <Link to={'/company-signup'}>
+            {/* <Link to={'/company-signup'}>
               <button className="login__btn">Company Signup</button>
             </Link>
             <Link to={'/personal-signup'}>
               <button className="login__btn">Personal Signup</button>
-            </Link>
+            </Link> */}
           </div>
         )}
         <i className="ri-close-line profile__close" id="profile-close"></i>

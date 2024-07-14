@@ -15,6 +15,8 @@ const ProfileSummary = () => {
   });
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');

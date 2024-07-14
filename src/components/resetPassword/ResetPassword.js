@@ -13,6 +13,8 @@ const ResetPassword = () => {
   // const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     let timer;
     if (resendTimeLeft > 0) {
       timer = setInterval(() => {

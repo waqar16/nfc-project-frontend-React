@@ -107,6 +107,25 @@
     font-size: 1em;
     color: #666;
   }
+
+  .buttonSaveProfile {
+    margin-top: 20px;
+    background: linear-gradient(to right, #6660FB, #FC4D53);
+    width: 100%;
+    color: #fff;
+    font-weight: var(--font-semi-bold);
+    padding: 1rem;
+    border-radius: 5rem; /* Ensure this is set */
+    cursor: pointer;
+    text-align: center; 
+    transition: transform 0.3s ease;
+  }
+  
+  .buttonSaveProfile:hover {
+    background: linear-gradient(to right, #7773fc, #f5676b);
+    border-radius: 5rem; 
+  }
+  
   
   .input,
   .textarea {

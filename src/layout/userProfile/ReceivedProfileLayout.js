@@ -1,11 +1,11 @@
-import DigitalProfile from '../../components/digitalProfile/DigitalProfile';
+import ReceivedProfile from '../../components/digitalProfile/ReceivedProfile';
 
-function DigitalProfileLayout() {
+function ReceivedProfileLayout() {
   return (
     <div>
-      <DigitalProfile/>
+      <ReceivedProfile/>
     </div>
   );
 }
 
-export default DigitalProfileLayout;
+export default ReceivedProfileLayout;

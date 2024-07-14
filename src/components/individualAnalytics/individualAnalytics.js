@@ -49,6 +49,7 @@ const Analytics = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');

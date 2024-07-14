@@ -42,20 +42,23 @@
   }
   
   
-  .button {
-    padding: 10px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
+  .buttonSaveProfile {
+    margin-top: 20px;
+    background: linear-gradient(to right, #6660FB, #FC4D53);
+    width: 100%;
+    color: #fff;
+    font-weight: var(--font-semi-bold);
+    padding: 1rem;
+    border-radius: 5rem; /* Ensure this is set */
     cursor: pointer;
-    margin-top: 10px;
+    text-align: center; 
+    transition: transform 0.3s ease;
   }
   
-  .button:hover {
-    background: #0056b3;
+  .buttonSaveProfile:hover {
+    background: linear-gradient(to right, #7773fc, #f5676b);
+    border-radius: 5rem; 
   }
-  
   .listContainer {
     flex: 2;
     background: #ffffff;

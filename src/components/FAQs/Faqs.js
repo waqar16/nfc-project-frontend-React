@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../../assets/css/FAQs/Faqs.module.css';
 
 const Faq = () => {
   const [open, setOpen] = useState({});
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const toggleFAQ = (index) => {
     setOpen((prevOpen) => ({

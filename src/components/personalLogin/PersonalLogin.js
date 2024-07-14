@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../../assets/css/authentication/Authentication.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -11,6 +11,10 @@ const PersonalLogin = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);

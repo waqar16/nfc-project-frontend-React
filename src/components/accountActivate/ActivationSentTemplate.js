@@ -7,6 +7,7 @@ const ActivationSentTemplate = () => {
   const [canResend, setCanResend] = useState(true); // State to manage button visibility and prevent multiple clicks
 
   useEffect(() => {
+
     let countdown;
     if (canResend) {
       countdown = setInterval(() => {

@@ -54,6 +54,8 @@ const ReceivedProfile = () => {
 
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const fetchData = async () => {
       await fetchUserData();
     };

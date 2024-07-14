@@ -1,0 +1,79 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal {
+    background: #fff;
+    border-radius: 10px;
+    width: 400px;
+    padding: 20px;
+    position: relative;
+    text-align: center;
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .icon {
+    margin-bottom: 20px;
+  }
+  
+  .icon img {
+    width: 120px;
+    height: 120px;
+  }
+  
+  h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  p {
+    margin: 10px 0 20px;
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .confirmButton {
+    background: linear-gradient(90deg, #7e4ff0 0%, #e94560 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .cancelButton {
+    background: none;
+    color: #e94560;
+    border: 2px solid #e94560;
+    border-radius: 25px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  

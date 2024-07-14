@@ -12,6 +12,8 @@ const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const token = localStorage.getItem('authToken');
     const userInfo = async () => {
       if (token) {
@@ -40,7 +42,7 @@ const Home = () => {
     if (isAuthenticated & profileType === 'company') {
       navigate(`/company-profile/${userId}/${username}`);
     } else {
-      navigate('/company-signup');
+      navigate('/signup');
     }
   };
 
@@ -48,7 +50,7 @@ const Home = () => {
     if (isAuthenticated & profileType === 'individual') {
       navigate(`/user-profile/${userId}/${username}`);
     } else {
-      navigate('/personal-signup');
+      navigate('/signup');
     }
   };
 

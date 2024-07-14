@@ -1,7 +1,12 @@
 import React from 'react';
 import styles from '../../assets/css/About/AboutUs.module.css';
+import { useEffect } from 'react';
 
 const AboutUs = () => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className={styles.aboutUs}>
       <h2 className={styles.aboutUs__title}>About Us</h2>
