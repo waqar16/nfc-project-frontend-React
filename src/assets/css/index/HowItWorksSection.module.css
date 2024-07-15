@@ -1,6 +1,6 @@
 /* HowItWorksSection.module.css */
 .howItWorksSection {
-  background: white;
+  background: transparent;
   padding: 60px 20px;
   text-align: center;
 }
@@ -19,7 +19,7 @@
 .stepCard {
   background: white;
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.1);
+  /* background-color: rgba(255, 255, 255, 0.1); */
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;

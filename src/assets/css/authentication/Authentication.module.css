@@ -230,10 +230,15 @@ textarea {
     transition: background-color .3s;
   }
   
-  .socialSignup__button:hover {
-    /* background-color: blue; */
-  }
+
   
   .socialSignup__button i {
     margin-right: .5rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    .login {
+      padding: 5rem 1.5rem 5rem;
+    }
+    
   }

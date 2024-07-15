@@ -34,10 +34,13 @@ const AccountDeletion = () => {
                     console.error('Error fetching profile type:', error);
                 }
             }
+            else{
+                navigate('/login');
+            }
         };
 
         userInfo();
-    }, []);
+    }, [navigate]);
 
     const openModal = () => {
         if (password === '') {

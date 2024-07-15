@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../../assets/css/authentication/Authentication.module.css';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const ResetPassword = () => {
@@ -10,22 +10,32 @@ const ResetPassword = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resendDisabled, setResendDisabled] = useState(true); // Initially disabled
   const [resendTimeLeft, setResendTimeLeft] = useState(0);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
+    const token = localStorage.getItem('authToken');
+
     let timer;
-    if (resendTimeLeft > 0) {
-      timer = setInterval(() => {
-        setResendTimeLeft((prevTime) => prevTime - 1);
-      }, 1000);
+
+    if (token) {
+      if (resendTimeLeft > 0) {
+        timer = setInterval(() => {
+          setResendTimeLeft((prevTime) => prevTime - 1);
+        }, 1000);
+      }
+  
+      return () => {
+        if (timer) clearInterval(timer);
+      };
     }
 
-    return () => {
-      if (timer) clearInterval(timer);
-    };
-  }, [resendTimeLeft]);
+    else {
+      navigate('/login');
+    }
+
+  }, [resendTimeLeft, navigate]);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
