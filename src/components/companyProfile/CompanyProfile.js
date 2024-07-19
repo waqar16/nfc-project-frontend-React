@@ -9,7 +9,7 @@ const CompanyProfile = () => {
   const { userId, username } = useParams();
   const navigate = useNavigate();
   const [company, setCompany] = useState({
-    id: userId,
+    user: userId,
     company_name: '',
     admin_name: '',
     email: '',
@@ -44,14 +44,14 @@ const CompanyProfile = () => {
         }
 
         try {
-          const companyResponse = await axios.get(`http://127.0.0.1:8000/api/companies/${id}/`, {
+          const companyResponse = await axios.get(`http://127.0.0.1:8000/api/companies/${userId}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
           });
 
           setCompany({
-            id: userId,
+            user: userId,
             company_name: companyResponse.data.company_name || '',
             admin_name: companyResponse.data.admin_name || '',
             email: email || '',
@@ -68,7 +68,7 @@ const CompanyProfile = () => {
           if (error.response && error.response.status === 404) {
             // Company profile does not exist
             setCompany({
-              id: userId,
+              user: userId,
               company_name: company_name || '',
               admin_name: admin_name || '',
               email: email || '',

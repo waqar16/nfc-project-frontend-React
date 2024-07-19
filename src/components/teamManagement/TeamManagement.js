@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// import 'remixicon/fonts/remixicon.css';
+import 'remixicon/fonts/remixicon.css';
 import styles from '../../assets/css/profiles/Team.module.css';
 import Sidebar from '../sidebar/Sidebar';
 
 const TeamManagement = () => {
   const [employees, setEmployees] = useState([]);
   const [employee, setEmployee] = useState({
-    id: '',
     first_name: '',
     last_name: '',
     email: '',
-    position: '',
+    position: '',   
     phone: '',
     company: '',
   });
@@ -19,8 +18,7 @@ const TeamManagement = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    // window.scrollTo(0, 0);
-
+    window.scrollTo(0, 0);
     fetchCompanyAndEmployees();
   }, []);
 
@@ -32,8 +30,10 @@ const TeamManagement = () => {
           Authorization: `Token ${token}`,
         },
       });
-      
+      console.log('Company data:', companyResponse.data);
+
       if (companyResponse.data.length > 0) {
+        console.log('Company data:', companyResponse.data);
         const company = companyResponse.data[0];
         setCompanyId(company.id);
         setEmployee((prevEmployee) => ({
@@ -72,9 +72,17 @@ const TeamManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('authToken');
+    console.log('Employee data being submitted:', employee);
+
+    // Check if the company field is populated
+    if (!employee.company) {
+      alert('Company is required.');
+      return;
+    }
+
     try {
       if (isEditing) {
-        await axios.put(`http://127.0.0.1:8000/api/employees/${employee.id}/`, employee, {
+        await axios.put(`http://127.0.0.1:8000/api/employees/${employee.email}/`, employee, {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -122,9 +130,25 @@ const TeamManagement = () => {
     setIsEditing(true);
   };
 
+  const handleDelete = async (email) => {
+    const token = localStorage.getItem('authToken');
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/employees/delete/${email}/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      alert('Employee deleted successfully!');
+      fetchEmployees(token);
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+      alert('Failed to delete employee.');
+    }
+  };
+
   return (
     <div className={styles.teamManagementContainer}>
-        <Sidebar  profileType="company"/>
+      <Sidebar profileType="company" />
       <div className={styles.formContainer}>
         <h2>{isEditing ? 'Edit Employee' : 'Create Employee'}</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -201,7 +225,7 @@ const TeamManagement = () => {
                 <p><i className="ri-phone-line"></i> <strong>Phone:</strong> {emp.phone}</p>
                 <div className={styles.actionIcons}>
                   <i className="ri-edit-line" onClick={() => handleEdit(emp)}></i>
-                  {/* Add a delete icon and functionality if needed */}
+                  <i className="ri-delete-bin-line" onClick={() => handleDelete(emp.email)}></i> {/* Delete icon */}
                 </div>
               </div>
             </li>

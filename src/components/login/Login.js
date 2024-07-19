@@ -25,7 +25,7 @@ const LoginPage = () => {
               className={`${styles.toggle__button} ${isPersonalLogin ? styles.active : ''}`}
               onClick={() => toggleLoginMode()}
             >
-              Individual
+              Individual/Employee
             </button>
             <button
               className={`${styles.toggle__button} ${!isPersonalLogin ? styles.active : ''}`}
@@ -111,6 +111,9 @@ const PersonalLogin = ({ navigate }) => {
           else if (profile_type === 'individual'){
             navigate(`/user-analytics/${id}/${username}`);
           }
+          else if (profile_type === 'employee'){
+            navigate(`/employee-profile/${username}`);
+          }
           
           // Hard refresh the page
           window.location.reload();
@@ -152,7 +155,7 @@ const PersonalLogin = ({ navigate }) => {
       <Link className={styles.login__forgot} to={"/reset-password"}>Forgot Password?</Link>
 
       <button type="submit" className={styles.login__button} disabled={loading}>
-        {loading ? 'Logging In...' : 'Log In as Individual'}
+        {loading ? 'Logging In...' : 'Log In as Individual/Employee'}
       </button>
     </form>
   );

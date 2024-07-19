@@ -111,6 +111,34 @@ const Sidebar = ({ profileType }) => {
               </li>
             </>
           )}
+          {profileType === 'employee' && (
+            <>
+              <li className={styles.sidebar__item}>
+                <Link to={`/employee-profile/${userData.username}`}>
+                  <i className="ri-profile-line"></i>
+                  Employee Profile
+                </Link>
+              </li>
+              {/* <li className={styles.sidebar__item}>
+                <Link to={`/nfc-management/${userData.id}/${userData.username}`}>
+                  <i className="ri-wifi-line"></i>
+                  NFC Card Management
+                </Link>
+              </li>
+              <li className={styles.sidebar__item}>
+                <Link to={`/digital-profile/${userData.id}/${userData.username}`}>
+                  <i className="ri-file-text-line"></i>
+                  Digital Card Management
+                </Link>
+              </li>
+              <li className={styles.sidebar__item}>
+                <Link to={`/company-analytics/${userData.id}/${userData.username}`}>
+                  <i className="ri-bar-chart-line"></i>
+                  Analytics
+                </Link>
+              </li> */}
+            </>
+          )}
         </ul>
       </div>
       <div className={styles.sidebar__toggle} onClick={toggleSidebar}>

@@ -28,6 +28,7 @@ import CompanyAnalyticsLayout from './layout/analytics/CompanyAnalyticsLayout';
 import SignupForm from './components/signup/Signup';
 import LoginLayout from './components/login/Login';
 import AccountDeletion from './components/accountDeletion/AccountDeletion';
+import EmployeeSignup from './components/employeeSignup/EmployeeSignup';
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
       <div className="App">
         <Navbar />
         <Routes>
+          <Route path="/api/employees/complete-registration/:uid/:e_mail/:first_name/:last_name" element={<EmployeeSignup />} />
           <Route path="/account-deletion" element={<AccountDeletion />} />
           <Route path="/login" element={<LoginLayout />} />
           <Route path="/signup" element={<SignupForm />} />
@@ -60,7 +62,7 @@ function App() {
           <Route path="/digital-profile/:userId/:username" element={<DigitalProfileLayout />} />
           <Route path="/profile/:userId/" element={<ReceivedProfileLayout />} />
           <Route path="/user-analytics/:userId/:username" element={<AnalyticsLayout/>}/>
-          <Route path="/employee-profile" element={<EmployeeProfileLayout/>}/>
+          <Route path="/employee-profile/:username" element={<EmployeeProfileLayout/>}/>
           <Route path="/profile-summary/:userId/:username" element={<ProfileSummaryLayout/>}/>
           <Route path="/nfc-management/:userId/:username" element={<NfcCardLayout/>}/>
           <Route path="/team-management/:userId/:username" element={<TeamManagementLayout/>}/>

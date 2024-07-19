@@ -19,7 +19,7 @@ const Activation = () => {
 
       if (response.status === 204) {
         setMessage('You have successfully activated your account.');
-        navigate('/personal-login')
+        navigate('/login')
 
         // // Retrieve email and password from local storage
         // const email = localStorage.getItem('email');
