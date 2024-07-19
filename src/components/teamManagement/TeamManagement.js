@@ -76,7 +76,7 @@ const TeamManagement = () => {
 
     // Check if the company field is populated
     if (!employee.company) {
-      alert('Company is required.');
+      alert('Company is required. Please complete you company profile first.');
       return;
     }
 

@@ -120,12 +120,12 @@ const CompanyProfile = () => {
       const authToken = localStorage.getItem('authToken');
 
       if (profileExists) {
-        await axios.put(`http://127.0.0.1:8000/api/companies/${company.id}/`, company, {
+        await axios.put(`http://127.0.0.1:8000/api/companies/${userId}/`, company, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
         });
-        // alert('Company profile updated successfully!');
+        alert('Company profile updated successfully!');
       } else {
         const createResponse = await axios.post('http://127.0.0.1:8000/api/companies/', company, {
           headers: {
@@ -141,13 +141,13 @@ const CompanyProfile = () => {
           id: createdCompanyId,
         }));
 
-        // alert('Company profile created successfully!');
+        alert('Company profile created successfully!');
         setProfileExists(true); // Update profile existence state
       }
 
     } catch (error) {
       console.error('Error updating/creating company profile:', error);
-      // alert('Failed to update/create company profile.');
+      alert('Failed to update/create company profile.');
     }
   };
 
