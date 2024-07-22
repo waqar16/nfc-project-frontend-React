@@ -33,7 +33,7 @@ const EmployeeProfile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
+        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -60,7 +60,7 @@ const EmployeeProfile = () => {
         })
 
         try {
-          const profileResponse = await axios.get(`http://127.0.0.1:8000/api/employees/${email}/`, {
+          const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/employees/${email}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -166,7 +166,7 @@ const EmployeeProfile = () => {
       const authToken = localStorage.getItem('authToken');
       if (profileExists) {
         
-        await axios.put(`http://127.0.0.1:8000/api/employees/${user.email}/`, formData, {
+        await axios.put(`https://waqar123.pythonanywhere.com/api/employees/${user.email}/`, formData, {
           headers: {
             Authorization: `Token ${authToken}`,
             'Content-Type': 'multipart/form-data',
@@ -174,7 +174,7 @@ const EmployeeProfile = () => {
         });
         alert('Profile updated successfully!');
       } else {
-        await axios.post('http://127.0.0.1:8000/api/employees/', formData, {
+        await axios.post('https://waqar123.pythonanywhere.com/api/employees/', formData, {
           headers: {
             Authorization: `Token ${authToken}`,
             'Content-Type': 'multipart/form-data',
@@ -184,7 +184,7 @@ const EmployeeProfile = () => {
       }
       
       // Fetch updated profile data
-      const profileResponse = await axios.get(`http://127.0.0.1:8000/api/employees/${user.email}/`, {
+      const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/employees/${user.email}/`, {
         headers: {
           Authorization: `Token ${authToken}`,
         },

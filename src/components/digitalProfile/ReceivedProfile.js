@@ -26,7 +26,7 @@ const ReceivedProfile = () => {
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const profileResponse = await axios.get(`http://127.0.0.1:8000/api/profiles/${userId}/`, {
+      const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${userId}/`, {
         headers: {
           Authorization: `Token ${token}`
         }

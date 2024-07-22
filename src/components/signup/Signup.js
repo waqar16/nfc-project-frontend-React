@@ -4,33 +4,37 @@ import styles from '../../assets/css/authentication/Authentication.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../../assets/img/logo.png';
-import google from '../../assets/img/socials/google.png';
-// import { GoogleLogin } from '@react-oauth/google';
+// import google from '../../assets/img/socials/google.png';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const SignupPage = () => {
   const [isPersonalSignup, setIsPersonalSignup] = useState(true); // State to toggle between personal and company signup
   const toggleSignupMode = () => setIsPersonalSignup(!isPersonalSignup); // Function to toggle signup mode
   const navigate = useNavigate();
 
-  // const handleSuccess = async (response) => {
-  //   const { code } = response;
-  //   try {
-  //     // Send the authorization code to your backend
-  //     const res = await axios.post('http://localhost:8000/auth/google/callback/', { code });
-  //     const { token } = res.data;
-      
-  //     // Save token and proceed
-  //     localStorage.setItem('token', token);
-  //     // Redirect or update UI as needed
-  //   } catch (error) {
-  //     console.error('Login failed', error);
-  //   }
-  // };
+  const clientId = '1036461909018-v32f9s35hefkbeq70gterh12sioug5a5.apps.googleusercontent.com';
 
-  // const handleError = (error) => {
-  //   console.error('Google Sign-In failed', error);
-  // };
+  const handleGoogleSuccess = async (response) => {
+    const tokenId = response.credential; // Token ID from Google
 
+    try {
+      const res = await axios.post('http://localhost:8000/auth/social/google/', {
+        access_token: tokenId,
+      });
+
+      // Store the authentication token in localStorage
+      localStorage.setItem('authToken', res.data.key);
+
+      // Redirect or perform additional actions
+      console.log('Login successful:', res.data);
+    } catch (error) {
+      console.error('Google login error:', error);
+    }
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.error('Google login failure:', error);
+  };
 
   return (
     <div className={`${styles.login} ${styles.marginCustom}`}>
@@ -56,11 +60,28 @@ const SignupPage = () => {
               Company
             </button>
           </div>
-          <div className={styles.login__google}><img className={styles.google__icon} src={google}></img>Continue with Google </div>
-          {/* <GoogleLogin
-      onSuccess={handleSuccess}
-      onError={handleError}
-    /> */}
+
+
+
+          {/* <div className={styles.login__google}><img className={styles.google__icon} src={google}></img>Continue with Google </div> */}
+          <GoogleOAuthProvider clientId={clientId}>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleFailure}
+              useOneTap
+            />
+
+            {/* <GoogleLogin
+              onSuccess={credentialResponse => {
+                console.log(credentialResponse);
+              }}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+            /> */}
+          </GoogleOAuthProvider>
+
+
           <p className={styles.login__or}>or</p>
 
           {isPersonalSignup ? (
@@ -129,7 +150,7 @@ const PersonalSignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/auth/users/', {
+      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
         first_name: firstName,
         last_name: lastName,
         email,
@@ -277,7 +298,7 @@ const CompanySignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/auth/users/', {
+      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
         company_name: companyName,
         admin_name: adminName,
         email,

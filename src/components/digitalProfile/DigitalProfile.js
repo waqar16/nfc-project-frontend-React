@@ -32,7 +32,7 @@ const DigitalProfile = () => {
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
+      const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -44,7 +44,7 @@ const DigitalProfile = () => {
       if (profile_type !== 'individual' || userId !== id.toString() || username !== authenticatedUsername) {
         navigate('/not-authorized'); // Redirect to not authorized page
       } else {
-        const profileResponse = await axios.get(`http://127.0.0.1:8000/api/profiles/${id}/`, {
+        const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${id}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -74,13 +74,13 @@ const DigitalProfile = () => {
   const fetchReceivedCards = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('http://127.0.0.1:8000/api/received-cards/', {
+      const response = await axios.get('https://waqar123.pythonanywhere.com/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
       });
       const cards = await Promise.all(response.data.map(async (card) => {
-        const userResponse = await axios.get(`http://127.0.0.1:8000/auth/users/${card.shared_from}/`, {
+        const userResponse = await axios.get(`https://waqar123.pythonanywhere.com/auth/users/${card.shared_from}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -114,7 +114,7 @@ const DigitalProfile = () => {
   const handleWriteToNFC = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      axios.post('http://127.0.0.1:8000/api/nfc-write/', user, {
+      axios.post('https://waqar123.pythonanywhere.com/api/nfc-write/', user, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -129,7 +129,7 @@ const DigitalProfile = () => {
   const handleShareProfile = async (recipient) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('http://127.0.0.1:8000/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
