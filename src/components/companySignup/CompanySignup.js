@@ -61,7 +61,7 @@ const CompanySignup = () => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/auth/users/', {
+      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
         company_name: companyName,
         admin_name: adminName,
         email,

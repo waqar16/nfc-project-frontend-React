@@ -26,7 +26,7 @@ const Navbar = () => {
       if (token) {
         setIsAuthenticated(true);
         try {
-          const response = await axios.get('http://127.0.0.1:8000/auth/users/me', {
+          const response = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me', {
             headers: {
               Authorization: `Token ${token}`,
             },
