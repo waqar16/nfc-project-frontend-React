@@ -4,11 +4,39 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../../assets/img/logo.png';
 import google from '../../assets/img/socials/google.png';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const LoginPage = () => {
   const [isPersonalLogin, setIsPersonalLogin] = useState(true); // State to toggle between personal and company login
   const toggleLoginMode = () => setIsPersonalLogin(!isPersonalLogin); // Function to toggle login mode
   const navigate = useNavigate();
+  const clientId = '1036461909018-v32f9s35hefkbeq70gterh12sioug5a5.apps.googleusercontent.com';
+
+  const handleGoogleSuccess = async (response) => {
+    const tokenId = response.credential; // Token ID from Google
+
+    try {
+      console.log('Google login response:', response);
+      const profileType = isPersonalLogin ? "individual" : "company";
+      const res = await axios.post('http://localhost:8000/auth/custom-google-login/', {
+        access_token: tokenId,
+        profile_type: profileType
+      });
+
+      // Store the authentication token in localStorage
+      localStorage.setItem('authToken', res.data.auth_token);
+
+      // Redirect or perform additional actions
+      navigate('/');
+    } catch (error) {
+      console.error('Google login error:', error);
+    }
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.error('Google login failure:', error);
+  };
+
 
   return (
     <div className={`${styles.login} ${styles.marginCustom}`}>
@@ -34,10 +62,17 @@ const LoginPage = () => {
               Company
             </button>
           </div>
-          <div className={styles.login__google}>
+          {/* <div className={styles.login__google}>
             <img className={styles.google__icon} src={google}></img>
             Continue with Google
-          </div>
+          </div> */}
+          <GoogleOAuthProvider clientId={clientId}>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleFailure}
+              useOneTap
+            />
+          </GoogleOAuthProvider>
           <p className={styles.login__or}>or</p>
 
           {isPersonalLogin ? (
@@ -56,84 +91,84 @@ const LoginPage = () => {
 };
 
 const PersonalLogin = ({ navigate }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
-    // const navigate = useNavigate();
-  
-    const handleEmailChange = (e) => {
-      setEmail(e.target.value);
-    };
-  
-    const handlePasswordChange = (e) => {
-      setPassword(e.target.value);
-    };
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      // window.location.reload();
-      setLoading(true);
-  
-      try {
-        const response = await axios.post('https://waqar123.pythonanywhere.com/auth/token/login/', {
-          email,
-          password,
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  // const navigate = useNavigate();
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // window.location.reload();
+    setLoading(true);
+
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/auth/token/login/', {
+        email,
+        password,
+      });
+
+      // const response2 = await axios.get('http://127.0.0.1:8000/api/profile_type/', {
+      // });
+
+      // console.log(response2.data.profile_type);
+
+      if (response.status === 200) {
+        const authToken = response.data;
+        localStorage.setItem('authToken', authToken.auth_token);
+        console.log('User logged in successfully:', response.data);
+        console.log('Token:', authToken.auth_token);
+
+        // Dispatch custom event to update Navbar state
+        const event = new Event('authStatusChanged');
+        window.dispatchEvent(event);
+
+        const token = localStorage.getItem('authToken');
+        const userResponse = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
+          headers: {
+            Authorization: `Token ${token}`
+          }
         });
-  
-        // const response2 = await axios.get('https://waqar123.pythonanywhere.com/api/profile_type/', {
-        // });
-  
-        // console.log(response2.data.profile_type);
-        
-        if (response.status === 200) {
-          const authToken = response.data;
-          localStorage.setItem('authToken', authToken.auth_token);
-          console.log('User logged in successfully:', response.data);
-          console.log('Token:', authToken.auth_token);
-  
-          // Dispatch custom event to update Navbar state
-          const event = new Event('authStatusChanged');
-          window.dispatchEvent(event);
-  
-          const token = localStorage.getItem('authToken');
-          const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
-            headers: {
-              Authorization: `Token ${token}`
-            }
-          });
-  
-          const { id, username, profile_type } = userResponse.data;
-  
-          if (profile_type === 'company'){
-            navigate(`/company-analytics/${id}/${username}`);
-          }
-          else if (profile_type === 'individual'){
-            navigate(`/user-analytics/${id}/${username}`);
-          }
-          else if (profile_type === 'employee'){
-            navigate(`/employee-profile/${username}`);
-          }
-          
-          // Hard refresh the page
-          window.location.reload();
-  
+
+        const { id, username, profile_type } = userResponse.data;
+
+        if (profile_type === 'company') {
+          navigate(`/company-analytics/${id}/${username}`);
         }
-      } catch (error) {
-        setLoading(false);
-        if (error.response && error.response.data) {
-          const data = error.response.data;
-          if (data.non_field_errors) {
-            setError(data.non_field_errors[0]);
-          }
-          if (data.error) {
-            setError(data.error[0]);
-          }
-        } else {
-          console.error('Error logging in user:', error.message);
+        else if (profile_type === 'individual') {
+          navigate(`/user-analytics/${id}/${username}`);
         }
+        else if (profile_type === 'employee') {
+          navigate(`/employee-profile/${username}`);
+        }
+
+        // Hard refresh the page
+        window.location.reload();
+
       }
-    };
+    } catch (error) {
+      setLoading(false);
+      if (error.response && error.response.data) {
+        const data = error.response.data;
+        if (data.non_field_errors) {
+          setError(data.non_field_errors[0]);
+        }
+        if (data.error) {
+          setError(data.error[0]);
+        }
+      } else {
+        console.error('Error logging in user:', error.message);
+      }
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -147,11 +182,11 @@ const PersonalLogin = ({ navigate }) => {
           <input required type="password" placeholder="Enter your password" id="password" className={styles.login__input} value={password} onChange={handlePasswordChange} />
         </div>
         {error && (
-  <p className={styles.error}>
-    <i className="fas fa-exclamation-circle" style={{ marginRight: '8px', borderRadius: '50%' }}></i>
-    {error}
-  </p>
-)}      </div>
+          <p className={styles.error}>
+            <i className="fas fa-exclamation-circle" style={{ marginRight: '8px', borderRadius: '50%' }}></i>
+            {error}
+          </p>
+        )}      </div>
       <Link className={styles.login__forgot} to={"/reset-password"}>Forgot Password?</Link>
 
       <button type="submit" className={styles.login__button} disabled={loading}>
@@ -162,81 +197,81 @@ const PersonalLogin = ({ navigate }) => {
 };
 
 const CompanyLogin = ({ navigate }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
-    // const navigate = useNavigate();
-  
-    const handleEmailChange = (e) => {
-      setEmail(e.target.value);
-    };
-  
-    const handlePasswordChange = (e) => {
-      setPassword(e.target.value);
-    };
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      // window.location.reload();
-      setLoading(true);
-  
-      try {
-        const response = await axios.post('https://waqar123.pythonanywhere.com/auth/token/login/', {
-          email,
-          password,
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  // const navigate = useNavigate();
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // window.location.reload();
+    setLoading(true);
+
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/auth/token/login/', {
+        email,
+        password,
+      });
+
+      // const response2 = await axios.get('http://127.0.0.1:8000/api/profile_type/', {
+      // });
+
+      // console.log(response2.data.profile_type);
+
+      if (response.status === 200) {
+        const authToken = response.data;
+        localStorage.setItem('authToken', authToken.auth_token);
+        console.log('User logged in successfully:', response.data);
+        console.log('Token:', authToken.auth_token);
+
+        // Dispatch custom event to update Navbar state
+        const event = new Event('authStatusChanged');
+        window.dispatchEvent(event);
+
+        const token = localStorage.getItem('authToken');
+        const userResponse = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
+          headers: {
+            Authorization: `Token ${token}`
+          }
         });
-  
-        // const response2 = await axios.get('https://waqar123.pythonanywhere.com/api/profile_type/', {
-        // });
-  
-        // console.log(response2.data.profile_type);
-        
-        if (response.status === 200) {
-          const authToken = response.data;
-          localStorage.setItem('authToken', authToken.auth_token);
-          console.log('User logged in successfully:', response.data);
-          console.log('Token:', authToken.auth_token);
-  
-          // Dispatch custom event to update Navbar state
-          const event = new Event('authStatusChanged');
-          window.dispatchEvent(event);
-  
-          const token = localStorage.getItem('authToken');
-          const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
-            headers: {
-              Authorization: `Token ${token}`
-            }
-          });
-  
-          const { id, username, profile_type } = userResponse.data;
-  
-          if (profile_type === 'company'){
-            navigate(`/company-analytics/${id}/${username}`);
-          }
-          else if (profile_type === 'individual'){
-            navigate(`/user-analytics/${id}/${username}`);
-          }
-          
-          // Hard refresh the page
-          window.location.reload();
-  
+
+        const { id, username, profile_type } = userResponse.data;
+
+        if (profile_type === 'company') {
+          navigate(`/company-analytics/${id}/${username}`);
         }
-      } catch (error) {
-        setLoading(false);
-        if (error.response && error.response.data) {
-          const data = error.response.data;
-          if (data.non_field_errors) {
-            setError(data.non_field_errors[0]);
-          }
-          if (data.error) {
-            setError(data.error[0]);
-          }
-        } else {
-          console.error('Error logging in user:', error.message);
+        else if (profile_type === 'individual') {
+          navigate(`/user-analytics/${id}/${username}`);
         }
+
+        // Hard refresh the page
+        window.location.reload();
+
       }
-    };
+    } catch (error) {
+      setLoading(false);
+      if (error.response && error.response.data) {
+        const data = error.response.data;
+        if (data.non_field_errors) {
+          setError(data.non_field_errors[0]);
+        }
+        if (data.error) {
+          setError(data.error[0]);
+        }
+      } else {
+        console.error('Error logging in user:', error.message);
+      }
+    }
+  };
   return (
     <form onSubmit={handleSubmit}>
       <div className={styles.login__group}>
@@ -249,11 +284,11 @@ const CompanyLogin = ({ navigate }) => {
           <input required type="password" placeholder="Enter your password" id="password" className={styles.login__input} value={password} onChange={handlePasswordChange} />
         </div>
         {error && (
-  <p className={styles.error}>
-    <i className="fas fa-exclamation-circle" style={{ marginRight: '8px', borderRadius: '50%' }}></i>
-    {error}
-  </p>
-)}      </div>
+          <p className={styles.error}>
+            <i className="fas fa-exclamation-circle" style={{ marginRight: '8px', borderRadius: '50%' }}></i>
+            {error}
+          </p>
+        )}      </div>
       <Link className={styles.login__forgot} to={"/reset-password"}>Forgot Password?</Link>
 
       <button type="submit" className={styles.login__button} disabled={loading}>

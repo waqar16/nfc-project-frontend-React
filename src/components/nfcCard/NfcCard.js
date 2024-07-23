@@ -18,7 +18,7 @@ const NfcCard = () => {
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+      const userResponse = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }

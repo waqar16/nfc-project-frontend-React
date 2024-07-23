@@ -28,11 +28,12 @@ const DigitalProfile = () => {
 
   const [receivedCards, setReceivedCards] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [shareLink, setShareLink] = useState('');
 
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+      const userResponse = await axios.get('http://127.0.0.1:8000/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -44,7 +45,7 @@ const DigitalProfile = () => {
       if (profile_type !== 'individual' || userId !== id.toString() || username !== authenticatedUsername) {
         navigate('/not-authorized'); // Redirect to not authorized page
       } else {
-        const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${id}/`, {
+        const profileResponse = await axios.get(`http://127.0.0.1:8000/api/profiles/${id}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -74,13 +75,13 @@ const DigitalProfile = () => {
   const fetchReceivedCards = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://waqar123.pythonanywhere.com/api/received-cards/', {
+      const response = await axios.get('http://127.0.0.1:8000/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
       });
       const cards = await Promise.all(response.data.map(async (card) => {
-        const userResponse = await axios.get(`https://waqar123.pythonanywhere.com/auth/users/${card.shared_from}/`, {
+        const userResponse = await axios.get(`http://127.0.0.1:8000/auth/users/${card.shared_from}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -107,14 +108,27 @@ const DigitalProfile = () => {
     fetchData();
   }, [fetchUserData, fetchReceivedCards]);
 
-  const handleShareToCard = () => {
-    setIsModalOpen(true);
+  const handleShareToCard = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await axios.post('http://127.0.0.1:8000/api/share-profile-url/', {}, {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      });
+  
+      setShareLink(response.data.profile_url);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('Error generating share link:', error);
+      alert('Failed to generate share link.');
+    }
   };
-
+  
   const handleWriteToNFC = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      axios.post('https://waqar123.pythonanywhere.com/api/nfc-write/', user, {
+      axios.post('http://127.0.0.1:8000/api/nfc-write/', user, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -129,7 +143,7 @@ const DigitalProfile = () => {
   const handleShareProfile = async (recipient) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('http://127.0.0.1:8000/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -190,11 +204,12 @@ const DigitalProfile = () => {
           </div>
         </div>
 
-        {/* <ShareProfileModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onShare={handleShareProfile}
-        />
+        <ShareProfileModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onShare={handleShareProfile}
+        shareLink={shareLink}  // Pass the share link to the modal
+      />
         <div className={styles.receivedCardsSection}>
           <h2>Received Digital Cards</h2>
           <div className={styles.receivedCardsList}>
@@ -215,7 +230,7 @@ const DigitalProfile = () => {
               <p>No received digital cards.</p>
             )}
           </div>
-        </div> */}
+        </div>
       </div>
       <div className={styles.cardActions}>
         <button onClick={handleShareToCard} className={styles.actionButton}>
@@ -230,3 +245,7 @@ const DigitalProfile = () => {
 };
 
 export default DigitalProfile;
+
+
+
+

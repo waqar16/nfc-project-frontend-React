@@ -22,7 +22,7 @@ function HomeLayout() {
       <ScheduleMeetingSection/>
       <OurApp/>
       <TestimonialsSection/>
-      <ContactSection/> 
+      {/* <ContactSection/>  */}
       {/* <FeedbackForm/> */}
 
       

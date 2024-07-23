@@ -18,15 +18,18 @@ const SignupPage = () => {
     const tokenId = response.credential; // Token ID from Google
 
     try {
-      const res = await axios.post('http://localhost:8000/auth/social/google/', {
+      console.log('Google login response:', response);
+      const profileType = isPersonalSignup ? "individual" : "company";
+      const res = await axios.post('http://localhost:8000/auth/custom-google-login/', {
         access_token: tokenId,
+        profile_type: profileType
       });
 
       // Store the authentication token in localStorage
-      localStorage.setItem('authToken', res.data.key);
+      localStorage.setItem('authToken', res.data.auth_token);
 
       // Redirect or perform additional actions
-      console.log('Login successful:', res.data);
+      navigate('/');
     } catch (error) {
       console.error('Google login error:', error);
     }
@@ -70,15 +73,6 @@ const SignupPage = () => {
               onError={handleGoogleFailure}
               useOneTap
             />
-
-            {/* <GoogleLogin
-              onSuccess={credentialResponse => {
-                console.log(credentialResponse);
-              }}
-              onError={() => {
-                console.log('Login Failed');
-              }}
-            /> */}
           </GoogleOAuthProvider>
 
 
@@ -150,7 +144,7 @@ const PersonalSignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
+      const response = await axios.post('http://127.0.0.1:8000/auth/users/', {
         first_name: firstName,
         last_name: lastName,
         email,
@@ -298,7 +292,7 @@ const CompanySignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
+      const response = await axios.post('http://127.0.0.1:8000/auth/users/', {
         company_name: companyName,
         admin_name: adminName,
         email,
