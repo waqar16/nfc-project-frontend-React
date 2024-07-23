@@ -18,7 +18,7 @@ const LoginPage = () => {
     try {
       console.log('Google login response:', response);
       const profileType = isPersonalLogin ? "individual" : "company";
-      const res = await axios.post('http://localhost:8000/auth/custom-google-login/', {
+      const res = await axios.post('https://waqar123.pythonanywhere.com/auth/custom-google-login/', {
         access_token: tokenId,
         profile_type: profileType
       });
@@ -111,12 +111,12 @@ const PersonalLogin = ({ navigate }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000auth/token/login/', {
+      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/token/login/', {
         email,
         password,
       });
 
-      // const response2 = await axios.get('http://127.0.0.1:8000api/profile_type/', {
+      // const response2 = await axios.get('https://waqar123.pythonanywhere.com/api/profile_type/', {
       // });
 
       // console.log(response2.data.profile_type);
@@ -132,7 +132,7 @@ const PersonalLogin = ({ navigate }) => {
         window.dispatchEvent(event);
 
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('http://127.0.0.1:8000auth/users/me/', {
+        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -217,12 +217,12 @@ const CompanyLogin = ({ navigate }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000auth/token/login/', {
+      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/token/login/', {
         email,
         password,
       });
 
-      // const response2 = await axios.get('http://127.0.0.1:8000api/profile_type/', {
+      // const response2 = await axios.get('https://waqar123.pythonanywhere.com/api/profile_type/', {
       // });
 
       // console.log(response2.data.profile_type);
@@ -238,7 +238,7 @@ const CompanyLogin = ({ navigate }) => {
         window.dispatchEvent(event);
 
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('http://127.0.0.1:8000auth/users/me/', {
+        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }

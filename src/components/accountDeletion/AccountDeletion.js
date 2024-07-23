@@ -22,7 +22,7 @@ const AccountDeletion = () => {
             const token = localStorage.getItem('authToken');
             if (token) {
                 try {
-                    const response = await axios.get('http://127.0.0.1:8000auth/users/me', {
+                    const response = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me', {
                         headers: {
                             Authorization: `Token ${token}`,
                         },
@@ -59,7 +59,7 @@ const AccountDeletion = () => {
 
         try {
             const authToken = localStorage.getItem('authToken');
-            const response = await axios.delete('http://127.0.0.1:8000auth/users/me/', {
+            const response = await axios.delete('https://waqar123.pythonanywhere.com/auth/users/me/', {
                 headers: {
                     Authorization: `Token ${authToken}`,
                 },

@@ -12,7 +12,7 @@ const Activation = () => {
   const handleActivation = async () => {
     try {
       // Activate user account
-      const response = await axios.post('http://127.0.0.1:8000auth/users/activation/', {
+      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/activation/', {
         uid,
         token,
       });
@@ -26,7 +26,7 @@ const Activation = () => {
         // const password = localStorage.getItem('password');
 
         // // Login user
-        // const loginResponse = await axios.post('http://127.0.0.1:8000auth/token/login/', {
+        // const loginResponse = await axios.post('https://waqar123.pythonanywhere.com/auth/token/login/', {
         //   email,
         //   password,
         // });
@@ -41,7 +41,7 @@ const Activation = () => {
     // finally{
     //           // Fetch user data
     //           const authToken = localStorage.getItem('authToken');
-    //           const userResponse = await axios.get('http://127.0.0.1:8000auth/users/me/', {
+    //           const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
     //             headers: {
     //               Authorization: `Token ${authToken}`,
     //             },
@@ -54,7 +54,7 @@ const Activation = () => {
     //             user: userResponse.data.id,
     //             profile_type: localStorage.getItem('profile_type'),
     //           }
-    //           await axios.post('http://127.0.0.1:8000api/profile_type/', profile, {
+    //           await axios.post('https://waqar123.pythonanywhere.com/api/profile_type/', profile, {
     //             headers: {
     //               Authorization: `Token ${authToken}`,
     //             },

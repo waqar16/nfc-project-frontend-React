@@ -31,7 +31,7 @@ const ReceivedProfile = () => {
     try {
       const token = localStorage.getItem('authToken');
       if (token) {
-        const profileResponse = await axios.get(`http://127.0.0.1:8000api/profiles/${userId}/`, {
+        const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${userId}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -51,7 +51,7 @@ const ReceivedProfile = () => {
       }
 
       else {
-        const profileResponse = await axios.get(`http://127.0.0.1:8000api/profiles/${userId}/`, {
+        const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${userId}/`, {
         });
         const profileData = profileResponse.data;
         setUser({
