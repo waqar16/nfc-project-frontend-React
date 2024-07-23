@@ -144,7 +144,7 @@ const PersonalSignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
+      const response = await axios.post('http://127.0.0.1:8000auth/users/', {
         first_name: firstName,
         last_name: lastName,
         email,
@@ -292,7 +292,7 @@ const CompanySignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
+      const response = await axios.post('http://127.0.0.1:8000auth/users/', {
         company_name: companyName,
         admin_name: adminName,
         email,

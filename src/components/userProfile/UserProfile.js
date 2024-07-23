@@ -33,7 +33,7 @@ const UserProfile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const userResponse = await axios.get('http://127.0.0.1:8000auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -57,7 +57,7 @@ const UserProfile = () => {
         })
 
         try {
-          const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${id}/`, {
+          const profileResponse = await axios.get(`http://127.0.0.1:8000api/profiles/${id}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -157,7 +157,7 @@ const UserProfile = () => {
       const authToken = localStorage.getItem('authToken');
       if (profileExists) {
         
-        await axios.put(`https://waqar123.pythonanywhere.com/api/profiles/${user.user}/`, formData, {
+        await axios.put(`http://127.0.0.1:8000api/profiles/${user.user}/`, formData, {
           headers: {
             Authorization: `Token ${authToken}`,
             'Content-Type': 'multipart/form-data',
@@ -165,7 +165,7 @@ const UserProfile = () => {
         });
         alert('Profile updated successfully!');
       } else {
-        await axios.post('https://waqar123.pythonanywhere.com/api/profiles/', formData, {
+        await axios.post('http://127.0.0.1:8000api/profiles/', formData, {
           headers: {
             Authorization: `Token ${authToken}`,
             'Content-Type': 'multipart/form-data',
@@ -175,7 +175,7 @@ const UserProfile = () => {
       }
       
       // Fetch updated profile data
-      const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${user.user}/`, {
+      const profileResponse = await axios.get(`http://127.0.0.1:8000api/profiles/${user.user}/`, {
         headers: {
           Authorization: `Token ${authToken}`,
         },

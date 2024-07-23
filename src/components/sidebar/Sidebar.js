@@ -16,7 +16,7 @@ const Sidebar = ({ profileType }) => {
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+      const response = await axios.get('http://127.0.0.1:8000auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
