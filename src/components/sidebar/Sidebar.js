@@ -16,7 +16,7 @@ const Sidebar = ({ profileType }) => {
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+      const response = await axios.get('http://localhost:8000/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -45,6 +45,9 @@ const Sidebar = ({ profileType }) => {
                   Profile Summary
                 </Link>
               </li> */}
+              <div className={styles.sidebar__toggle} onClick={toggleSidebar}>
+                <i className="ri-menu-line"></i>
+              </div>
               <li className={styles.sidebar__item}>
                 <Link to={`/user-profile/${userData.id}/${userData.username}`}>
                   <i className="ri-profile-line"></i>
@@ -66,7 +69,7 @@ const Sidebar = ({ profileType }) => {
               <li className={styles.sidebar__item}>
                 <Link to={`/schedule-meeting/${userData.id}/${userData.username}`}>
                   <i className="ri-calendar-line"></i>
-                  Appointment Scheduling
+                  Manage Appointments
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
@@ -114,12 +117,12 @@ const Sidebar = ({ profileType }) => {
           {profileType === 'employee' && (
             <>
               <li className={styles.sidebar__item}>
-                <Link to={`/employee-profile/${userData.username}`}>
+                <Link to={`/employee-profile/${userData.id}/${userData.username}`}>
                   <i className="ri-profile-line"></i>
                   Employee Profile
                 </Link>
               </li>
-              {/* <li className={styles.sidebar__item}>
+              <li className={styles.sidebar__item}>
                 <Link to={`/nfc-management/${userData.id}/${userData.username}`}>
                   <i className="ri-wifi-line"></i>
                   NFC Card Management
@@ -132,11 +135,17 @@ const Sidebar = ({ profileType }) => {
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
-                <Link to={`/company-analytics/${userData.id}/${userData.username}`}>
+                <Link to={`/schedule-meeting/${userData.id}/${userData.username}`}>
+                  <i className="ri-calendar-line"></i>
+                   Manage Appointments
+                </Link>
+              </li>
+              <li className={styles.sidebar__item}>
+                <Link to={`/user-analytics/${userData.id}/${userData.username}`}>
                   <i className="ri-bar-chart-line"></i>
                   Analytics
                 </Link>
-              </li> */}
+              </li>
             </>
           )}
         </ul>

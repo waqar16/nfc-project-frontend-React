@@ -13,11 +13,13 @@ const DigitalProfile = () => {
   const { userId, username } = useParams();
   const navigate = useNavigate();
 
+
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
+    position: '',
     address: '',
     bio: '',
     facebook: '',
@@ -33,7 +35,7 @@ const DigitalProfile = () => {
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+      const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -42,10 +44,11 @@ const DigitalProfile = () => {
       const { id, first_name, last_name, email, username: authenticatedUsername, profile_type } = userResponse.data;
 
       // Check if the user ID or username from URL parameters does not match the authenticated user's details
-      if (profile_type !== 'individual' || userId !== id.toString() || username !== authenticatedUsername) {
+      if (profile_type !== profile_type || userId !== id.toString() || username !== authenticatedUsername) {
         navigate('/not-authorized'); // Redirect to not authorized page
       } else {
-        const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${id}/`, {
+        const endpoint = profile_type === 'employee' ? `http://localhost:8000/api/employees/${email}/` : `http://localhost:8000/api/profiles/${id}/`;
+        const profileResponse = await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -58,6 +61,7 @@ const DigitalProfile = () => {
           lastName: last_name,
           email: email,
           phone: profileData.phone || '',
+          position: profileData.position || '',
           address: profileData.address || '',
           bio: profileData.bio || '',
           facebook: profileData.facebook || '',
@@ -75,13 +79,13 @@ const DigitalProfile = () => {
   const fetchReceivedCards = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://waqar123.pythonanywhere.com/api/received-cards/', {
+      const response = await axios.get('http://localhost:8000/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
       });
       const cards = await Promise.all(response.data.map(async (card) => {
-        const userResponse = await axios.get(`https://waqar123.pythonanywhere.com/auth/users/${card.shared_from}/`, {
+        const userResponse = await axios.get(`http://localhost:8000/api/profiles/${card.shared_from}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -111,7 +115,7 @@ const DigitalProfile = () => {
   const handleShareToCard = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://waqar123.pythonanywhere.com/api/share-profile-url/', {}, {
+      const response = await axios.post('http://localhost:8000/api/share-profile-url/', {}, {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -128,7 +132,7 @@ const DigitalProfile = () => {
   const handleWriteToNFC = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      axios.post('https://waqar123.pythonanywhere.com/api/nfc-write/', user, {
+      axios.post('http://localhost:8000/api/nfc-write/', user, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -138,12 +142,13 @@ const DigitalProfile = () => {
       console.error('Error writing to NFC:', error);
       alert('Failed to write profile to NFC.');
     }
+    
   };
 
   const handleShareProfile = async (recipient) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('http://localhost:8000/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -163,13 +168,13 @@ const DigitalProfile = () => {
   return (
     <>
       <div className={styles.digitalProfileContainer}>
-        <Sidebar profileType="individual" />
+        <Sidebar profileType={localStorage.getItem('profile_type')} />
         <div className={styles.profileCard}>
           <div className={styles.profileHeader}>
           <div className={styles.profileinfo}>
           <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
           <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
-          <div className={styles.position}>Full Stack Developer</div>
+          <div className={styles.position}>{user.position}</div>
           </div>
           </div>
 
@@ -220,7 +225,7 @@ const DigitalProfile = () => {
                   <div className={styles.receivedCardDetails}>
                     <div className={styles.receivedCardName}>{`${card.shared_from_user.first_name} ${card.shared_from_user.last_name}`}</div>
                     <div className={styles.receivedCardDate}>Received on: {new Date(card.shared_at).toLocaleDateString()}</div>
-                    <span onClick={() => handleShowDetails(card.shared_from_user.id)} className={styles.showDetailsButton}>
+                    <span onClick={() => handleShowDetails(card.shared_from_user.user)} className={styles.showDetailsButton}>
                       View Card
                     </span>
                   </div>
@@ -245,7 +250,5 @@ const DigitalProfile = () => {
 };
 
 export default DigitalProfile;
-
-
 
 

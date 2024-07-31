@@ -20,7 +20,7 @@ const ProfileSummary = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -63,7 +63,7 @@ const ProfileSummary = () => {
 
   return (
     <div className={styles.profileSummaryContainer}>
-      <Sidebar profileType="individual" />
+      <Sidebar profileType={localStorage.getItem('profile_type')} />
       <div className={styles.profilePicContainer}>
         <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
         <label htmlFor="profilePicInput" className={styles.editIcon}>

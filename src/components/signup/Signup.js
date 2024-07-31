@@ -1,5 +1,5 @@
 // SignupPage.js
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styles from '../../assets/css/authentication/Authentication.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -20,16 +20,23 @@ const SignupPage = () => {
     try {
       console.log('Google login response:', response);
       const profileType = isPersonalSignup ? "individual" : "company";
-      const res = await axios.post('https://waqar123.pythonanywhere.com/auth/custom-google-login/', {
+      const res = await axios.post('http://localhost:8000/auth/custom-google-login/', {
         access_token: tokenId,
         profile_type: profileType
       });
 
       // Store the authentication token in localStorage
       localStorage.setItem('authToken', res.data.auth_token);
+      localStorage.setItem('profile_type', res.data.profile_type);
+      localStorage.setItem('first_name', res.data.first_name);
+      localStorage.setItem('last_name', res.data.last_name);
+      localStorage.setItem('email', res.data.email);
+      localStorage.setItem('authentication_type', 'google');
 
       // Redirect or perform additional actions
       navigate('/');
+      window.location.reload();
+
     } catch (error) {
       console.error('Google login error:', error);
     }
@@ -144,7 +151,7 @@ const PersonalSignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
+      const response = await axios.post('http://localhost:8000/auth/users/', {
         first_name: firstName,
         last_name: lastName,
         email,
@@ -292,7 +299,7 @@ const CompanySignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
+      const response = await axios.post('http://localhost:8000/auth/users/', {
         company_name: companyName,
         admin_name: adminName,
         email,
@@ -359,7 +366,8 @@ const CompanySignup = ({ navigate }) => {
               <i className="fas fa-exclamation-circle" style={{ marginRight: '8px' }}></i>
               {usernameError}
             </p>
-          )}        </div>
+          )}    
+              </div>
         <div>
           <label htmlFor="password" className={styles.login__label}>Password</label>
           <input required type="password" placeholder="Enter your password" id="password" className={styles.login__input} value={password} onChange={handlePasswordChange} />

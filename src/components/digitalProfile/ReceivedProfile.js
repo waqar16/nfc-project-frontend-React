@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import styles from '../../assets/css/profiles/DigitalProfile.module.css';
-import Sidebar from '../sidebar/Sidebar';
-import { useParams, useNavigate } from 'react-router-dom';
-import ScheduleMeeting from '../scheduleMeetings/ScheduleMeetings';
+import { useParams} from 'react-router-dom';
 import facebook from '../../assets/img/socials/facebook.png';
 import instagram from '../../assets/img/socials/instagram.png';
 import linkedin from '../../assets/img/socials/linkedin.png';
-import whatsapp from '../../assets/img/socials/whatsapp.png';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+
 
 const ReceivedProfile = () => {
   const { userId } = useParams();
-  const navigate = useNavigate();
+  const { email } = useParams();
+  const clientId = '1036461909018-v32f9s35hefkbeq70gterh12sioug5a5.apps.googleusercontent.com';
 
   const [user, setUser] = useState({
     firstName: '',
@@ -26,81 +26,141 @@ const ReceivedProfile = () => {
     profilePic: 'https://via.placeholder.com/150',
   });
 
+  const [isGoogleLoginVisible, setGoogleLoginVisible] = useState(false);
+  const [ profileType , setProfileType] = useState();
+
+  const handleGoogleSuccess = async (response) => {
+    const tokenId = response.credential;
+
+    try {
+      console.log('Google login response:', response);
+      const res = await axios.post('http://localhost:8000/auth/custom-google-login/', {
+        access_token: tokenId,
+        profile_type: 'individual',
+      });
+
+      localStorage.setItem('authToken', res.data.auth_token);
+      await shareProfile();
+    } catch (error) {
+      console.error('Google login error:', error);
+      alert('Failed to login with Google.');
+    }
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.error('Google login failure:', error);
+    alert('Failed to login with Google.');
+  };
 
   const fetchUserData = useCallback(async () => {
     try {
+      // const token = localStorage.getItem('authToken');
+      // const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
+      //   headers: {
+      //     Authorization: `Token ${token}`
+      //   }
+      // });
+
+      // const { id, first_name, last_name, email, username: authenticatedUsername, profile_type } = userResponse.data;
+      if (email){
+        setProfileType('employee')
+      }
+      const endpoint = profileType === 'employee' ? `http://localhost:8000/api/employees/${email}/` : `http://localhost:8000/api/profiles/${userId}/`;
+      const profileResponse = await axios.get(endpoint, {
+        // headers: {
+        //   Authorization: `Token ${token}`
+        // }
+      });
+
+      const profileData = profileResponse.data;
+      setUser({
+        firstName: profileData.first_name || '',
+        lastName: profileData.last_name || '',
+        email: profileData.email || '',
+        phone: profileData.phone || '',
+        position: profileData.position || '',
+        address: profileData.address || '',
+        bio: profileData.bio || '',
+        facebook: profileData.facebook || '',
+        instagram: profileData.instagram || '',
+        linkedin: profileData.linkedin || '',
+        profilePic: profileData.profilePic || 'https://via.placeholder.com/150',
+      });
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  }, [userId, profileType, email]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    fetchUserData();
+  }, [fetchUserData]);
+
+  const shareProfileBack = async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      setGoogleLoginVisible(true);
+    } else {
+      await shareProfile();
+    }
+  };
+  const shareProfile = async () => {
+    try {
       const token = localStorage.getItem('authToken');
-      if (token) {
-        const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${userId}/`, {
+      const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      });
+      const { id, first_name, last_name, email, profile_type } = userResponse.data;
+  
+      try {
+        const endpoint = profile_type === 'employee' ? `http://localhost:8000/api/employees/${email}/` : `http://localhost:8000/api/profiles/${userId}/`;
+        await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`
           }
         });
-        const profileData = profileResponse.data; setUser({
-          firstName: profileData.first_name,
-          lastName: profileData.last_name,
-          email: profileData.email,
-          phone: profileData.phone || '',
-          address: profileData.address || '',
-          bio: profileData.bio || '',
-          facebook: profileData.facebook || '',
-          instagram: profileData.instagram || '',
-          linkedin: profileData.linkedin || '',
-          profilePic: profileData.profilePic || 'https://via.placeholder.com/150',
-        });
+      } catch (error) {
+        // Profile does not exist, create it
+        if (error.response && error.response.status === 404) {
+          await axios.post('http://localhost:8000/api/profiles/', {
+            user: id,
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+          }, {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          });
+        } else {
+          throw error;
+        }
       }
-
-      else {
-        const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${userId}/`, {
-        });
-        const profileData = profileResponse.data;
-        setUser({
-          firstName: profileData.first_name,
-          lastName: profileData.last_name,
-          email: profileData.email,
-          phone: profileData.phone || '',
-          address: profileData.address || '',
-          bio: profileData.bio || '',
-          facebook: profileData.facebook || '',
-          instagram: profileData.instagram || '',
-          linkedin: profileData.linkedin || '',
-          profilePic: profileData.profilePic || 'https://via.placeholder.com/150',
-        });
-      }
-
-
+  
+      const recipient = user.email;
+      await axios.post('http://localhost:8000/api/share-profile/', { shared_to: recipient }, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      alert('Profile shared back successfully!');
     } catch (error) {
-      console.error('Error fetching user data:', error);
-      // Handle errors, e.g., redirect to login page or show error message
+      console.error('Error sharing profile back:', error);
+      alert('Failed to share profile back.');
     }
-  }, [userId]);
-
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-    const fetchData = async () => {
-      await fetchUserData();
-    };
-
-    fetchData();
-  }, [fetchUserData]);
-
-  const shareProfileBack = async () => {
-
-  }
-
+  };
 
   return (
-    <>
+    <GoogleOAuthProvider clientId={clientId}>
       <div className={styles.digitalProfileContainer}>
-        {/* <Sidebar profileType="individual" /> */}
         <div className={styles.profileCard}>
           <div className={styles.profileHeader}>
             <div className={styles.profileinfo}>
               <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
               <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
-              <div className={styles.position}>Full Stack Developer</div>
+              <div className={styles.position}>{user.position}</div>
             </div>
           </div>
 
@@ -135,15 +195,21 @@ const ReceivedProfile = () => {
           </div>
         </div>
         <div>
-          <ScheduleMeeting />
         </div>
-      </div>
-      <div className={styles.cardActions}>
+        <div className={styles.cardActions}>
           <button onClick={shareProfileBack} className={styles.actionButton}>
             <i className="ri-share-forward-line"></i> <span>Share Your Profile Back</span>
           </button>
+          {isGoogleLoginVisible && (
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleFailure}
+            // useOneTap
+            />
+          )}
         </div>
-    </>
+      </div>
+    </GoogleOAuthProvider>
   );
 };
 

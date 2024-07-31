@@ -18,6 +18,7 @@ const UserProfile = () => {
     phone: '',
     address: '',
     bio: '',
+    position: '',
     website: '',
     facebook: '',
     instagram: '',
@@ -33,7 +34,7 @@ const UserProfile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -57,7 +58,7 @@ const UserProfile = () => {
         })
 
         try {
-          const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${id}/`, {
+          const profileResponse = await axios.get(`http://localhost:8000/api/profiles/${id}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -71,6 +72,7 @@ const UserProfile = () => {
             phone: profileResponse.data.phone || '',
             address: profileResponse.data.address || '',
             bio: profileResponse.data.bio || '',
+            position: profileResponse.data.position || '',
             website: profileResponse.data.website || '',
             facebook: profileResponse.data.facebook || '',
             instagram: profileResponse.data.instagram || '',
@@ -91,6 +93,7 @@ const UserProfile = () => {
               phone: '',
               address: '',
               bio: '',
+              position: '',
               website: '',
               facebook: '',
               instagram: '',
@@ -144,6 +147,7 @@ const UserProfile = () => {
     formData.append('phone', user.phone);
     formData.append('address', user.address);
     formData.append('bio', user.bio);
+    formData.append('position', user.position);
     formData.append('facebook', user.facebook);
     formData.append('instagram', user.instagram);
     formData.append('linkedin', user.linkedin);
@@ -157,7 +161,7 @@ const UserProfile = () => {
       const authToken = localStorage.getItem('authToken');
       if (profileExists) {
         
-        await axios.put(`https://waqar123.pythonanywhere.com/api/profiles/${user.user}/`, formData, {
+        await axios.put(`http://localhost:8000/api/profiles/${user.user}/`, formData, {
           headers: {
             Authorization: `Token ${authToken}`,
             'Content-Type': 'multipart/form-data',
@@ -165,7 +169,7 @@ const UserProfile = () => {
         });
         alert('Profile updated successfully!');
       } else {
-        await axios.post('https://waqar123.pythonanywhere.com/api/profiles/', formData, {
+        await axios.post('http://localhost:8000/api/profiles/', formData, {
           headers: {
             Authorization: `Token ${authToken}`,
             'Content-Type': 'multipart/form-data',
@@ -175,7 +179,7 @@ const UserProfile = () => {
       }
       
       // Fetch updated profile data
-      const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${user.user}/`, {
+      const profileResponse = await axios.get(`http://localhost:8000/api/profiles/${user.user}/`, {
         headers: {
           Authorization: `Token ${authToken}`,
         },
@@ -195,7 +199,7 @@ const UserProfile = () => {
       <div className={styles.formContainer}>
         {/* <h2>User Profile Management</h2> */}
         <div className={styles.profileSummaryContainer}>
-      <Sidebar profileType="individual" />
+      <Sidebar profileType={localStorage.getItem('profile_type')} />
       <div className={styles.profilePicContainer}>
         <img src={user.profile_pic} className={styles.profilePic} />
         <label htmlFor="profilePicInput" className={styles.editIcon}>
@@ -231,7 +235,7 @@ const UserProfile = () => {
               value={user.first_name}
               onChange={handleChange}
               className={styles.input}
-              required
+              // required
             />
           </label>
           <label className={styles.label}>
@@ -242,7 +246,7 @@ const UserProfile = () => {
               value={user.last_name}
               onChange={handleChange}
               className={styles.input}
-              required
+              // required
             />
           </label>
           <label className={styles.label}>
@@ -254,7 +258,18 @@ const UserProfile = () => {
               onChange={handleChange}
               className={styles.input}
               readOnly 
-              required
+              // required
+            />
+          </label>
+          <label className={styles.label}>
+            Position:
+            <input
+              type="text"
+              name="position"
+              value={user.position}
+              onChange={handleChange}
+              className={styles.input}
+              // required
             />
           </label>
           <label className={styles.label}>
@@ -265,7 +280,7 @@ const UserProfile = () => {
               value={user.phone}
               onChange={handleChange}
               className={styles.input}
-              required
+              // required
             />
           </label>
           <label className={styles.label}>
@@ -276,7 +291,7 @@ const UserProfile = () => {
               value={user.address}
               onChange={handleChange}
               className={styles.input}
-              required
+              // required
             />
           </label>
           <label className={styles.label}>
@@ -286,7 +301,7 @@ const UserProfile = () => {
               value={user.bio}
               onChange={handleChange}
               className={styles.textarea}
-              required
+              // required
             ></textarea>
           </label>
           <label className={styles.label}>

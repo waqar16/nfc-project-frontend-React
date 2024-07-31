@@ -28,7 +28,7 @@ const CompanyProfile = () => {
     const fetchCompanyData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -44,7 +44,7 @@ const CompanyProfile = () => {
         }
 
         try {
-          const companyResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/companies/${userId}/`, {
+          const companyResponse = await axios.get(`http://localhost:8000/api/companies/${userId}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -120,14 +120,14 @@ const CompanyProfile = () => {
       const authToken = localStorage.getItem('authToken');
 
       if (profileExists) {
-        await axios.put(`https://waqar123.pythonanywhere.com/api/companies/${userId}/`, company, {
+        await axios.put(`http://localhost:8000/api/companies/${userId}/`, company, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
         });
         alert('Company profile updated successfully!');
       } else {
-        const createResponse = await axios.post('https://waqar123.pythonanywhere.com/api/companies/', company, {
+        const createResponse = await axios.post('http://localhost:8000/api/companies/', company, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -153,7 +153,7 @@ const CompanyProfile = () => {
 
   return (
     <div className={styles.companyProfileContainer}>
-      <Sidebar profileType="company" />
+      <Sidebar profileType={localStorage.getItem('profile_type')} />
       {/* Preview Card */}
       <div className={styles.previewCard}>
         <h2>{company.company_name}</h2>

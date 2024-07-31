@@ -26,7 +26,7 @@ const Navbar = () => {
       if (token) {
         setIsAuthenticated(true);
         try {
-          const response = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me', {
+          const response = await axios.get('http://localhost:8000/auth/users/me', {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -53,25 +53,27 @@ const Navbar = () => {
     localStorage.removeItem('authToken');
     setIsAuthenticated(false);
     navigate('/');
-    window.location.reload();
+    // window.location.reload();
   };
 
   const manageProfile = () => {
-    if (loading) {
-      console.log('Profile type is still loading.');
-      return;
-    }
+    // if (loading) {
+    //   console.log('Profile type is still loading.');
+    //   return;
+    // }
 
-    if (!profileType) {
-      console.log('Profile type is not set yet.');
-      return;
-    }
+    // if (!profileType) {
+    //   console.log('Profile type is not set yet.');
+    //   return;
+    // }
 
-    console.log(profileType);
+    // console.log(profileType);
     if (profileType === 'individual') {
       navigate(`/user-profile/${userId}/${username}`);
     } else if (profileType === 'company'){
       navigate(`/company-profile/${userId}/${username}`);
+    } else if (profileType === 'employee'){
+      navigate(`/employee-profile/${userId}/${username}`);
     }
   };
 

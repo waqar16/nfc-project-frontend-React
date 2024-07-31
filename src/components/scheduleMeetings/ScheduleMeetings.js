@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import Sidebar from '../sidebar/Sidebar';
+// import Sidebar from '../sidebar/Sidebar';
 import styles from '../../assets/css/profiles/ScheduleMeeting.module.css';
 
 const ScheduleMeeting = () => {
@@ -32,7 +32,7 @@ const ScheduleMeeting = () => {
 
   return (
     <div className={styles.scheduleMeeting}>
-      <Sidebar profileType="individual" />
+      {/* <Sidebar profileType="individual" /> */}
       <h2 className={styles.title}>Schedule a Meeting</h2>
       <div className={styles.calendarContainer}>
         <Calendar onChange={handleDateChange} value={date} className={styles.customCalendar} />

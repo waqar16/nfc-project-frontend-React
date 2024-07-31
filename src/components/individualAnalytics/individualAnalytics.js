@@ -53,7 +53,7 @@ const Analytics = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -61,7 +61,7 @@ const Analytics = () => {
   
         const { id, profile_type, username: authenticatedUsername } = userResponse.data;
   
-        if (profile_type !== 'individual' || userId !== id.toString() || username !== authenticatedUsername) {
+        if (profile_type !== localStorage.getItem('profile_type') || userId !== id.toString() || username !== authenticatedUsername) {
           console.log(`UserId from URL: ${userId}, User ID: ${id}`);
           navigate('/not-authorized');
         }
@@ -91,7 +91,7 @@ const Analytics = () => {
   return (
     <div className={styles.analyticsContainer}>
       <h2 className={styles.analyticTitle}>Analytics</h2>
-      <Sidebar profileType="individual" />
+      <Sidebar profileType={localStorage.getItem('profile_type')} />
       <div className={styles.analyticsContent}>
         {/* Interaction Frequency Chart */}
         <div className={styles.card}>

@@ -1,6 +1,12 @@
 import CompanyProfile from '../../components/companyProfile/CompanyProfile';
+import React from 'react';
 
-function companyProfileLayout() {
+function CompanyProfileLayout() {
+  React.useEffect(()=>{
+    const profile = document.getElementById('profile');
+    if (profile) {
+      profile.classList.remove('show-profile');
+    }   },[])
   return (
     <div>
         <CompanyProfile />
@@ -8,4 +14,4 @@ function companyProfileLayout() {
   );
 }
 
-export default companyProfileLayout;
+export default CompanyProfileLayout;

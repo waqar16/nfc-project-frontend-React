@@ -64,7 +64,7 @@ const EmployeeSignup = () => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
+      const response = await axios.post('http://localhost:8000/auth/users/', {
         first_name: firstName,
         last_name: lastName,
         email,
@@ -122,13 +122,23 @@ const EmployeeSignup = () => {
           <div>
             <label htmlFor="email" className={styles.login__label}>Email</label>
             <input required type="email" placeholder="Write your email" id="email" className={styles.login__input} value={email} onChange={handleEmailChange} readOnly />
-            {emailError && <p style={{textAlign:'left', color: 'red' }}>{emailError}</p>}
-          </div>
+            {emailError && (
+            <p className={styles.error}>
+              <i className="fas fa-exclamation-circle" style={{ marginRight: '8px' }}></i>
+              {emailError}
+            </p>
+          )}    
+           </div>
           <div>
             <label htmlFor="username" className={styles.login__label}>Username</label>
             <input required type="text" placeholder="Write your username" id="username" className={styles.login__input} value={username} onChange={handleUsernameChange} />
-            {usernameError && <p style={{textAlign:'left', color: 'red' }}>{usernameError}</p>}
-          </div>
+            {usernameError && (
+            <p className={styles.error}>
+              <i className="fas fa-exclamation-circle" style={{ marginRight: '8px' }}></i>
+              {usernameError}
+            </p>
+          )}    
+                    </div>
           <div>
             <label htmlFor="password" className={styles.login__label}>Password</label>
             <input required type="password" placeholder="Enter your password" id="password" className={styles.login__input} value={password} onChange={handlePasswordChange} />
@@ -136,8 +146,13 @@ const EmployeeSignup = () => {
           <div>
             <label htmlFor="confirmpassword" className={styles.login__label}>Confirm Password</label>
             <input required type="password" placeholder="Confirm password" id="confirmpassword" className={styles.login__input} value={confirmPassword} onChange={handleConfirmPasswordChange} />
-            {passwordError && <p style={{textAlign:'left', color: 'red' }}>{passwordError}</p>}
-          </div>
+            {passwordError && (
+            <p className={styles.error}>
+              <i className="fas fa-exclamation-circle" style={{ marginRight: '8px' }}></i>
+              {passwordError}
+            </p>
+          )} 
+                    </div>
         </div>
         <div>
           <div className={styles.login__agreement}>

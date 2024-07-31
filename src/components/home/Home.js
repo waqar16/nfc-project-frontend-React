@@ -19,7 +19,7 @@ const Home = () => {
       if (token) {
         setIsAuthenticated(true);
         try {
-          const response = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me', {
+          const response = await axios.get('http://localhost:8000/auth/users/me', {
             headers: {
               Authorization: `Token ${token}`,
             },

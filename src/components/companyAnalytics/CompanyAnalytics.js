@@ -68,7 +68,7 @@ const Analytics = () => {
 
   return (
     <div className={styles.analyticsContainer}>
-      <Sidebar profileType="company" />
+      <Sidebar profileType={localStorage.getItem('profile_type')} />
 
       <h2 className={styles.analyticTitle}>Analytics</h2>
 

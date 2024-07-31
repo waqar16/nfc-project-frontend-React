@@ -29,7 +29,7 @@ const ActivationSentTemplate = () => {
     try {
       setCanResend(false); // Disable button to prevent multiple clicks
       const email = localStorage.getItem('email'); // Assuming the email is stored in localStorage
-      await axios.post('https://waqar123.pythonanywhere.com/auth/users/resend_activation/', { email });
+      await axios.post('http://localhost:8000/auth/users/resend_activation/', { email });
       // alert('Activation email resent successfully!');
 
       // Double the timer duration

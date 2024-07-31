@@ -18,7 +18,7 @@ import ConfirmResetPasswordLayout from './layout/authentication/ConfirmResetPass
 import Activation from './components/accountActivate/activation';
 import ActivationSentTemplate from './components/accountActivate/ActivationSentTemplate';
 import DigitalProfileLayout from './layout/userProfile/DigitalProfileLayout';
-import ReceivedProfileLayout from './components/digitalProfile/ReceivedProfile';
+import ReceivedProfileLayout from './layout/userProfile/ReceivedProfileLayout';
 import AnalyticsLayout from './layout/analytics/AnalyticsLayout';
 import EmployeeProfileLayout from './layout/emplyeeProfile/EmployeeProfileLayout';
 import ProfileSummaryLayout from './layout/profileSummary/ProfileSummaryLayout';
@@ -62,7 +62,7 @@ function App() {
           <Route path="/digital-profile/:userId/:username" element={<DigitalProfileLayout />} />
           <Route path="/profile/:userId/" element={<ReceivedProfileLayout />} />
           <Route path="/user-analytics/:userId/:username" element={<AnalyticsLayout/>}/>
-          <Route path="/employee-profile/:username" element={<EmployeeProfileLayout/>}/>
+          <Route path="/employee-profile/:userId/:username" element={<EmployeeProfileLayout/>}/>
           <Route path="/profile-summary/:userId/:username" element={<ProfileSummaryLayout/>}/>
           <Route path="/nfc-management/:userId/:username" element={<NfcCardLayout/>}/>
           <Route path="/team-management/:userId/:username" element={<TeamManagementLayout/>}/>

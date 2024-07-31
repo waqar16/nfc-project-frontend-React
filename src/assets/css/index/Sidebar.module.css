@@ -72,14 +72,16 @@
   }
   
   .sidebar__toggle i {
-    font-size: 1.5rem;
-  }
+    margin-top: 3.2px;
+    font-size: 1.25rem;
+    }
   
   /* Responsive Styles */
   @media screen and (max-width: 768px) {
     .sidebar__toggle {
         top: 0.4rem;
         left: 0.2rem;
+        font-size: 1.25rem;
     }
     .sidebar {
      top: 50px;
