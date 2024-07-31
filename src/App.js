@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import NotFoundPage from './components/404Page/404Page';
 import NotAuthorizedPage from './components/404Page/notAuthorized';
 import HomeLayout from './layout/home/HomeLayout'
@@ -30,8 +30,9 @@ import LoginLayout from './components/login/Login';
 import AccountDeletion from './components/accountDeletion/AccountDeletion';
 import EmployeeSignup from './components/employeeSignup/EmployeeSignup';
 
+import Map from './components/Map/Map';
 function App() {
-
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

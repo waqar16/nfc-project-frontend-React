@@ -7,6 +7,7 @@ import ContactSection from '../../components/contactSection/ContactSection';
 import TestimonialsSection from '../../components/testimonialSection/TestimonialSection';
 // import FeedbackForm from '../../components/feedback/FeedbackSection';
 import { useEffect } from 'react';
+import Map from '../../components/Map/Map';
 
 function HomeLayout() {
 
@@ -18,6 +19,7 @@ function HomeLayout() {
   return (
     <div>
       <Home/>
+      <Map/>
       <FeaturesSection/>
       <HowItWorksSection/>  
       <ScheduleMeetingSection/>
