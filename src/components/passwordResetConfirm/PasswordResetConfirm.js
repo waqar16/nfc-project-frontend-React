@@ -31,7 +31,7 @@ const PasswordResetConfirm = () => {
     }
 
     try {
-      await axios.post('http://localhost:8000/auth/users/reset_password_confirm/', {
+      await axios.post('https://waqar123.pythonanywhere.com/auth/users/reset_password_confirm/', {
         uid,
         token,
         new_password: newPassword,

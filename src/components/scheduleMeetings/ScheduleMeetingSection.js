@@ -1,5 +1,5 @@
-import {React, useState, useEffect } from 'react';
-import {useNavigate } from 'react-router-dom';
+import { React, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from '../../assets/css/index/ScheduleMeetingSection.module.css';
 
@@ -18,7 +18,7 @@ const ScheduleMeetingSection = () => {
       if (token) {
         setIsAuthenticated(true);
         try {
-          const response = await axios.get('http://localhost:8000/auth/users/me', {
+          const response = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me', {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -45,9 +45,9 @@ const ScheduleMeetingSection = () => {
     }
   };
 
-    return (
-      <div className={styles.scheduleMeetingSection}>
-        {/* <div className={styles.content}>
+  return (
+    <div className={styles.scheduleMeetingSection}>
+      {/* <div className={styles.content}>
           <h2 className={styles.title}>Schedule a Meeting</h2>
           <p className={styles.description}>
             Quickly and easily schedule a meeting with us. Select your preferred date and time, and we'll take care of the rest.
@@ -59,15 +59,15 @@ const ScheduleMeetingSection = () => {
             className={styles.previewCalendar}
           />
         </div> */}
-                <div className={styles.content}>
-          <h2 className={styles.title}>Unmatched First Impression</h2>
-          <p className={styles.description}>
-            With your elegent one sec NFC Digital Cards
-          </p>
-          <button to="/schedule-meeting" onClick={handleCreateNowButtonClick} className={styles.ctaButton}>Create Now</button>
-        </div>
+      <div className={styles.content}>
+        <h2 className={styles.title}>Unmatched First Impression</h2>
+        <p className={styles.description}>
+          With your elegent one sec NFC Digital Cards
+        </p>
+        <button to="/schedule-meeting" onClick={handleCreateNowButtonClick} className={styles.ctaButton}>Create Now</button>
       </div>
-    );
-  };
-  
-  export default ScheduleMeetingSection;
+    </div>
+  );
+};
+
+export default ScheduleMeetingSection;

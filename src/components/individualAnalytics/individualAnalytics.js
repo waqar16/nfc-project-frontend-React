@@ -8,19 +8,10 @@ import styles from '../../assets/css/profiles/IndividualAnalaytics.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Map from '../Map/Map';
 
 const options = ['Daily', 'Weekly', 'Monthly'];
 const defaultOption = options[0];
-
-const dummyInteractionFrequency = [
-  { name: 'Monday', uv: 4, pv: 0, amt: 0 },
-  { name: 'Tuesday', uv: 4, pv: 0, amt: 4 },
-  { name: 'Wednesday', uv: 5, pv: 0, amt: 8 },
-  { name: 'Thursday', uv: 7, pv: 7, amt: 2 },
-  { name: 'Friday', uv: 7, pv: 4, amt: 7 },
-  { name: 'Saturday', uv: 6, pv: 4, amt: 7 },
-  { name: 'Sunday', uv: 9, pv: 5, amt: 7 },
-];
 
 const dummyPeakInteractionTime = [
   { name: 'Monday', pv: 0, uv: 4 },
@@ -40,27 +31,25 @@ const dummyGeoData = [
   { name: 'Canada', interactions: 45 },
 ];
 
-
 const Analytics = () => {
-  const [interactionFrequency, setInteractionFrequency] = useState(dummyInteractionFrequency);
+  const [interactionFrequency, setInteractionFrequency] = useState([]);
   const [peakInteractionTime, setPeakInteractionTime] = useState(dummyPeakInteractionTime);
   const [geoData] = useState(dummyGeoData);
   const { userId, username } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
+        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
         });
-  
+
         const { id, profile_type, username: authenticatedUsername } = userResponse.data;
-  
+
         if (profile_type !== localStorage.getItem('profile_type') || userId !== id.toString() || username !== authenticatedUsername) {
           console.log(`UserId from URL: ${userId}, User ID: ${id}`);
           navigate('/not-authorized');
@@ -70,9 +59,35 @@ const Analytics = () => {
         // Handle errors, e.g., redirect to login page or show error message
       }
     };
-  
+
     fetchUserData();
   }, [userId, navigate, username]);
+
+  const fetchInteractionFrequency = async (frequency) => {
+    try {
+      const response = await axios.get(`https://waqar123.pythonanywhere.com/api/interaction-frequency/${frequency.toLowerCase()}`,
+    {
+      headers: {
+        Authorization: `Token ${localStorage.getItem('authToken')}`,
+      },
+    });
+      const formattedData = response.data.map(item => ({
+        name: new Date(item.timestamp__date).toLocaleDateString(),
+        uv: item.count,
+      }));
+      setInteractionFrequency(formattedData);
+    } catch (error) {
+      console.error('Error fetching interaction frequency:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchInteractionFrequency(defaultOption);
+  }, []);
+
+  const handleDropdownChange = async (option) => {
+    await fetchInteractionFrequency(option.value);
+  };
 
   const getMostInteractedCountry = () => {
     let maxInteractions = 0;
@@ -100,18 +115,19 @@ const Analytics = () => {
               <h3>Interaction Frequency</h3>
               <Dropdown
                 options={options}
-                onChange={(e) => setInteractionFrequency(dummyInteractionFrequency)}
+                onChange={handleDropdownChange}
                 value={defaultOption}
                 placeholder="Select an option"
               />
             </div>
             <ResponsiveContainer width="100%" height={300}>
+              {/* <LineChart data={[interactionFrequency[0],32,34,21,12,90,78,9,23]}> */}
               <LineChart data={interactionFrequency}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+                <Line type="monotype" dataKey="uv" stroke="#8884d8" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -150,16 +166,7 @@ const Analytics = () => {
             <div className={styles.chartHeader}>
               <h3>Geographic Data</h3>
             </div>
-            <div className={styles.geoList}>
-              <ul>
-                {geoData.map((country, index) => (
-                  <li key={index} className={country.name === mostInteractedCountry ? styles.highlighted : ''}>
-                    <span>{country.name}</span>
-                    <span>({country.interactions} interactions)</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <Map />
           </div>
         </div>
         {/* Networking stats*/}
@@ -170,24 +177,39 @@ const Analytics = () => {
             </div>
             <ul className={styles.userList}>
               <li>
-                <span>Lily Saunders</span>
-                <span>ID #3124 • Paid</span>
+                <span>
+                <img src='https://placehold.co/150x150' alt='Profile'/>
+                Lily Saunders
+                </span>
+                <span className={styles.pending} >ID #3124 • Pending</span>
               </li>
               <li>
-                <span>Franklin Jackson</span>
-                <span>ID #3124 • Paid</span>
+                <span>
+                <img src='https://placehold.co/150x150' alt='Profile'/>
+                Lily Saunders
+                </span>
+                <span className={styles.paid}>ID #3124 • Paid</span>
               </li>
               <li>
-                <span>Kyle Duncan</span>
-                <span>ID #3124 • Pending</span>
+                <span>
+                <img src='https://placehold.co/150x150' alt='Profile'/>
+                Lily Saunders
+                </span>
+                <span className={styles.paid}>ID #3124 • Paid</span>
               </li>
               <li>
-                <span>Alta Chandler</span>
-                <span>ID #3124 • Pending</span>
+                <span>
+                <img src='https://placehold.co/150x150' alt='Profile'/>
+                Lily Saunders
+                </span>
+                <span className={styles.pending} >ID #3124 • Pending</span>
               </li>
               <li>
-                <span>Anthony Hubbard</span>
-                <span>ID #3124 • Paid</span>
+                <span>
+                <img src='https://placehold.co/150x150' alt='Profile'/>
+                Lily Saunders
+                </span>
+                <span className={styles.paid}>ID #3124 • Paid</span>
               </li>
             </ul>
           </div>

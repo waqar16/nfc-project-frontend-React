@@ -1,9 +1,11 @@
 /* FeaturesSection.module.css */
 .featuresSection {
-    padding: 60px 20px;
+    padding: 60px 40px;
     background: transparent;
     /* color: #fff; */
     text-align: center;
+  
+
   }
   
   .title {

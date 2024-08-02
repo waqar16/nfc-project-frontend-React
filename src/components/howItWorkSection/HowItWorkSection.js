@@ -10,7 +10,7 @@ const steps = [
 
 const HowItWorksSection = () => {
   return (
-    <section className={styles.howItWorksSection}>
+    <section className={styles.howItWorksSection} >
       <h2 className={styles.title}>How It Works</h2>
       <div className={styles.stepsGrid}>
         {steps.map((step, index) => (

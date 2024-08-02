@@ -3,8 +3,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
 
 body{
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+  /* max-width: fit-content; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 /*=============== VARIABLES CSS ===============*/
 :root {
@@ -212,6 +216,7 @@ img {
 .nav {
   height: var(--header-height);
   display: flex;
+  max-width: 1160px;
   justify-content: space-between;
   align-items: center;
 }

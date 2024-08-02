@@ -1,0 +1,75 @@
+/*  */
+.map-container {
+  width: 100%; /* Makes the map container full width of its parent */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* background-color: #007bff; */
+}
+
+.WorldMap {
+  width: 100%; /* Ensures the map takes the full width of the container */
+  height: auto; /* Adjusts the height based on the width */
+  
+}
+
+.Sub-Content {
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+} 
+.sub-Content-Heading{
+  font-size: 40px;
+  text-align: left;
+  width: 100%;
+
+  /* background-color: chartreuse; */
+}
+.Sub-Content-description {
+  font-size: 18px;
+  width: 100%;
+  text-align: left;
+
+  /* background-color: chartreuse; */
+
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+ 
+.bullet-icon{
+  background-color: #007bff;
+}
+
+.Stats {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.Stats span{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.Stats li {
+  display: flex;
+  justify-content:space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

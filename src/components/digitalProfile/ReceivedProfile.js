@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import styles from '../../assets/css/profiles/DigitalProfile.module.css';
-import { useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import facebook from '../../assets/img/socials/facebook.png';
 import instagram from '../../assets/img/socials/instagram.png';
 import linkedin from '../../assets/img/socials/linkedin.png';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
-
 const ReceivedProfile = () => {
-  const { userId } = useParams();
-  const { email } = useParams();
+  const { userId, email } = useParams();
   const clientId = '1036461909018-v32f9s35hefkbeq70gterh12sioug5a5.apps.googleusercontent.com';
 
   const [user, setUser] = useState({
+    user: null,
     firstName: '',
     lastName: '',
     email: '',
@@ -27,14 +26,14 @@ const ReceivedProfile = () => {
   });
 
   const [isGoogleLoginVisible, setGoogleLoginVisible] = useState(false);
-  const [ profileType , setProfileType] = useState();
+  const [profileType, setProfileType] = useState();
 
   const handleGoogleSuccess = async (response) => {
     const tokenId = response.credential;
 
     try {
       console.log('Google login response:', response);
-      const res = await axios.post('http://localhost:8000/auth/custom-google-login/', {
+      const res = await axios.post('https://waqar123.pythonanywhere.com/auth/custom-google-login/', {
         access_token: tokenId,
         profile_type: 'individual',
       });
@@ -54,26 +53,15 @@ const ReceivedProfile = () => {
 
   const fetchUserData = useCallback(async () => {
     try {
-      // const token = localStorage.getItem('authToken');
-      // const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
-      //   headers: {
-      //     Authorization: `Token ${token}`
-      //   }
-      // });
-
-      // const { id, first_name, last_name, email, username: authenticatedUsername, profile_type } = userResponse.data;
-      if (email){
-        setProfileType('employee')
+      if (email) {
+        setProfileType('employee');
       }
-      const endpoint = profileType === 'employee' ? `http://localhost:8000/api/employees/${email}/` : `http://localhost:8000/api/profiles/${userId}/`;
-      const profileResponse = await axios.get(endpoint, {
-        // headers: {
-        //   Authorization: `Token ${token}`
-        // }
-      });
+      const endpoint = profileType === 'employee' ? `https://waqar123.pythonanywhere.com/api/employees/${email}/` : `https://waqar123.pythonanywhere.com/api/profiles/${userId}/`;
+      const profileResponse = await axios.get(endpoint);
 
       const profileData = profileResponse.data;
       setUser({
+        user: profileData.user,
         firstName: profileData.first_name || '',
         lastName: profileData.last_name || '',
         email: profileData.email || '',
@@ -86,10 +74,34 @@ const ReceivedProfile = () => {
         linkedin: profileData.linkedin || '',
         profilePic: profileData.profilePic || 'https://via.placeholder.com/150',
       });
+
+      // Create interaction when profile is viewed
+      await createInteraction(profileData.user);
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
   }, [userId, profileType, email]);
+
+  const createInteraction = async (user_id) => {
+    try {
+      // const token = localStorage.getItem('authToken');
+      await axios.post(
+        'https://waqar123.pythonanywhere.com/api/create_interaction/',
+        {
+          user: user_id,
+          interaction_type: 'view_profile',
+        },
+        // {
+        //   headers: {
+        //     Authorization: `Token ${token}`,
+        //   },
+        // }
+      );
+      console.log('Interaction created successfully');
+    } catch (error) {
+      console.error('Error creating interaction:', error);
+    }
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -104,27 +116,28 @@ const ReceivedProfile = () => {
       await shareProfile();
     }
   };
+
   const shareProfile = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
+      const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
         headers: {
-          Authorization: `Token ${token}`
-        }
+          Authorization: `Token ${token}`,
+        },
       });
       const { id, first_name, last_name, email, profile_type } = userResponse.data;
-  
+
       try {
-        const endpoint = profile_type === 'employee' ? `http://localhost:8000/api/employees/${email}/` : `http://localhost:8000/api/profiles/${userId}/`;
+        const endpoint = profile_type === 'employee' ? `https://waqar123.pythonanywhere.com/api/employees/${email}/` : `https://waqar123.pythonanywhere.com/api/profiles/${userId}/`;
         await axios.get(endpoint, {
           headers: {
-            Authorization: `Token ${token}`
-          }
+            Authorization: `Token ${token}`,
+          },
         });
       } catch (error) {
         // Profile does not exist, create it
         if (error.response && error.response.status === 404) {
-          await axios.post('http://localhost:8000/api/profiles/', {
+          await axios.post('https://waqar123.pythonanywhere.com/api/profiles/', {
             user: id,
             first_name: first_name,
             last_name: last_name,
@@ -138,9 +151,9 @@ const ReceivedProfile = () => {
           throw error;
         }
       }
-  
+
       const recipient = user.email;
-      await axios.post('http://localhost:8000/api/share-profile/', { shared_to: recipient }, {
+      await axios.post('https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -194,8 +207,6 @@ const ReceivedProfile = () => {
             </div>
           </div>
         </div>
-        <div>
-        </div>
         <div className={styles.cardActions}>
           <button onClick={shareProfileBack} className={styles.actionButton}>
             <i className="ri-share-forward-line"></i> <span>Share Your Profile Back</span>
@@ -203,8 +214,8 @@ const ReceivedProfile = () => {
           {isGoogleLoginVisible && (
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
-              onError={handleGoogleFailure}
-            // useOneTap
+              onFailure={handleGoogleFailure}
+              cookiePolicy={'single_host_origin'}
             />
           )}
         </div>

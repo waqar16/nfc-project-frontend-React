@@ -1,9 +1,10 @@
 import React from "react";
-import "./Map.module.css";
+import "./Map.css";
 import { WorldMap } from "react-svg-worldmap";
+import { BsDisplay } from "react-icons/bs";
 
 function Map() {
-  
+
   // Data for countries with their values and custom colors
   const data = [
     { country: "DE", value: "121224", color: "#FF5733" }, // Germany
@@ -71,44 +72,89 @@ function Map() {
     { country: "CY", value: "6", color: "#27AE60" }, // Cyprus
     { country: "LV", value: "6", color: "#2980B9" }, // Latvia
     { country: "EE", value: "4", color: "#8E44AD" }, // Estonia
-    ]
+  ]
 
   const defaultColor = "#93BED4"; // Default color for countries not in the data
 
-  const stylingFunction = (context) => { 
-    const countryData = data.find(item => item.country === context.countryCode);  
-    const color = countryData ? countryData.color : 'red';
- 
+  const stylingFunction = (context) => {
+    const countryData = data.find(item => item.country === context.countryCode);
+    const color = countryData ? countryData.color : 'gray';
+
     const opacityLevel = countryData ? 1 : 0.3 + (1.5 * (context.countryValue - context.minValue)) / (context.maxValue - context.minValue);
 
     return {
       fill: color,
-      fillOpacity: isNaN(opacityLevel) ? 0 : opacityLevel,
-      stroke: "white",
+      fillOpacity: isNaN(opacityLevel) ? 0.2 : opacityLevel,
+      stroke: "gray",
       strokeWidth: 2,
-      strokeOpacity: 0.2,
+      strokeOpacity: 0.1,
       cursor: "pointer"
     };
   };
+  const bulletStyle = (color) => ({
+    width: '12px',
+    height: '12px',
+    borderRadius: '50%',
+    backgroundColor: color,
+    marginRight: '10px'
+  });
+
+  const listItemStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    boxSizing: 'border-box'
+  };
 
   return (
-    <div className="App">
-      <div className="Main">
-        <WorldMap
-          richInteraction={true}
-          backgroundColor={"gray"}
-          borderColor={"white"}
-          color={defaultColor}
-          tooltipBgColor={"#31323f"}
-          title="Our Work"
-          valueSuffix="applications"
-          valuePrefix=":"
-          size="responsive"
-          data={data}
-          styleFunction={stylingFunction}
-        />
-      </div>
+    <div className="map-container">
+    <WorldMap
+      alignCenter={true}
+      richInteraction={true}
+      borderColor={"white"}
+      color={defaultColor}
+      tooltipBgColor={"#31323f"}
+      valueSuffix="applications"
+      valuePrefix=":"
+      size={"responsive"}
+      data={data}
+      styleFunction={stylingFunction}
+    />
+    <div className="Sub-Content">
+      <h2 className="sub-Content-Heading">122.20</h2>
+      <h5 className="Sub-Content-description">Our most custumer in US</h5>
+      <ul className="size-list">
+        <li style={listItemStyle}>
+          <div style={bulletStyle("blue")}></div>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            <h5 style={{ margin: '0' }}>Massive</h5>
+            <p>1233.k</p>
+          </div>
+        </li>
+        <li style={listItemStyle}>
+          <div style={bulletStyle("orange")}></div>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            <h5 style={{ margin: '0' }}>Large</h5>
+            <p>1233.k</p>
+          </div>
+        </li>
+        <li style={listItemStyle}>
+          <div style={bulletStyle("yellow")}></div>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            <h5 style={{ margin: '0' }}>Medium</h5>
+            <p>1233.k</p>
+          </div>
+        </li>
+        <li style={listItemStyle}>
+          <div style={bulletStyle("grey")}></div>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            <h5 style={{ margin: '0' }}>Small</h5>
+            <p>1233.k</p>
+          </div>
+        </li>
+      </ul>
     </div>
+  </div>
   );
 }
 

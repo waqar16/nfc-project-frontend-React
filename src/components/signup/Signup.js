@@ -20,7 +20,7 @@ const SignupPage = () => {
     try {
       console.log('Google login response:', response);
       const profileType = isPersonalSignup ? "individual" : "company";
-      const res = await axios.post('http://localhost:8000/auth/custom-google-login/', {
+      const res = await axios.post('https://waqar123.pythonanywhere.com/auth/custom-google-login/', {
         access_token: tokenId,
         profile_type: profileType
       });
@@ -151,7 +151,7 @@ const PersonalSignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('http://localhost:8000/auth/users/', {
+      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
         first_name: firstName,
         last_name: lastName,
         email,
@@ -299,7 +299,7 @@ const CompanySignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('http://localhost:8000/auth/users/', {
+      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
         company_name: companyName,
         admin_name: adminName,
         email,
