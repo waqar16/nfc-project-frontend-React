@@ -15,7 +15,7 @@
 
 .analyticsContent {
   height: auto;
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -31,6 +31,7 @@
 
 .chartContainer {
   margin-top: 20px;
+  /* width: 100%; */
 }
 
 .chartHeader {

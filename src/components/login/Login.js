@@ -40,6 +40,7 @@ const LoginPage = () => {
       localStorage.setItem('last_name', res.data.last_name);
       localStorage.setItem('email', res.data.email);
       localStorage.setItem('authentication_type', 'google');
+      localStorage.setItem('profile_pic', res.data.profile_pic);
 
       // Redirect or perform additional actions
       navigate('/');
@@ -88,11 +89,13 @@ const LoginPage = () => {
             Continue with Google
           </div> */}
           <GoogleOAuthProvider clientId={clientId}>
+            <div className={styles.login__google}>
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={handleGoogleFailure}
               useOneTap
             />
+            </div>
           </GoogleOAuthProvider>
           <p className={styles.login__or}>or</p>
 

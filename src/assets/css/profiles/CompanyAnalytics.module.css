@@ -2,6 +2,18 @@
     padding: 20px;
   }
 
+  .overviewCard {
+  padding: 20px;
+  text-align: center;
+}
+
+.pieChartContainer, .barChartContainer {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  margin-top: 20px;
+}
 
   .analyticTitle {
     text-align: center;
@@ -9,9 +21,9 @@
   }
   
   .analyticsContent {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+    /* display: flex; */
+    /* flex-direction: row; */
+    /* gap: 20px; */
     padding: 20px;
   }
   

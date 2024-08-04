@@ -72,7 +72,7 @@ const ReceivedProfile = () => {
         facebook: profileData.facebook || '',
         instagram: profileData.instagram || '',
         linkedin: profileData.linkedin || '',
-        profilePic: profileData.profilePic || 'https://via.placeholder.com/150',
+        profilePic: profileData.profile_pic || 'https://via.placeholder.com/150',
       });
 
       // Create interaction when profile is viewed
@@ -106,7 +106,7 @@ const ReceivedProfile = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchUserData();
-  }, [fetchUserData]);
+  }, []);
 
   const shareProfileBack = async () => {
     const token = localStorage.getItem('authToken');
@@ -165,6 +165,27 @@ const ReceivedProfile = () => {
     }
   };
 
+  const addToContacts = () => {
+    const contactData = `
+      BEGIN:VCARD
+      VERSION:3.0
+      FN:${user.firstName} ${user.lastName}
+      EMAIL:${user.email}
+      TEL:${user.phone}
+      ADR:${user.address}
+      END:VCARD
+    `;
+    const blob = new Blob([contactData], { type: 'text/vcard' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${user.firstName}_${user.lastName}.vcf`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+
+
   return (
     <GoogleOAuthProvider clientId={clientId}>
       <div className={styles.digitalProfileContainer}>
@@ -210,6 +231,9 @@ const ReceivedProfile = () => {
         <div className={styles.cardActions}>
           <button onClick={shareProfileBack} className={styles.actionButton}>
             <i className="ri-share-forward-line"></i> <span>Share Your Profile Back</span>
+          </button>
+          <button onClick={addToContacts} className={styles.actionButton}>
+            <i className="ri-user-add-line"></i> <span>Add to Contacts</span>
           </button>
           {isGoogleLoginVisible && (
             <GoogleLogin

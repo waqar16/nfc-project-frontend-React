@@ -75,13 +75,15 @@ const SignupPage = () => {
 
           {/* <div className={styles.login__google}><img className={styles.google__icon} src={google}></img>Continue with Google </div> */}
           <GoogleOAuthProvider clientId={clientId}>
+            <div className={styles.login__google}>
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={handleGoogleFailure}
               useOneTap
             />
+            </div>
           </GoogleOAuthProvider>
-
+          
 
           <p className={styles.login__or}>or</p>
 

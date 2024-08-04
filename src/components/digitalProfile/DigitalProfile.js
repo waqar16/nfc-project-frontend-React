@@ -67,7 +67,7 @@ const DigitalProfile = () => {
           facebook: profileData.facebook || '',
           instagram: profileData.instagram || '',
           linkedin: profileData.linkedin || '',
-          profilePic: profileData.profilePic || 'https://via.placeholder.com/150',
+          profilePic: profileData.profile_pic || 'https://via.placeholder.com/150',
         });
       }
     } catch (error) {

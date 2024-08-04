@@ -80,7 +80,7 @@ const Sidebar = ({ profileType }) => {
               </li>
               <li className={styles.sidebar__item}>
                 <Link to={`/account-deletion/`}>
-                  <i className="ri-delete-3-line"></i>
+                  <i className="ri-settings-3-line"></i>
                   Account Deletion
                 </Link>
               </li>
@@ -109,7 +109,7 @@ const Sidebar = ({ profileType }) => {
               <li className={styles.sidebar__item}>
                 <Link to={`/account-deletion/`}>
                   <i className="ri-settings-3-line"></i>
-                  Account Deletetion
+                  Account Deletion
                 </Link>
               </li>
             </>

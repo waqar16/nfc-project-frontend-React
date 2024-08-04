@@ -11,16 +11,19 @@ import axios from 'axios';
 import Map from '../Map/Map';
 
 const options = ['Daily', 'Weekly', 'Monthly'];
+const options2 = ['Time of Day', 'Day of Week'];
 const defaultOption = options[0];
+const defaultOption2 = options2[0];
 
 const dummyPeakInteractionTime = [
-  { name: 'Monday', pv: 0, uv: 4 },
-  { name: 'Tuesday', pv: 4, uv: 4 },
-  { name: 'Wednesday', pv: 8, uv: 5 },
-  { name: 'Thursday', pv: 2, uv: 7 },
-  { name: 'Friday', pv: 7, uv: 7 },
-  { name: 'Saturday', pv: 7, uv: 6 },
-  { name: 'Sunday', pv: 7, uv: 9 },
+  { period: '00:00 - 03:59', count: 0 },
+  { period: '03:00 - 06:59', count: 0 },
+  { period: '06:00 - 09:59', count: 1 },
+  { period: '09:00 - 12:59', count: 5 },
+  { period: '12:00 - 15:59', count: 0 },
+  { period: '15:00 - 18:59', count: 0 },
+  { period: '18:00 - 21:59', count: 5 },
+  { period: '21:00 - 24:59', count: 0 },
 ];
 
 const dummyGeoData = [
@@ -56,7 +59,6 @@ const Analytics = () => {
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
-        // Handle errors, e.g., redirect to login page or show error message
       }
     };
 
@@ -65,15 +67,14 @@ const Analytics = () => {
 
   const fetchInteractionFrequency = async (frequency) => {
     try {
-      const response = await axios.get(`https://waqar123.pythonanywhere.com/api/interaction-frequency/${frequency.toLowerCase()}`,
-    {
-      headers: {
-        Authorization: `Token ${localStorage.getItem('authToken')}`,
-      },
-    });
+      const response = await axios.get(`https://waqar123.pythonanywhere.com/api/interaction-frequency/${frequency.toLowerCase()}`, {
+        headers: {
+          Authorization: `Token ${localStorage.getItem('authToken')}`,
+        },
+      });
       const formattedData = response.data.map(item => ({
-        name: new Date(item.timestamp__date).toLocaleDateString(),
-        uv: item.count,
+        Period: item.period,
+        Count: item.count,
       }));
       setInteractionFrequency(formattedData);
     } catch (error) {
@@ -81,12 +82,35 @@ const Analytics = () => {
     }
   };
 
+  const fetchPeakInteractionTime = async (frequency) => {
+    try {
+      const formattedFrequency = frequency.toLowerCase().replace(/ /g, '_');
+      const response = await axios.get(`https://waqar123.pythonanywhere.com/api/peak-interaction-time/${formattedFrequency}`, {        headers: {
+          Authorization: `Token ${localStorage.getItem('authToken')}`,
+        },
+      });
+      const transformedData = response.data.data.map(item => ({
+        period: item.period,
+        count: item.count,
+      }));
+      setPeakInteractionTime(transformedData);
+    } catch (error) {
+      console.error('Error fetching peak interaction time:', error);
+    }
+  };
+
   useEffect(() => {
     fetchInteractionFrequency(defaultOption);
+    fetchPeakInteractionTime(defaultOption2);
   }, []);
 
   const handleDropdownChange = async (option) => {
     await fetchInteractionFrequency(option.value);
+    await fetchPeakInteractionTime(defaultOption2);
+  };
+
+  const handleDropdownChange2 = async (option) => {
+    await fetchPeakInteractionTime(option.value);
   };
 
   const getMostInteractedCountry = () => {
@@ -121,13 +145,12 @@ const Analytics = () => {
               />
             </div>
             <ResponsiveContainer width="100%" height={300}>
-              {/* <LineChart data={[interactionFrequency[0],32,34,21,12,90,78,9,23]}> */}
               <LineChart data={interactionFrequency}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
+                <XAxis dataKey="Period" />
+                <YAxis tickFormatter={(tick) => Math.round(tick)} />
                 <Tooltip />
-                <Line type="monotype" dataKey="uv" stroke="#8884d8" />
+                <Line type="monotone" dataKey="Count" stroke="purple" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -139,20 +162,19 @@ const Analytics = () => {
             <div className={styles.chartHeader}>
               <h3>Peak Interactions Time</h3>
               <Dropdown
-                options={options}
-                onChange={(e) => setPeakInteractionTime(dummyPeakInteractionTime)}
-                value={defaultOption}
+                options={options2}
+                onChange={handleDropdownChange2}
+                value={defaultOption2}
                 placeholder="Select an option"
               />
             </div>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={peakInteractionTime}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
+                <XAxis dataKey="period" />
+                <YAxis tickFormatter={(tick) => Math.round(tick)} />
                 <Tooltip />
-                <Bar dataKey="pv" fill="#8884d8" />
-                <Bar dataKey="uv" fill="#82ca9d" />
+                <Bar dataKey="count" fill="#8884d8" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -169,8 +191,8 @@ const Analytics = () => {
             <Map />
           </div>
         </div>
-        {/* Networking stats*/}
-        <div className={styles.card}>
+        {/* Networking stats */}
+        {/* <div className={styles.card}>
           <div className={styles.chartContainer}>
             <div className={styles.chartHeader}>
               <h3>Network Stats</h3>
@@ -178,42 +200,35 @@ const Analytics = () => {
             <ul className={styles.userList}>
               <li>
                 <span>
-                <img src='https://placehold.co/150x150' alt='Profile'/>
-                Lily Saunders
+                  <img src='https://placehold.co/150x150' alt='Profile' />
+                  Lily Saunders
                 </span>
                 <span className={styles.pending} >ID #3124 • Pending</span>
               </li>
               <li>
                 <span>
-                <img src='https://placehold.co/150x150' alt='Profile'/>
-                Lily Saunders
+                  <img src='https://placehold.co/150x150' alt='Profile' />
+                  Lily Saunders
                 </span>
                 <span className={styles.paid}>ID #3124 • Paid</span>
               </li>
               <li>
                 <span>
-                <img src='https://placehold.co/150x150' alt='Profile'/>
-                Lily Saunders
+                  <img src='https://placehold.co/150x150' alt='Profile' />
+                  Lily Saunders
                 </span>
                 <span className={styles.paid}>ID #3124 • Paid</span>
               </li>
               <li>
                 <span>
-                <img src='https://placehold.co/150x150' alt='Profile'/>
-                Lily Saunders
+                  <img src='https://placehold.co/150x150' alt='Profile' />
+                  Lily Saunders
                 </span>
-                <span className={styles.pending} >ID #3124 • Pending</span>
-              </li>
-              <li>
-                <span>
-                <img src='https://placehold.co/150x150' alt='Profile'/>
-                Lily Saunders
-                </span>
-                <span className={styles.paid}>ID #3124 • Paid</span>
+                <span className={styles.pending}>ID #3124 • Pending</span>
               </li>
             </ul>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

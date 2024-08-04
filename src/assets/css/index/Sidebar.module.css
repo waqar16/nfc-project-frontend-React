@@ -87,11 +87,18 @@
     }
     .sidebar {
      top: 50px;
-      width: 200px;
+      width: 220px;
     }
   
     .sidebar__item a {
-      font-size: 0.875rem;
+      font-size: 0.86rem;
     }
+
+    .sidebar__toggle i {
+      /* display: flex; */
+      /* align-items: center; */
+      margin-top: 3px;
+      font-size: 1.25rem;
+      }
   }
-  
+

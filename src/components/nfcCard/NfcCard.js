@@ -11,8 +11,7 @@ const NfcCard = () => {
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
-    profilePic: 'https://via.placeholder.com/150', // Placeholder image URL
-    isActive: true, // Mock status indicator, replace with actual logic
+    isActive: true, 
   });
 
   const fetchUserData = useCallback(async () => {
@@ -33,13 +32,12 @@ const NfcCard = () => {
         setUser({
           firstName: first_name,
           lastName: last_name,
-          profilePic: 'https://via.placeholder.com/150', // Placeholder for profile pic, replace with actual URL if available
-          isActive: true, // Mock status indicator, replace with actual logic
+          isActive: true, 
         });
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
-      // Handle errors, e.g., redirect to login page or show error message
+
     }
   }, [navigate, userId, username]);
 
@@ -47,7 +45,7 @@ const NfcCard = () => {
     window.scrollTo(0, 0);
 
     fetchUserData();
-  }, [fetchUserData]); // Only re-run the effect if fetchUserData changes
+  }, []); 
 
   return (
     <div className={styles.nfcContainer}>

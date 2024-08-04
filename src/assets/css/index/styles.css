@@ -5,10 +5,10 @@
 body{
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
   /* max-width: fit-content; */
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: 100%; */
 }
 /*=============== VARIABLES CSS ===============*/
 :root {
@@ -541,6 +541,10 @@ img {
 
 /* For large devices */
 @media screen and (min-width: 1023px) {
+
+  .nav__logo{
+    margin-left: 2rem;
+  }
   .nav {
     height: calc(var(--header-height) + 2rem);
     column-gap: 3rem;
@@ -567,3 +571,4 @@ img {
     margin-inline: auto;
   }
 }
+
