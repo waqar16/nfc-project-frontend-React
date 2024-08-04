@@ -84,7 +84,7 @@ const SignupPage = () => {
             </div>
           </GoogleOAuthProvider>
           
-
+      
           <p className={styles.login__or}>or</p>
 
           {isPersonalSignup ? (
