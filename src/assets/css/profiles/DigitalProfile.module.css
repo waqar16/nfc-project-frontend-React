@@ -336,7 +336,7 @@
 @media (max-width: 768px) {
   .digitalProfileContainer{
     margin-top: 0px;
-    gap: 30px;
+    gap: 50px;
     }
   .profileCard {
     width: 100%;
