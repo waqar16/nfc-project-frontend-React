@@ -10,7 +10,10 @@ function HomeLayout() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    
+    const profile = document.getElementById('profile');
+    if (profile) {
+      profile.classList.remove('show-profile');
+    }  
   }, []);
 
   return (

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import CardStatusPieChart from './CardStatusPieChart';
 import EngagementMetricsChart from './EngagementMetrics';
-import styles from '../../assets/css/profiles/CompanyAnalytics.module.css';
+import styles from '../../assets/css/profiles/IndividualAnalaytics.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import axios from 'axios';
+import Map from '../Map/Map';
 
 const Analytics = () => {
   const [activeCount, setActiveCount] = useState(0);
@@ -15,7 +16,7 @@ const defaultOption = options[0];
 
   const fetchInteractionFrequency = async (frequency) => {
     try {
-      const response = await axios.get(`https://waqar123.pythonanywhere.com/api/interaction-frequency/${frequency.toLowerCase()}`, {
+      const response = await axios.get(`  https://waqar123.pythonanywhere.com/api/interaction-frequency/${frequency.toLowerCase()}`, {
         headers: {
           Authorization: `Token ${localStorage.getItem('authToken')}`,
         },
@@ -47,9 +48,18 @@ const defaultOption = options[0];
       <Sidebar profileType={localStorage.getItem('profile_type')} />
 
       <h2 className={styles.analyticTitle}>Analytics</h2>
-
       <div className={styles.analyticsContent}>
-        <CardStatusPieChart activeCount={activeCount} inactiveCount={inactiveCount} />
+      <div className={styles.card}>
+          <div className={styles.chartContainer}>
+            <div className={styles.chartHeader}>
+              <h3>Geographic Data</h3>
+            </div>
+            <Map />
+          </div>
+        </div>
+        </div>
+      <div className={styles.analyticsContent}>
+        {/* <CardStatusPieChart activeCount={activeCount} inactiveCount={inactiveCount} /> */}
         <EngagementMetricsChart
           interactionFrequency={interactionFrequency}
           onDropdownChange={handleDropdownChange}

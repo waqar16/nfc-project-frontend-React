@@ -12,6 +12,8 @@ import whatsapp from '../../assets/img/socials/whatsapp.png';
 const DigitalProfile = () => {
   const { userId, username } = useParams();
   const navigate = useNavigate();
+  const [profileTypeWhoShared , setProfileTypeWhoShared] = useState('');
+
 
 
   const [user, setUser] = useState({
@@ -35,7 +37,7 @@ const DigitalProfile = () => {
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+      const userResponse = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -47,7 +49,7 @@ const DigitalProfile = () => {
       if (profile_type !== profile_type || userId !== id.toString() || username !== authenticatedUsername) {
         navigate('/not-authorized'); // Redirect to not authorized page
       } else {
-        const endpoint = profile_type === 'employee' ? `https://waqar123.pythonanywhere.com/api/employees/${email}/` : `https://waqar123.pythonanywhere.com/api/profiles/${id}/`;
+        const endpoint = profile_type === 'employee' ? `  https://waqar123.pythonanywhere.com/api/employees/${email}/` : `  https://waqar123.pythonanywhere.com/api/profiles/${id}/`;
         const profileResponse = await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`
@@ -76,16 +78,17 @@ const DigitalProfile = () => {
     }
   }, [navigate, userId, username]);
 
-  const fetchReceivedCards = useCallback(async () => {
+  const fetchReceivedCards = (async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://waqar123.pythonanywhere.com/api/received-cards/', {
+      const response = await axios.get('  https://waqar123.pythonanywhere.com/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
       });
       const cards = await Promise.all(response.data.map(async (card) => {
-        const userResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${card.shared_from}/`, {
+        setProfileTypeWhoShared(card.profile_type_who_shared);
+        const userResponse = await axios.get(`  https://waqar123.pythonanywhere.com/api/profiles/${card.shared_from}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -115,7 +118,7 @@ const DigitalProfile = () => {
   const handleShareToCard = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://waqar123.pythonanywhere.com/api/share-profile-url/', {}, {
+      const response = await axios.post('  https://waqar123.pythonanywhere.com/api/share-profile-url/', {}, {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -132,7 +135,7 @@ const DigitalProfile = () => {
   const handleWriteToNFC = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      axios.post('https://waqar123.pythonanywhere.com/api/nfc-write/', user, {
+      axios.post('  https://waqar123.pythonanywhere.com/api/nfc-write/', user, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -148,7 +151,7 @@ const DigitalProfile = () => {
   const handleShareProfile = async (recipient) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('  https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -162,8 +165,36 @@ const DigitalProfile = () => {
   };
 
   const handleShowDetails = (profileId) => {
-    navigate(`/profile/${profileId}`);
+    console.log('Profile Type:', profileTypeWhoShared);
+    if (profileTypeWhoShared === 'company') {
+      navigate(`/company/${profileId}`);
+    }
+    else {
+      navigate(`/profile/${profileId}`);
+    }
   };
+
+  function timeAgo(date) {
+    const now = new Date();
+    const secondsPast = (now.getTime() - date.getTime()) / 1000;
+
+    if (secondsPast < 60) {
+        return `${Math.floor(secondsPast)} seconds ago`;
+    }
+    if (secondsPast < 3600) {
+        return `${Math.floor(secondsPast / 60)} minutes ago`;
+    }
+    if (secondsPast < 86400) {
+        return `${Math.floor(secondsPast / 3600)} hours ago`;
+    }
+    if (secondsPast < 2592000) {
+        return `${Math.floor(secondsPast / 86400)} days ago`;
+    }
+    if (secondsPast < 31536000) {
+        return `${Math.floor(secondsPast / 2592000)} months ago`;
+    }
+    return `${Math.floor(secondsPast / 31536000)} years ago`;
+}
 
   return (
     <>
@@ -215,26 +246,31 @@ const DigitalProfile = () => {
         onShare={handleShareProfile}
         shareLink={shareLink}  // Pass the share link to the modal
       />
-        <div className={styles.receivedCardsSection}>
-          <h2>Received Digital Cards</h2>
-          <div className={styles.receivedCardsList}>
-            {receivedCards.length > 0 ? (
-              receivedCards.map(card => (
-                <div key={card.id} className={styles.receivedCard}>
-                  <img src={card.shared_from_user.profilePic || 'https://via.placeholder.com/150'} alt="Profile" className={styles.receivedCardPic} />
-                  <div className={styles.receivedCardDetails}>
-                    <div className={styles.receivedCardName}>{`${card.shared_from_user.first_name} ${card.shared_from_user.last_name}`}</div>
-                    <div className={styles.receivedCardDate}>Received on: {new Date(card.shared_at).toLocaleDateString()}</div>
-                    <span onClick={() => handleShowDetails(card.shared_from_user.user)} className={styles.showDetailsButton}>
-                      View Card
-                    </span>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>No received digital cards.</p>
-            )}
-          </div>
+<div className={styles.receivedCardsSection}>
+    <div className={styles.receivedCardsList}>
+    <h2>Received Digital Cards</h2>
+
+        {receivedCards.length > 0 ? (
+            receivedCards
+                .sort((a, b) => new Date(b.shared_at) - new Date(a.shared_at)) // Sort by shared_at date in descending order
+                .map(card => (
+                    <div key={card.id} className={styles.receivedCard}>
+                        {/* <img src={card.shared_from_user.profilePic || 'https://via.placeholder.com/150'} alt="Profile" className={styles.receivedCardPic} /> */}
+                        <div className={styles.receivedCardDetails}>
+                            <div className={styles.receivedCardName}>
+                                {` Email: ${card.shared_from_user.email}`}
+                            </div>
+                            <div className={styles.receivedCardDate}>Received on: {timeAgo(new Date(card.shared_at))}</div>
+                            <span onClick={() => handleShowDetails(card.shared_from_user.user)} className={styles.showDetailsButton}>
+                                View Card
+                            </span>
+                        </div>
+                    </div>
+                ))
+        ) : (
+            <p>No received cards</p>
+        )}
+    </div>
         </div>
       </div>
       <div className={styles.cardActions}>

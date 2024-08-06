@@ -12,7 +12,7 @@ const EngagementMetricsChart = ({ interactionFrequency, onDropdownChange }) => {
     <div className={styles.card}>
       <div className={styles.chartContainer}>
         <div className={styles.chartHeader}>
-          <h3>Interaction Frequency</h3>
+          <h3>Engagement Metrics Chart</h3>
           <Dropdown
             options={options}
             onChange={onDropdownChange}

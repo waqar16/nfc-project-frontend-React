@@ -26,7 +26,7 @@ const AccountDeletion = () => {
 
             if (token) {
                 try {
-                    const response = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me', {
+                    const response = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me', {
                         headers: {
                             Authorization: `Token ${token}`,
                         },
@@ -68,7 +68,7 @@ const AccountDeletion = () => {
         try {
             const authToken = localStorage.getItem('authToken');
             const requestData = authType === 'google' ? {} : { current_password: password };
-            const endpoint = authType === 'google' ? `https://waqar123.pythonanywhere.com/auth/delete-user/` : `https://waqar123.pythonanywhere.com/auth/users/me/`;
+            const endpoint = authType === 'google' ? `  https://waqar123.pythonanywhere.com/auth/delete-user/` : `  https://waqar123.pythonanywhere.com/auth/users/me/`;
             const response = await axios.delete(endpoint, {
                 headers: {
                     Authorization: `Token ${authToken}`,

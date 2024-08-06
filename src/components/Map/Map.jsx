@@ -15,7 +15,7 @@ function Map() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://waqar123.pythonanywhere.com/api/geo-data/', {
+        const response = await axios.get('  https://waqar123.pythonanywhere.com/api/geo-data/', {
           headers: { Authorization: `Token ${localStorage.getItem('authToken')}` }
         });
         const apiData = response.data;

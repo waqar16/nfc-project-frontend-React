@@ -32,7 +32,7 @@ const UserProfile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const userResponse = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -56,7 +56,7 @@ const UserProfile = () => {
         setUser(updatedUser);
 
         try {
-          const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${id}/`, {
+          const profileResponse = await axios.get(`  https://waqar123.pythonanywhere.com/api/profiles/${id}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -115,8 +115,8 @@ const UserProfile = () => {
     try {
       const authToken = localStorage.getItem('authToken');
       const url = profileExists
-        ? `https://waqar123.pythonanywhere.com/api/profiles/${user.user}/`
-        : 'https://waqar123.pythonanywhere.com/api/profiles/';
+        ? `  https://waqar123.pythonanywhere.com/api/profiles/${user.user}/`
+        : '  https://waqar123.pythonanywhere.com/api/profiles/';
       const method = profileExists ? 'put' : 'post';
 
       await axios[method](url, formData, {
@@ -128,7 +128,7 @@ const UserProfile = () => {
 
       alert(profileExists ? 'Profile updated successfully!' : 'Profile created successfully!');
 
-      const profileResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${user.user}/`, {
+      const profileResponse = await axios.get(`  https://waqar123.pythonanywhere.com/api/profiles/${user.user}/`, {
         headers: {
           Authorization: `Token ${authToken}`,
         },

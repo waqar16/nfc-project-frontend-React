@@ -8,7 +8,7 @@
   }
   
   .formContainer {
-    /* background: #fff; */
+    background: #fff;
     flex: 1;
     max-width: 600px;
     padding: 2rem;
@@ -64,7 +64,7 @@
   .listContainer {
     max-width: 500px;
     flex: 2;
-    /* background: #ffffff; */
+    background: #ffffff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -83,31 +83,58 @@
   }
   
   .employeeItem {
-    background: linear-gradient(135deg, #e3ebf8 0%, #d0d1fd 33%, #e8d2fc 66%, #f8dac7 100%);
-    margin-bottom: 10px;
+    /* background: linear-gradient(135deg, #e3ebf8 0%, #d0d1fd 33%, #e8d2fc 66%, #f8dac7 100%); */
+    /* margin-bottom: 10px; */
     padding: 20px;
     border-radius: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    /* border: 2px solid #0c0c0c; */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   }
   
   .employeeInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* gap: 5px; */
   }
-  
-  .actionIcons {
-    color: #007bff;
 
-    display: flex;
-    gap: 10px;
-    cursor: pointer;
+  .actionIconEdit {
+    color: #007bff !important;
+    cursor: pointer !important;
+    
+
+  }
+  .actionIconDelete {
+    color: #ce0000 !important;
+    cursor: pointer !important;
+
+
   }
   
   .actionIcons i:hover {
     color: #007bff;
   }
+
+
+  @media screen and (max-width: 768px) {
+    .teamManagementContainer {
+      margin-top: 30px;
+      flex-direction: column;
+      gap: 20px;
+    }
   
+    .formContainer {
+      padding: 1rem;
+    }
+  
+    .form {
+      gap: 10px;
+    }
+  
+    .listContainer {
+      max-height: 400px;
+    } 
+    
+  }

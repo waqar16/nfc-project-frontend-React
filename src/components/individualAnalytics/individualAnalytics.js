@@ -45,7 +45,7 @@ const Analytics = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const userResponse = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -67,7 +67,7 @@ const Analytics = () => {
 
   const fetchInteractionFrequency = async (frequency) => {
     try {
-      const response = await axios.get(`https://waqar123.pythonanywhere.com/api/interaction-frequency/${frequency.toLowerCase()}`, {
+      const response = await axios.get(`  https://waqar123.pythonanywhere.com/api/interaction-frequency/${frequency.toLowerCase()}`, {
         headers: {
           Authorization: `Token ${localStorage.getItem('authToken')}`,
         },
@@ -85,7 +85,7 @@ const Analytics = () => {
   const fetchPeakInteractionTime = async (frequency) => {
     try {
       const formattedFrequency = frequency.toLowerCase().replace(/ /g, '_');
-      const response = await axios.get(`https://waqar123.pythonanywhere.com/api/peak-interaction-time/${formattedFrequency}`, {        headers: {
+      const response = await axios.get(`  https://waqar123.pythonanywhere.com/api/peak-interaction-time/${formattedFrequency}`, {        headers: {
           Authorization: `Token ${localStorage.getItem('authToken')}`,
         },
       });
@@ -132,6 +132,15 @@ const Analytics = () => {
       <h2 className={styles.analyticTitle}>Analytics</h2>
       <Sidebar profileType={localStorage.getItem('profile_type')} />
       <div className={styles.analyticsContent}>
+                {/* Geographic Data */}
+                <div className={styles.card}>
+          <div className={styles.chartContainer}>
+            <div className={styles.chartHeader}>
+              <h3>Geographic Data</h3>
+            </div>
+            <Map />
+          </div>
+        </div>
         {/* Interaction Frequency Chart */}
         <div className={styles.card}>
           <div className={styles.chartContainer}>
@@ -182,15 +191,6 @@ const Analytics = () => {
       </div>
 
       <div className={styles.analyticsContent}>
-        {/* Geographic Data */}
-        <div className={styles.card}>
-          <div className={styles.chartContainer}>
-            <div className={styles.chartHeader}>
-              <h3>Geographic Data</h3>
-            </div>
-            <Map />
-          </div>
-        </div>
         {/* Networking stats */}
         {/* <div className={styles.card}>
           <div className={styles.chartContainer}>

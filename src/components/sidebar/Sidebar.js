@@ -16,7 +16,7 @@ const Sidebar = ({ profileType }) => {
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+      const response = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -104,6 +104,12 @@ const Sidebar = ({ profileType }) => {
                 <Link to={`/company-analytics/${userData.id}/${userData.username}`}>
                   <i className="ri-bar-chart-line"></i>
                   Analytics
+                </Link>
+              </li>
+              <li className={styles.sidebar__item}>
+                <Link to={`/company-card/${userData.id}/${userData.username}`}>
+                <i className="ri-file-text-line"></i>
+                Company Card
                 </Link>
               </li>
               <li className={styles.sidebar__item}>

@@ -1,18 +1,17 @@
-import EmployeeProfile from '../../components/employeeProfile/EmployeeProfile';
+import CompanyCard from '../../components/companyProfile/CompanyCard';
 import React from 'react';
 
-function EmployeeProfileLayout() {
+function CompanyCardLayout() {
   React.useEffect(()=>{
     const profile = document.getElementById('profile');
     if (profile) {
       profile.classList.remove('show-profile');
-    }  
-   },[])
+    }   },[])
   return (
     <div>
-        <EmployeeProfile />
+        <CompanyCard />
     </div>
   );
 }
 
-export default EmployeeProfileLayout;
+export default CompanyCardLayout;

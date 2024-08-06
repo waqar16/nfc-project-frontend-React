@@ -1,5 +1,6 @@
 .scheduleMeeting {
-  max-width:500px;
+  padding: 70px;
+  max-width: 100%;
   margin: 0 auto;
   /* padding: 20px; */
 }
@@ -129,4 +130,14 @@
 
 .button:hover {
   background-color: #0056b3;
+}
+
+@media screen and (max-width: 768px) {
+  .calendarContainer {
+    flex-direction: column;
+  }
+  .scheduleMeeting {
+    padding: 30px;
+  }
+  
 }

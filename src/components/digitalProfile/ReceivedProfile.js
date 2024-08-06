@@ -33,7 +33,7 @@ const ReceivedProfile = () => {
 
     try {
       console.log('Google login response:', response);
-      const res = await axios.post('https://waqar123.pythonanywhere.com/auth/custom-google-login/', {
+      const res = await axios.post('  https://waqar123.pythonanywhere.com/auth/custom-google-login/', {
         access_token: tokenId,
         profile_type: 'individual',
       });
@@ -56,7 +56,7 @@ const ReceivedProfile = () => {
       if (email) {
         setProfileType('employee');
       }
-      const endpoint = profileType === 'employee' ? `https://waqar123.pythonanywhere.com/api/employees/${email}/` : `https://waqar123.pythonanywhere.com/api/profiles/${userId}/`;
+      const endpoint = profileType === 'employee' ? `  https://waqar123.pythonanywhere.com/api/employees/${email}/` : `  https://waqar123.pythonanywhere.com/api/profiles/${userId}/`;
       const profileResponse = await axios.get(endpoint);
 
       const profileData = profileResponse.data;
@@ -86,7 +86,7 @@ const ReceivedProfile = () => {
     try {
       // const token = localStorage.getItem('authToken');
       await axios.post(
-        'https://waqar123.pythonanywhere.com/api/create_interaction/',
+        '  https://waqar123.pythonanywhere.com/api/create_interaction/',
         {
           user: user_id,
           interaction_type: 'view_profile',
@@ -116,11 +116,16 @@ const ReceivedProfile = () => {
       await shareProfile();
     }
   };
+  const shareProfileBackButton = profileType !== 'company' && (
+    <button onClick={shareProfileBack} className={styles.actionButton}>
+      <i className="ri-share-forward-line"></i> <span>Share Your Profile Back</span>
+    </button>
+  );
 
   const shareProfile = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+      const userResponse = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -128,7 +133,7 @@ const ReceivedProfile = () => {
       const { id, first_name, last_name, email, profile_type } = userResponse.data;
 
       try {
-        const endpoint = profile_type === 'employee' ? `https://waqar123.pythonanywhere.com/api/employees/${email}/` : `https://waqar123.pythonanywhere.com/api/profiles/${userId}/`;
+        const endpoint = profile_type === 'employee' ? `  https://waqar123.pythonanywhere.com/api/employees/${email}/` : `  https://waqar123.pythonanywhere.com/api/profiles/${userId}/`;
         await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`,
@@ -137,7 +142,7 @@ const ReceivedProfile = () => {
       } catch (error) {
         // Profile does not exist, create it
         if (error.response && error.response.status === 404) {
-          await axios.post('https://waqar123.pythonanywhere.com/api/profiles/', {
+          await axios.post('  https://waqar123.pythonanywhere.com/api/profiles/', {
             user: id,
             first_name: first_name,
             last_name: last_name,
@@ -153,7 +158,7 @@ const ReceivedProfile = () => {
       }
 
       const recipient = user.email;
-      await axios.post('https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: recipient }, {
+      await axios.post('  https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },

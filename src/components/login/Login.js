@@ -28,7 +28,7 @@ const LoginPage = () => {
     try {
       console.log('Google login response:', response);
       const profileType = isPersonalLogin ? "individual" : "company";
-      const res = await axios.post('https://waqar123.pythonanywhere.com/auth/custom-google-login/', {
+      const res = await axios.post('  https://waqar123.pythonanywhere.com/auth/custom-google-login/', {
         access_token: tokenId,
         profile_type: profileType
       });
@@ -43,7 +43,17 @@ const LoginPage = () => {
       localStorage.setItem('profile_pic', res.data.profile_pic);
 
       // Redirect or perform additional actions
-      navigate('/');
+      if (res.data.profile_type === 'company') {
+        navigate(`/company-profile/${res.data.user_id}/${res.data.username}`);
+      }
+      else if (res.data.profile_type === 'individual') {
+        navigate(`/user-profile/${res.data.user_id}/${res.data.username}`);
+      }
+      else if (res.data.profile_type === 'employee') {
+        navigate(`/employee-profile/${res.data.user_id}/${res.data.username}`);
+      }
+      
+      // navigate('/');
       window.location.reload();
     } catch (error) {
       console.error('Google login error:', error);
@@ -135,12 +145,12 @@ const PersonalLogin = ({ navigate }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/token/login/', {
+      const response = await axios.post('  https://waqar123.pythonanywhere.com/auth/token/login/', {
         email,
         password,
       });
 
-      // const response2 = await axios.get('https://waqar123.pythonanywhere.com/api/profile_type/', {
+      // const response2 = await axios.get('  https://waqar123.pythonanywhere.com/api/profile_type/', {
       // });
 
       // console.log(response2.data.profile_type);
@@ -156,7 +166,7 @@ const PersonalLogin = ({ navigate }) => {
         window.dispatchEvent(event);
 
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const userResponse = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -241,12 +251,12 @@ const CompanyLogin = ({ navigate }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/token/login/', {
+      const response = await axios.post('  https://waqar123.pythonanywhere.com/auth/token/login/', {
         email,
         password,
       });
 
-      // const response2 = await axios.get('https://waqar123.pythonanywhere.com/api/profile_type/', {
+      // const response2 = await axios.get('  https://waqar123.pythonanywhere.com/api/profile_type/', {
       // });
 
       // console.log(response2.data.profile_type);
@@ -262,7 +272,7 @@ const CompanyLogin = ({ navigate }) => {
         window.dispatchEvent(event);
 
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const userResponse = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }

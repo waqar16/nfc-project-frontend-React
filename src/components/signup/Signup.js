@@ -15,14 +15,15 @@ const SignupPage = () => {
   const clientId = '1036461909018-v32f9s35hefkbeq70gterh12sioug5a5.apps.googleusercontent.com';
 
   const handleGoogleSuccess = async (response) => {
-    const tokenId = response.credential; // Token ID from Google
+    const tokenId = response.credential;
 
     try {
       console.log('Google login response:', response);
       const profileType = isPersonalSignup ? "individual" : "company";
-      const res = await axios.post('https://waqar123.pythonanywhere.com/auth/custom-google-login/', {
+      const res = await axios.post('  https://waqar123.pythonanywhere.com/auth/custom-google-login/', {
         access_token: tokenId,
-        profile_type: profileType
+        profile_type: profileType,
+        authentication_type: 'google'
       });
 
       // Store the authentication token in localStorage
@@ -31,7 +32,7 @@ const SignupPage = () => {
       localStorage.setItem('first_name', res.data.first_name);
       localStorage.setItem('last_name', res.data.last_name);
       localStorage.setItem('email', res.data.email);
-      localStorage.setItem('authentication_type', 'google');
+      localStorage.setItem('authentication_type', res.data.authentication_type);
 
       // Redirect or perform additional actions
       navigate('/');
@@ -153,13 +154,14 @@ const PersonalSignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
+      const response = await axios.post('  https://waqar123.pythonanywhere.com/auth/users/', {
         first_name: firstName,
         last_name: lastName,
         email,
         username,
         password,
         profile_type: 'individual',
+        authentication_type: 'manual'
       });
 
       if (response.status === 201) {
@@ -301,13 +303,14 @@ const CompanySignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('https://waqar123.pythonanywhere.com/auth/users/', {
+      const response = await axios.post('  https://waqar123.pythonanywhere.com/auth/users/', {
         company_name: companyName,
         admin_name: adminName,
         email,
         username,
         password,
         profile_type: 'company',
+        authentication_type: 'manual'
       });
 
       if (response.status === 201) {

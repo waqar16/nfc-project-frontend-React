@@ -29,8 +29,9 @@ import SignupForm from './components/signup/Signup';
 import LoginLayout from './components/login/Login';
 import AccountDeletion from './components/accountDeletion/AccountDeletion';
 import EmployeeSignup from './components/employeeSignup/EmployeeSignup';
+import CompanyCardLayout from './layout/companyProfile/CompanyCardLayout';
+import ReceivedCompanyLayout from './layout/companyProfile/ReceivedCompantLayout';
 
-import Map from './components/Map/Map';
 function App() {
   
   useEffect(() => {
@@ -61,7 +62,9 @@ function App() {
           <Route path="/activate/:uid/:token" element={<Activation />} />
           <Route path="/activation-sent" element={<ActivationSentTemplate />} />
           <Route path="/digital-profile/:userId/:username" element={<DigitalProfileLayout />} />
+          <Route path="/company-card/:userId/:username" element={<CompanyCardLayout />} />
           <Route path="/profile/:userId/" element={<ReceivedProfileLayout />} />
+          <Route path="/company/:userId/" element={<ReceivedCompanyLayout />} />
           <Route path="/user-analytics/:userId/:username" element={<AnalyticsLayout/>}/>
           <Route path="/employee-profile/:userId/:username" element={<EmployeeProfileLayout/>}/>
           <Route path="/profile-summary/:userId/:username" element={<ProfileSummaryLayout/>}/>
