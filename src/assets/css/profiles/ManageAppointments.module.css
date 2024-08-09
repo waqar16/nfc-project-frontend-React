@@ -1,0 +1,78 @@
+/* ManageAppointments.module.css */
+
+.manageAppointmentsSection{
+  margin-top: 120px;
+}
+
+.appointmentList{
+  width: 600px;
+}
+
+.appointmentItem{
+  background: white;
+  padding: 20px;
+  /* background-color: rgba(255, 255, 255, 0.1); */
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* .appointmentItem:hover{
+  background: linear-gradient(to right, rgb(11, 147, 193), purple, orange);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+} */
+.manageAppointments {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .message {
+    color: #d9534f;
+  }
+  
+  .appointmentList {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .appointmentItem {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f9f9f9;
+  }
+  
+  .appointmentTitle {
+    font-size: 20px;
+    margin: 0 0 10px;
+  }
+  
+  .appointmentDescription {
+  font-size: 1.2rem;
+  }
+  
+  .deleteButton {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #dc3545;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .deleteButton:hover {
+    background-color: #c82333;
+  }
+  

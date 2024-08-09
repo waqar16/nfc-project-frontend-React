@@ -67,7 +67,7 @@ const Sidebar = ({ profileType }) => {
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
-                <Link to={`/schedule-meeting/${userData.id}/${userData.username}`}>
+                <Link to={`/manage-appointments/${userData.id}/${userData.username}`}>
                   <i className="ri-calendar-line"></i>
                   Manage Appointments
                 </Link>
@@ -98,6 +98,13 @@ const Sidebar = ({ profileType }) => {
                 <Link to={`/team-management/${userData.id}/${userData.username}`}>
                   <i className="ri-team-line"></i>
                   Team Management
+                </Link>
+              </li>
+
+              <li className={styles.sidebar__item}>
+                <Link to={`/manage-appointments/${userData.id}/${userData.username}`}>
+                  <i className="ri-calendar-line"></i>
+                  Manage Appointments
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
@@ -141,9 +148,9 @@ const Sidebar = ({ profileType }) => {
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
-                <Link to={`/schedule-meeting/${userData.id}/${userData.username}`}>
+                <Link to={`/manage-appointments/${userData.id}/${userData.username}`}>
                   <i className="ri-calendar-line"></i>
-                   Manage Appointments
+                  Manage Appointments
                 </Link>
               </li>
               <li className={styles.sidebar__item}>

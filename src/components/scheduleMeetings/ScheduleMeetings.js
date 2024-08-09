@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-// import Sidebar from '../sidebar/Sidebar';
+import axios from 'axios';
 import styles from '../../assets/css/profiles/ScheduleMeeting.module.css';
 
-const ScheduleMeeting = () => {
+const ScheduleMeeting = ({ attendeeEmail, userId }) => {
   const [date, setDate] = useState(new Date());
   const [meetingDetails, setMeetingDetails] = useState({
+    attendee_email: '',
     title: '',
     description: '',
     time: ''
   });
+  const [message, setMessage] = useState('');
 
   const handleDateChange = (date) => {
     setDate(date);
@@ -24,20 +26,39 @@ const ScheduleMeeting = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    alert('Meeting scheduled successfully!');
+  const handleAuthAndSchedule = async () => {
+    try {
+      const dateString = date.toISOString().split('T')[0];
+      const combinedDateTime = `${dateString}T${meetingDetails.time}:00.000Z`;
+  
+      const authUrl = `https://127.0.0.1:8000/google/auth-request/?title=${encodeURIComponent(meetingDetails.title)}&description=${encodeURIComponent(meetingDetails.description)}&start_datetime=${combinedDateTime}&attendee_email=${encodeURIComponent(attendeeEmail)}&user_id=${encodeURIComponent(userId)}`;
+      
+      window.location.href = authUrl;
+    } catch (error) {
+      setMessage('Error starting authorization process.');
+      console.error('Error initiating Google OAuth flow:', error);
+    }
   };
 
   return (
     <div className={styles.scheduleMeeting}>
-      {/* <Sidebar profileType="individual" /> */}
       <h2 className={styles.title}>Schedule a Meeting</h2>
       <div className={styles.calendarContainer}>
         <Calendar onChange={handleDateChange} value={date} className={styles.customCalendar} />
       </div>
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <form className={styles.form}>
+        <div className={styles.formGroup}>
+          <input
+            type="hidden"
+            id="email"
+            value={attendeeEmail}
+            name="email"
+            onChange={handleChange}
+            className={styles.input}
+            required
+            readOnly
+          />
+        </div>
         <div className={styles.formGroup}>
           <label htmlFor="title" className={styles.label}>Meeting Title</label>
           <input
@@ -48,6 +69,7 @@ const ScheduleMeeting = () => {
             onChange={handleChange}
             className={styles.input}
             placeholder="Enter meeting title"
+            required
           />
         </div>
         <div className={styles.formGroup}>
@@ -59,6 +81,7 @@ const ScheduleMeeting = () => {
             onChange={handleChange}
             className={styles.textarea}
             placeholder="Enter meeting description"
+            required
           ></textarea>
         </div>
         <div className={styles.formGroup}>
@@ -70,9 +93,13 @@ const ScheduleMeeting = () => {
             value={meetingDetails.time}
             onChange={handleChange}
             className={styles.input}
+            required
           />
         </div>
-        <button type="submit" className={styles.button}>Schedule Meeting</button>
+        <button type="button" onClick={handleAuthAndSchedule} className={styles.button}>
+          Schedule Meeting
+        </button>
+        {message && <p className={styles.message}>{message}</p>}
       </form>
     </div>
   );

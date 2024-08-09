@@ -7,6 +7,8 @@ import instagram from '../../assets/img/socials/instagram.png';
 import linkedin from '../../assets/img/socials/linkedin.png';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import logo from '../../assets/img/logo.png';
+import ScheduleMeeting from '../../components/scheduleMeetings/ScheduleMeetings';
+
 
 const ReceivedCompany = () => {
   const { userId } = useParams();
@@ -249,6 +251,10 @@ const shareProfile = async () => {
               cookiePolicy={'single_host_origin'}
             />
           )}
+          <ScheduleMeeting
+           attendeeEmail={company.email}
+           userId={userId}
+           />
         </div>
       </div>
     </GoogleOAuthProvider>

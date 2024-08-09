@@ -31,6 +31,7 @@ import AccountDeletion from './components/accountDeletion/AccountDeletion';
 import EmployeeSignup from './components/employeeSignup/EmployeeSignup';
 import CompanyCardLayout from './layout/companyProfile/CompanyCardLayout';
 import ReceivedCompanyLayout from './layout/companyProfile/ReceivedCompantLayout';
+import ManageAppointmentsLayout from './layout/scheduleMeetings/ManageAppointmentsLayout';
 
 function App() {
   
@@ -62,6 +63,7 @@ function App() {
           <Route path="/activate/:uid/:token" element={<Activation />} />
           <Route path="/activation-sent" element={<ActivationSentTemplate />} />
           <Route path="/digital-profile/:userId/:username" element={<DigitalProfileLayout />} />
+          <Route path="/manage-appointments/:userId/:username" element={<ManageAppointmentsLayout />} />
           <Route path="/company-card/:userId/:username" element={<CompanyCardLayout />} />
           <Route path="/profile/:userId/" element={<ReceivedProfileLayout />} />
           <Route path="/company/:userId/" element={<ReceivedCompanyLayout />} />

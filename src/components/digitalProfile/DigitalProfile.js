@@ -78,17 +78,17 @@ const DigitalProfile = () => {
     }
   }, [navigate, userId, username]);
 
-  const fetchReceivedCards = (async () => {
+  const fetchReceivedCards = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('  https://waqar123.pythonanywhere.com/api/received-cards/', {
+      const response = await axios.get('https://waqar123.pythonanywhere.com/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
       });
       const cards = await Promise.all(response.data.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
-        const userResponse = await axios.get(`  https://waqar123.pythonanywhere.com/api/profiles/${card.shared_from}/`, {
+        const userResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${card.shared_from}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -118,7 +118,7 @@ const DigitalProfile = () => {
   const handleShareToCard = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('  https://waqar123.pythonanywhere.com/api/share-profile-url/', {}, {
+      const response = await axios.post('https://waqar123.pythonanywhere.com/api/share-profile-url/', {}, {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -151,7 +151,7 @@ const DigitalProfile = () => {
   const handleShareProfile = async (recipient) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('  https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -258,7 +258,7 @@ const DigitalProfile = () => {
                         {/* <img src={card.shared_from_user.profilePic || 'https://via.placeholder.com/150'} alt="Profile" className={styles.receivedCardPic} /> */}
                         <div className={styles.receivedCardDetails}>
                             <div className={styles.receivedCardName}>
-                                {` Email: ${card.shared_from_user.email}`}
+                                {` From: ${card.shared_from_user.email}`}
                             </div>
                             <div className={styles.receivedCardDate}>Received on: {timeAgo(new Date(card.shared_at))}</div>
                             <span onClick={() => handleShowDetails(card.shared_from_user.user)} className={styles.showDetailsButton}>
