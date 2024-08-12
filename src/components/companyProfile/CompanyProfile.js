@@ -32,7 +32,7 @@ const CompanyProfile = () => {
     const fetchCompanyData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('http://54.84.254.221/auth/users/me/', {
+        const userResponse = await axios.get('https://54.84.254.221/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -59,7 +59,7 @@ const CompanyProfile = () => {
 
         try {
           setLoading(true)
-          const companyResponse = await axios.get(`http://54.84.254.221/api/companies/${userId}/`, {
+          const companyResponse = await axios.get(`https://54.84.254.221/api/companies/${userId}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -145,7 +145,7 @@ const CompanyProfile = () => {
       const authToken = localStorage.getItem('authToken');
 
       if (profileExists) {
-        await axios.put(`http://54.84.254.221/api/companies/${userId}/`, company, {
+        await axios.put(`https://54.84.254.221/api/companies/${userId}/`, company, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -154,7 +154,7 @@ const CompanyProfile = () => {
         toast.success('Company profile updated successfully!');
 
       } else {
-        const createResponse = await axios.post('http://54.84.254.221/api/companies/', company, {
+        const createResponse = await axios.post('https://54.84.254.221/api/companies/', company, {
           headers: {
             Authorization: `Token ${authToken}`,
           },

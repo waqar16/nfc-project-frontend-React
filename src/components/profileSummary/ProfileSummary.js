@@ -20,7 +20,7 @@ const ProfileSummary = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('  http://54.84.254.221/auth/users/me/', {
+        const userResponse = await axios.get('  https://54.84.254.221/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }

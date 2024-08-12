@@ -36,7 +36,7 @@ const CompanyCard = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('http://54.84.254.221/auth/users/me/', {
+      const userResponse = await axios.get('https://54.84.254.221/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -51,7 +51,7 @@ const CompanyCard = () => {
       }
 
       try {
-        const companyResponse = await axios.get(`http://54.84.254.221/api/companies/${userId}/`, {
+        const companyResponse = await axios.get(`https://54.84.254.221/api/companies/${userId}/`, {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -102,7 +102,7 @@ const CompanyCard = () => {
     try {
       // setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('http://54.84.254.221/api/received-cards/', {
+      const response = await axios.get('https://54.84.254.221/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -110,7 +110,7 @@ const CompanyCard = () => {
       //   setProfileTypeWhoShared(response.data.profile_type_who_shared);
       const cards = await Promise.all(response.data.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
-        const userResponse = await axios.get(`http://54.84.254.221/api/profiles/${card.shared_from}/`, {
+        const userResponse = await axios.get(`https://54.84.254.221/api/profiles/${card.shared_from}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -140,7 +140,7 @@ const CompanyCard = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('http://54.84.254.221/api/share-profile-url/', {}, {
+      const response = await axios.post('https://54.84.254.221/api/share-profile-url/', {}, {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -160,7 +160,7 @@ const CompanyCard = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('http://54.84.254.221/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('https://54.84.254.221/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },

@@ -18,7 +18,7 @@ const ScheduleMeetingSection = () => {
       if (token) {
         setIsAuthenticated(true);
         try {
-          const response = await axios.get('  http://54.84.254.221/auth/users/me', {
+          const response = await axios.get('  https://54.84.254.221/auth/users/me', {
             headers: {
               Authorization: `Token ${token}`,
             },

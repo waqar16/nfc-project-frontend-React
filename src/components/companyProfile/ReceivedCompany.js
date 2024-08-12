@@ -39,7 +39,7 @@ const ReceivedCompany = () => {
     try {
       setLoading(true);
       console.log('Google login response:', response);
-      const res = await axios.post('  http://54.84.254.221/auth/custom-google-login/', {
+      const res = await axios.post('  https://54.84.254.221/auth/custom-google-login/', {
         access_token: tokenId,
         profile_type: 'company',
       });
@@ -64,7 +64,7 @@ const ReceivedCompany = () => {
   const fetchCompanyData = useCallback(async () => {
     const token = localStorage.getItem('authToken');
     try {
-      const response = await axios.get(`  http://54.84.254.221/api/companies/${userId}/`, {
+      const response = await axios.get(`  https://54.84.254.221/api/companies/${userId}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -95,7 +95,7 @@ const ReceivedCompany = () => {
     const token = localStorage.getItem('authToken');
     try {
       await axios.post(
-        '  http://54.84.254.221/api/create_interaction/',
+        '  https://54.84.254.221/api/create_interaction/',
         {
           user: companyId,
           interaction_type: 'view_profile',
@@ -130,14 +130,14 @@ const shareProfile = async () => {
   const token = localStorage.getItem('authToken');
   try {
     setLoading(true);
-    const userResponse = await axios.get('  http://54.84.254.221/auth/users/me/', {
+    const userResponse = await axios.get('  https://54.84.254.221/auth/users/me/', {
       headers: {
         Authorization: `Token ${token}`,
       },
     });
     const { id, email, profile_type } = userResponse.data;
 
-    const endpoint = profile_type === 'employee' ? `  http://54.84.254.221/api/employees/${email}/` : `  http://54.84.254.221/api/profiles/${userId}/`;
+    const endpoint = profile_type === 'employee' ? `  https://54.84.254.221/api/employees/${email}/` : `  https://54.84.254.221/api/profiles/${userId}/`;
 
 
     // Check if profile exists before creating
@@ -152,7 +152,7 @@ const shareProfile = async () => {
         // Profile does not exist, create it
         try {
           await axios.post(
-            '  http://54.84.254.221/api/profiles/',
+            '  https://54.84.254.221/api/profiles/',
             {
               user: id,
               first_name: userResponse.data.first_name,
@@ -181,7 +181,7 @@ const shareProfile = async () => {
     }
 
     try {
-      await axios.post('http://54.84.254.221/api/share-profile/', { shared_to: company.email }, {
+      await axios.post('https://54.84.254.221/api/share-profile/', { shared_to: company.email }, {
         headers: {
           Authorization: `Token ${token}`,
         },

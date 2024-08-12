@@ -67,7 +67,7 @@ const EmployeeSignup = () => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('http://54.84.254.221/auth/users/', {
+      const response = await axios.post('https://54.84.254.221/auth/users/', {
         first_name: firstName,
         last_name: lastName,
         email,

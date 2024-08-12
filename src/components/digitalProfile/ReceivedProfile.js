@@ -38,7 +38,7 @@ const ReceivedProfile = () => {
 
     try {
       console.log('Google login response:', response);
-      const res = await axios.post('http://54.84.254.221/auth/custom-google-login/', {
+      const res = await axios.post('https://54.84.254.221/auth/custom-google-login/', {
         access_token: tokenId,
         profile_type: 'individual',
       });
@@ -61,7 +61,7 @@ const ReceivedProfile = () => {
       if (email) {
         setProfileType('employee');
       }
-      const endpoint = profileType === 'employee' ? `  http://54.84.254.221/api/employees/${email}/` : `  http://54.84.254.221/api/profiles/${userId}/`;
+      const endpoint = profileType === 'employee' ? `  https://54.84.254.221/api/employees/${email}/` : `  https://54.84.254.221/api/profiles/${userId}/`;
       const profileResponse = await axios.get(endpoint);
 
       const profileData = profileResponse.data;
@@ -94,7 +94,7 @@ const ReceivedProfile = () => {
     try {
       // const token = localStorage.getItem('authToken');
       await axios.post(
-        '  http://54.84.254.221/api/create_interaction/',
+        '  https://54.84.254.221/api/create_interaction/',
         {
           user: user_id,
           interaction_type: 'view_profile',
@@ -131,7 +131,7 @@ const ReceivedProfile = () => {
     setloading(true)
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('http://54.84.254.221/auth/users/me/', {
+      const userResponse = await axios.get('https://54.84.254.221/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -139,7 +139,7 @@ const ReceivedProfile = () => {
       const { id, first_name, last_name, email, profile_type } = userResponse.data;
 
       try {
-        const endpoint = profile_type === 'employee' ? `http://54.84.254.221/api/employees/${email}/` : `  http://54.84.254.221/api/profiles/${userId}/`;
+        const endpoint = profile_type === 'employee' ? `https://54.84.254.221/api/employees/${email}/` : `  https://54.84.254.221/api/profiles/${userId}/`;
         await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`,
@@ -148,7 +148,7 @@ const ReceivedProfile = () => {
       } catch (error) {
         // Profile does not exist, create it
         if (error.response && error.response.status === 404) {
-          await axios.post('http://54.84.254.221/api/profiles/', {
+          await axios.post('https://54.84.254.221/api/profiles/', {
             user: id,
             first_name: first_name,
             last_name: last_name,
@@ -166,7 +166,7 @@ const ReceivedProfile = () => {
       }
 
       const recipient = user.email;
-      await axios.post('http://54.84.254.221/api/share-profile/', { shared_to: recipient }, {
+      await axios.post('https://54.84.254.221/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -307,7 +307,7 @@ export default ReceivedProfile;
 
 //     try {
 //       console.log('Google login response:', response);
-//       const res = await axios.post('http://54.84.254.221/auth/custom-google-login/', {
+//       const res = await axios.post('https://54.84.254.221/auth/custom-google-login/', {
 //         access_token: access_token,
 //         profile_type: 'individual',
 //       });
@@ -330,7 +330,7 @@ export default ReceivedProfile;
 //       if (email) {
 //         setProfileType('employee');
 //       }
-//       const endpoint = profileType === 'employee' ? `http://54.84.254.221/api/employees/${email}/` : `http://54.84.254.221/api/profiles/${userId}/`;
+//       const endpoint = profileType === 'employee' ? `https://54.84.254.221/api/employees/${email}/` : `https://54.84.254.221/api/profiles/${userId}/`;
 //       const profileResponse = await axios.get(endpoint);
 
 //       const profileData = profileResponse.data;
@@ -359,7 +359,7 @@ export default ReceivedProfile;
 //   const createInteraction = async (user_id) => {
 //     try {
 //       await axios.post(
-//         'http://54.84.254.221/api/create_interaction/',
+//         'https://54.84.254.221/api/create_interaction/',
 //         {
 //           user: user_id,
 //           interaction_type: 'view_profile',
@@ -395,7 +395,7 @@ export default ReceivedProfile;
 //   const shareProfile = async () => {
 //     try {
 //       const token = localStorage.getItem('authToken');
-//       const userResponse = await axios.get('http://54.84.254.221/auth/users/me/', {
+//       const userResponse = await axios.get('https://54.84.254.221/auth/users/me/', {
 //         headers: {
 //           Authorization: `Token ${token}`,
 //         },
@@ -403,7 +403,7 @@ export default ReceivedProfile;
 //       const { id, first_name, last_name, email, profile_type } = userResponse.data;
 
 //       try {
-//         const endpoint = profile_type === 'employee' ? `http://54.84.254.221/api/employees/${email}/` : `http://54.84.254.221/api/profiles/${userId}/`;
+//         const endpoint = profile_type === 'employee' ? `https://54.84.254.221/api/employees/${email}/` : `https://54.84.254.221/api/profiles/${userId}/`;
 //         await axios.get(endpoint, {
 //           headers: {
 //             Authorization: `Token ${token}`,
@@ -412,7 +412,7 @@ export default ReceivedProfile;
 //       } catch (error) {
 //         // Profile does not exist, create it
 //         if (error.response && error.response.status === 404) {
-//           await axios.post('http://54.84.254.221/api/profiles/', {
+//           await axios.post('https://54.84.254.221/api/profiles/', {
 //             user: id,
 //             first_name: first_name,
 //             last_name: last_name,
@@ -428,7 +428,7 @@ export default ReceivedProfile;
 //       }
 
 //       const recipient = user.email;
-//       await axios.post('http://54.84.254.221/api/share-profile/', { shared_to: recipient }, {
+//       await axios.post('https://54.84.254.221/api/share-profile/', { shared_to: recipient }, {
 //         headers: {
 //           Authorization: `Token ${token}`,
 //         },

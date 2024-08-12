@@ -39,7 +39,7 @@ const DigitalProfile = () => {
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('  http://54.84.254.221/auth/users/me/', {
+      const userResponse = await axios.get('  https://54.84.254.221/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -51,7 +51,7 @@ const DigitalProfile = () => {
       if (profile_type !== profile_type || userId !== id.toString() || username !== authenticatedUsername) {
         navigate('/not-authorized'); // Redirect to not authorized page
       } else {
-        const endpoint = profile_type === 'employee' ? `  http://54.84.254.221/api/employees/${email}/` : `  http://54.84.254.221/api/profiles/${id}/`;
+        const endpoint = profile_type === 'employee' ? `  https://54.84.254.221/api/employees/${email}/` : `  https://54.84.254.221/api/profiles/${id}/`;
         const profileResponse = await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`
@@ -87,14 +87,14 @@ const DigitalProfile = () => {
     try {
       // setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('http://54.84.254.221/api/received-cards/', {
+      const response = await axios.get('https://54.84.254.221/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
       });
       const cards = await Promise.all(response.data.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
-        const userResponse = await axios.get(`http://54.84.254.221/api/profiles/${card.shared_from}/`, {
+        const userResponse = await axios.get(`https://54.84.254.221/api/profiles/${card.shared_from}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -128,7 +128,7 @@ const DigitalProfile = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('http://54.84.254.221/api/share-profile-url/', {}, {
+      const response = await axios.post('https://54.84.254.221/api/share-profile-url/', {}, {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -147,7 +147,7 @@ const DigitalProfile = () => {
   const handleWriteToNFC = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      axios.post('http://54.84.254.221/api/nfc-write/', user, {
+      axios.post('https://54.84.254.221/api/nfc-write/', user, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -164,7 +164,7 @@ const DigitalProfile = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('http://54.84.254.221/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('https://54.84.254.221/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
