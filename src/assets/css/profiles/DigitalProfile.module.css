@@ -1,7 +1,7 @@
 .digitalProfileContainer {
   display: flex;
   flex-direction: row;
-  gap: 100px;
+  gap: 30px;
   justify-content: center;
   padding: 2rem;
   margin-top: 75px;

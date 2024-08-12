@@ -3,6 +3,9 @@ import styles from '../../assets/css/authentication/Authentication.module.css';
 import { Link,useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../../assets/img/logo.png';
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from '../loader/Loader';
 
 const EmployeeSignup = () => {
   const { uid, e_mail, first_name, last_name } = useParams();
@@ -64,7 +67,7 @@ const EmployeeSignup = () => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('  https://waqar123.pythonanywhere.com/auth/users/', {
+      const response = await axios.post('http://54.84.254.221/auth/users/', {
         first_name: firstName,
         last_name: lastName,
         email,
@@ -75,6 +78,7 @@ const EmployeeSignup = () => {
 
       if (response.status === 201) {
         console.log('User registered successfully:', response.data);
+        toast.success('User registered successfully. Please check your email to activate your account.');
         const userInfo = response.data;
         localStorage.setItem('first_name', userInfo.first_name);
         localStorage.setItem('last_name', userInfo.last_name);
@@ -97,6 +101,7 @@ const EmployeeSignup = () => {
         }
       } else {
         console.error('Error registering user:', error.message);
+        toast.error('Error registering user. Please try again later.');
       }
     } finally {
       setLoading(false);
@@ -105,6 +110,7 @@ const EmployeeSignup = () => {
 
   return (
     <div className={`${styles.login} ${styles.marginCustom}`}>
+      <ToastContainer />
       <form className={styles.login__form} onSubmit={handleSubmit}>
       <img src={logo} alt="Logo" className={styles.auth__logo} />
         <h2 className={styles.login__title}>Employee Signup</h2>

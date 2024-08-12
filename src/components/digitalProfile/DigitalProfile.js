@@ -8,13 +8,15 @@ import facebook from '../../assets/img/socials/facebook.png';
 import instagram from '../../assets/img/socials/instagram.png';
 import linkedin from '../../assets/img/socials/linkedin.png';
 import whatsapp from '../../assets/img/socials/whatsapp.png';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from '../loader/Loader';
 
 const DigitalProfile = () => {
   const { userId, username } = useParams();
   const navigate = useNavigate();
   const [profileTypeWhoShared , setProfileTypeWhoShared] = useState('');
-
-
+  const [loading, setLoading] = useState(true);
 
   const [user, setUser] = useState({
     firstName: '',
@@ -37,7 +39,7 @@ const DigitalProfile = () => {
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me/', {
+      const userResponse = await axios.get('  http://54.84.254.221/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -49,7 +51,7 @@ const DigitalProfile = () => {
       if (profile_type !== profile_type || userId !== id.toString() || username !== authenticatedUsername) {
         navigate('/not-authorized'); // Redirect to not authorized page
       } else {
-        const endpoint = profile_type === 'employee' ? `  https://waqar123.pythonanywhere.com/api/employees/${email}/` : `  https://waqar123.pythonanywhere.com/api/profiles/${id}/`;
+        const endpoint = profile_type === 'employee' ? `  http://54.84.254.221/api/employees/${email}/` : `  http://54.84.254.221/api/profiles/${id}/`;
         const profileResponse = await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`
@@ -71,24 +73,28 @@ const DigitalProfile = () => {
           linkedin: profileData.linkedin || '',
           profilePic: profileData.profile_pic || 'https://via.placeholder.com/150',
         });
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
-      // Handle errors, e.g., redirect to login page or show error message
+      setLoading(false);
+      toast.error('Failed to fetch user data.');  
+      
     }
   }, [navigate, userId, username]);
 
   const fetchReceivedCards = useCallback(async () => {
     try {
+      // setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://waqar123.pythonanywhere.com/api/received-cards/', {
+      const response = await axios.get('http://54.84.254.221/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
       });
       const cards = await Promise.all(response.data.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
-        const userResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${card.shared_from}/`, {
+        const userResponse = await axios.get(`http://54.84.254.221/api/profiles/${card.shared_from}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -99,9 +105,12 @@ const DigitalProfile = () => {
         };
       }));
       setReceivedCards(cards);
+      // setLoading(false);
       console.log('Received cards:', cards);
     } catch (error) {
+      setLoading(false)
       console.error('Error fetching received cards:', error);
+      toast.error('Failed to fetch received cards.');
     }
   }, []);
 
@@ -117,8 +126,9 @@ const DigitalProfile = () => {
 
   const handleShareToCard = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://waqar123.pythonanywhere.com/api/share-profile-url/', {}, {
+      const response = await axios.post('http://54.84.254.221/api/share-profile-url/', {}, {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -126,47 +136,52 @@ const DigitalProfile = () => {
   
       setShareLink(response.data.profile_url);
       setIsModalOpen(true);
+      setLoading(false);
     } catch (error) {
       console.error('Error generating share link:', error);
-      alert('Failed to generate share link.');
+      toast.error('Failed to generate share link.');
+      setLoading(false);
     }
   };
   
   const handleWriteToNFC = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      axios.post('  https://waqar123.pythonanywhere.com/api/nfc-write/', user, {
+      axios.post('http://54.84.254.221/api/nfc-write/', user, {
         headers: {
           Authorization: `Token ${token}`,
         },
       });
-      alert('Profile written to NFC successfully!');
+      toast.success('Profile written to NFC successfully!');
     } catch (error) {
       console.error('Error writing to NFC:', error);
-      alert('Failed to write profile to NFC.');
+      toast.error('Failed to write profile to NFC.');
     }
     
   };
 
   const handleShareProfile = async (recipient) => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('http://54.84.254.221/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
       });
-      alert('Profile shared successfully!', response.data);
+      toast.success('Profile shared successfully!', response.data);
       setIsModalOpen(false);
+      setLoading(false);
     } catch (error) {
       console.error('Error sharing profile:', error);
-      alert('Failed to share profile.');
+      toast.error('Failed to share profile.');
+      setLoading(false);
     }
   };
 
-  const handleShowDetails = (profileId) => {
+  const handleShowDetails = (profileId, sharedProfileType) => {
     console.log('Profile Type:', profileTypeWhoShared);
-    if (profileTypeWhoShared === 'company') {
+    if (sharedProfileType === 'company') {
       navigate(`/company/${profileId}`);
     }
     else {
@@ -261,9 +276,12 @@ const DigitalProfile = () => {
                                 {` From: ${card.shared_from_user.email}`}
                             </div>
                             <div className={styles.receivedCardDate}>Received on: {timeAgo(new Date(card.shared_at))}</div>
-                            <span onClick={() => handleShowDetails(card.shared_from_user.user)} className={styles.showDetailsButton}>
-                                View Card
-                            </span>
+          <span
+            onClick={() => handleShowDetails(card.shared_from_user.user, card.profile_type_who_shared)}
+            className={styles.showDetailsButton}
+          >
+            View Card
+          </span>
                         </div>
                     </div>
                 ))
@@ -281,6 +299,8 @@ const DigitalProfile = () => {
           <i className="ri-wifi-line"></i> <span>Write to NFC</span>
         </button>
       </div>
+      {loading && <Loader />}
+      <ToastContainer />
     </>
   );
 };

@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../sidebar/Sidebar'; 
 import styles from '../../assets/css/profiles/UserProfile.module.css';
+import Loader from '../loader/Loader'; 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UserProfile = () => {
   const { userId, username } = useParams();
@@ -16,15 +19,16 @@ const UserProfile = () => {
     address: '',
     bio: '',
     position: '',
-    website: '',
-    facebook: '',
-    instagram: '',
-    linkedin: '',
-    whatsapp: '',
-    github: '', 
+    website: null,
+    facebook: null,
+    instagram: null,
+    linkedin: null,
+    whatsapp: null,
+    github: null, 
     profile_pic: 'https://placehold.co/150x150',
   });
   const [profileExists, setProfileExists] = useState(false);
+  const [loading, setLoading] = useState(true);  // Add a loading state
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -32,7 +36,7 @@ const UserProfile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const userResponse = await axios.get('http://54.84.254.221/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -54,9 +58,11 @@ const UserProfile = () => {
         };
 
         setUser(updatedUser);
+        setLoading(false);  
 
         try {
-          const profileResponse = await axios.get(`  https://waqar123.pythonanywhere.com/api/profiles/${id}/`, {
+          setLoading(true);  // Set loading to true when fetching profile data
+          const profileResponse = await axios.get(`http://54.84.254.221/api/profiles/${id}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -68,15 +74,22 @@ const UserProfile = () => {
           }));
 
           setProfileExists(true);
+          setLoading(false);  // Set loading to false after fetching profile data
         } catch (error) {
+          setLoading(false);  // Set loading to false if there's an error fetching profile data
           if (error.response && error.response.status === 404) {
             setProfileExists(false);
           } else {
             console.error('Error fetching profile:', error);
+            // navigate('/login');
           }
         }
       } catch (error) {
+        setLoading(false);  // Set loading to false if there's an error fetching user data
         console.error('Error fetching user data:', error);
+        navigate('/login');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -107,28 +120,30 @@ const UserProfile = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const formData = new FormData();
-    Object.keys(user).forEach(key => {
-      formData.append(key, user[key]);
-    });
+    setLoading(true);  // Set loading to true when form is submitted
+    // const formData = new FormData();
+    // Object.keys(user).forEach(key => {
+    //   formData.append(key, user[key]);
+    // });
 
     try {
       const authToken = localStorage.getItem('authToken');
       const url = profileExists
-        ? `  https://waqar123.pythonanywhere.com/api/profiles/${user.user}/`
-        : '  https://waqar123.pythonanywhere.com/api/profiles/';
+        ? `http://54.84.254.221/api/profiles/${user.user}/`
+        : 'http://54.84.254.221/api/profiles/';
       const method = profileExists ? 'put' : 'post';
 
-      await axios[method](url, formData, {
+      await axios[method](url, user, {
         headers: {
           Authorization: `Token ${authToken}`,
-          'Content-Type': 'multipart/form-data',
+          // 'Content-Type': 'multipart/form-data',
         },
       });
 
-      alert(profileExists ? 'Profile updated successfully!' : 'Profile created successfully!');
-
-      const profileResponse = await axios.get(`  https://waqar123.pythonanywhere.com/api/profiles/${user.user}/`, {
+      toast.success(profileExists ? 'Profile updated successfully!' : 'Profile created successfully!');
+      setLoading(false);
+      
+      const profileResponse = await axios.get(`http://54.84.254.221/api/profiles/${user.user}/`, {
         headers: {
           Authorization: `Token ${authToken}`,
         },
@@ -138,7 +153,10 @@ const UserProfile = () => {
       setProfileExists(true);
     } catch (error) {
       console.error('Error updating/creating profile:', error);
-      alert('Failed to update/create profile.');
+      toast.error('Failed to update/create profile.');
+      setLoading(false);
+    } finally {
+      setLoading(false);  
     }
   };
 
@@ -209,6 +227,8 @@ const UserProfile = () => {
           </button>
         </form>
       </div>
+      {loading && <Loader />}
+      <ToastContainer />
     </div>
   );
 };

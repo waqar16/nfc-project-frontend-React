@@ -1,8 +1,10 @@
 .scheduleMeeting {
-  padding: 70px;
-  max-width: 100%;
-  margin: 0 auto;
+  padding: 50px;
+  max-width: 70%;
+  /* margin: 0 auto; */
   /* padding: 20px; */
+  background-color: #fff;
+  height: fit-content;
 }
 
 .title {

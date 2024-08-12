@@ -9,6 +9,9 @@ import Sidebar from '../sidebar/Sidebar';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Map from '../Map/Map';
+import Loader from '../loader/Loader';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const options = ['Daily', 'Weekly', 'Monthly'];
 const options2 = ['Time of Day', 'Day of Week'];
@@ -39,13 +42,15 @@ const Analytics = () => {
   const [peakInteractionTime, setPeakInteractionTime] = useState(dummyPeakInteractionTime);
   const [geoData] = useState(dummyGeoData);
   const { userId, username } = useParams();
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const userResponse = await axios.get('http://54.84.254.221/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -67,7 +72,8 @@ const Analytics = () => {
 
   const fetchInteractionFrequency = async (frequency) => {
     try {
-      const response = await axios.get(`  https://waqar123.pythonanywhere.com/api/interaction-frequency/${frequency.toLowerCase()}`, {
+      setLoading(true);
+      const response = await axios.get(`http://54.84.254.221/api/interaction-frequency/${frequency.toLowerCase()}`, {
         headers: {
           Authorization: `Token ${localStorage.getItem('authToken')}`,
         },
@@ -77,15 +83,18 @@ const Analytics = () => {
         Count: item.count,
       }));
       setInteractionFrequency(formattedData);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error('Error fetching interaction frequency:', error);
     }
   };
 
   const fetchPeakInteractionTime = async (frequency) => {
     try {
+      setLoading(true);
       const formattedFrequency = frequency.toLowerCase().replace(/ /g, '_');
-      const response = await axios.get(`  https://waqar123.pythonanywhere.com/api/peak-interaction-time/${formattedFrequency}`, {        headers: {
+      const response = await axios.get(`  http://54.84.254.221/api/peak-interaction-time/${formattedFrequency}`, {        headers: {
           Authorization: `Token ${localStorage.getItem('authToken')}`,
         },
       });
@@ -94,7 +103,9 @@ const Analytics = () => {
         count: item.count,
       }));
       setPeakInteractionTime(transformedData);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error('Error fetching peak interaction time:', error);
     }
   };
@@ -129,7 +140,7 @@ const Analytics = () => {
 
   return (
     <div className={styles.analyticsContainer}>
-      <h2 className={styles.analyticTitle}>Analytics</h2>
+      <h2 className={styles.analyticTitle}>Analytics Dashboard</h2>
       <Sidebar profileType={localStorage.getItem('profile_type')} />
       <div className={styles.analyticsContent}>
                 {/* Geographic Data */}
@@ -230,6 +241,8 @@ const Analytics = () => {
           </div>
         </div> */}
       </div>
+      {loading && <Loader />}
+      <ToastContainer />
     </div>
   );
 };

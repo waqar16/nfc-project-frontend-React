@@ -4,6 +4,9 @@ import axios from 'axios';
 import ConfirmationModal from '../modal/ConfirmationModal';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../sidebar/Sidebar';
+import Loader from '../loader/Loader';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AccountDeletion = () => {
     const navigate = useNavigate();
@@ -15,6 +18,7 @@ const AccountDeletion = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [profileType, setProfileType] = useState('');
     const [authType, setAuthType] = useState('');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -26,17 +30,20 @@ const AccountDeletion = () => {
 
             if (token) {
                 try {
-                    const response = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me', {
+                    const response = await axios.get('  http://54.84.254.221/auth/users/me', {
                         headers: {
                             Authorization: `Token ${token}`,
                         },
                     });
 
                     setProfileType(response.data.profile_type);
+                    setLoading(false);
                 } catch (error) {
+                    setLoading(false);
                     console.error('Error fetching profile type:', error);
                 }
             } else {
+                setLoading(false);
                 navigate('/login');
             }
         };
@@ -47,11 +54,13 @@ const AccountDeletion = () => {
     const openModal = () => {
         if (authType === 'google' && deleteConfirmation.toLowerCase() !== 'delete') {
             setError('Please type "delete" to confirm account deletion.');
+            toast.error('Please type "delete" to confirm account deletion.');
             return;
         }
 
         if (authType !== 'google' && password === '') {
             setError('Please enter your password.');
+            toast.error('Please enter your password.');
             return;
         }
         
@@ -61,6 +70,7 @@ const AccountDeletion = () => {
     const closeModal = () => setModalOpen(false);
 
     const handleDeletion = async () => {
+        setLoading(true);
         setIsSubmitting(true);
         setError('');
         setMessage('');
@@ -68,7 +78,7 @@ const AccountDeletion = () => {
         try {
             const authToken = localStorage.getItem('authToken');
             const requestData = authType === 'google' ? {} : { current_password: password };
-            const endpoint = authType === 'google' ? `  https://waqar123.pythonanywhere.com/auth/delete-user/` : `  https://waqar123.pythonanywhere.com/auth/users/me/`;
+            const endpoint = authType === 'google' ? `  http://54.84.254.221/auth/delete-user/` : `  http://54.84.254.221/auth/users/me/`;
             const response = await axios.delete(endpoint, {
                 headers: {
                     Authorization: `Token ${authToken}`,
@@ -77,9 +87,12 @@ const AccountDeletion = () => {
             });
 
             if (response.status !== 204) {
+                setLoading(false);
                 setError('An error occurred. Please check your input and try again.');
+                toast.error('Failed to delete the account.');
                 setIsSubmitting(false);
             } else {
+                setLoading(false);
                 closeModal();
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('authentication_type');
@@ -87,6 +100,7 @@ const AccountDeletion = () => {
                 window.location.reload();
             }
         } catch (error) {
+            setLoading(false);
             setIsSubmitting(false);
             if (error.response && error.response.data) {
                 setError(error.response.data.current_password || 'Failed to delete the account.');
@@ -110,6 +124,7 @@ const AccountDeletion = () => {
     const handleSubmit = (e) => {
         if (deleteConfirmation !== 'delete') {
             setError('Please type "delete" to confirm account deletion.');
+            toast.error('Please type "delete" to confirm account deletion.');
             return;
         }
         e.preventDefault();
@@ -117,6 +132,9 @@ const AccountDeletion = () => {
     };
 
     return (
+        <div>
+            {loading && <Loader />} 
+            <ToastContainer />
         <div className={`${styles.login}`}>
             <Sidebar profileType={profileType} />
 
@@ -171,6 +189,8 @@ const AccountDeletion = () => {
                         onClose={closeModal}
                         onConfirm={handleDeletion}
                     />
+                    
+        </div>
         </div>
     );
 };

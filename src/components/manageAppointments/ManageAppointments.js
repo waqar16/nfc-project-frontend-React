@@ -14,7 +14,7 @@ const ManageAppointments = () => {
         // Simulate API call with dummy data
         const fetchAppointments = async () => {
             try {
-                const appointmentsdata = await axios.get('https://waqar123.pythonanywhere.com/api/get-meetings/',
+                const appointmentsdata = await axios.get('http://54.84.254.221/api/get-meetings/',
                     { headers: { Authorization: `Token ${localStorage.getItem('authToken')}` } }
                 )
 

@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from '../../assets/css/authentication/Authentication.module.css';
+import Loader from '../loader/Loader'; 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ActivationSentTemplate = () => {
   const [timer, setTimer] = useState(60); // Initial timer set to 60 seconds
-  const [canResend, setCanResend] = useState(true); // State to manage button visibility and prevent multiple clicks
+  const [canResend, setCanResend] = useState(true);
+  const [loading, setLoading] = useState(false); // Loading state for the loader
 
   useEffect(() => {
-
     let countdown;
-    if (canResend) {
+    if (!canResend) {
       countdown = setInterval(() => {
         setTimer((prevTimer) => {
           if (prevTimer <= 1) {
             clearInterval(countdown);
-            setCanResend(true); // Enable button after countdown ends
+            setCanResend(true);
             return 0;
           }
           return prevTimer - 1;
@@ -27,34 +30,27 @@ const ActivationSentTemplate = () => {
 
   const handleResendActivation = async () => {
     try {
+      setLoading(true); // Start loading
       setCanResend(false); // Disable button to prevent multiple clicks
+
       const email = localStorage.getItem('email'); // Assuming the email is stored in localStorage
-      await axios.post('  https://waqar123.pythonanywhere.com/auth/users/resend_activation/', { email });
-      // alert('Activation email resent successfully!');
+      await axios.post('http://54.84.254.221/auth/users/resend_activation/', { email });
 
-      // Double the timer duration
-      setTimer((prevTimer) => prevTimer * 2);
+      toast.success('Activation email resent successfully!');
 
-      // Start the countdown with the updated timer duration
-      let countdown = setInterval(() => {
-        setTimer((prevTimer) => {
-          if (prevTimer <= 1) {
-            clearInterval(countdown);
-            setCanResend(true); // Enable button after countdown ends
-            return 0;
-          }
-          return prevTimer - 1;
-        });
-      }, 1000);
+      setTimer((prevTimer) => prevTimer * 2); // Double the timer duration
     } catch (error) {
       console.error('Error resending activation email:', error);
-      alert('Failed to resend activation email.');
+      toast.error('Failed to resend activation email.');
       setCanResend(true); // Re-enable the button on error
+    } finally {
+      setLoading(false); // Stop loading after the request completes
     }
   };
 
   return (
     <div className={styles.login}>
+      {loading && <Loader />} 
       <form action="" className={styles.login__form}>
         <h2 className={styles.login__title}>Account Activation Link Sent</h2>
 
@@ -63,7 +59,12 @@ const ActivationSentTemplate = () => {
             Activation email sent to your email address successfully. Kindly check your email inbox. Check the spam folder if not received in inbox.
           </p>
           {canResend ? (
-            <button type="button" onClick={handleResendActivation} className={styles.login__button}>
+            <button
+              type="button"
+              onClick={handleResendActivation}
+              className={styles.login__button}
+              disabled={loading} // Disable button when loading
+            >
               Resend Activation Email
             </button>
           ) : (
@@ -71,6 +72,7 @@ const ActivationSentTemplate = () => {
           )}
         </div>
       </form>
+      <ToastContainer /> {/* Container for toast notifications */}
     </div>
   );
 };

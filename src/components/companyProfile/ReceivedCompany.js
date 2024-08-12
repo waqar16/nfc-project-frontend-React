@@ -8,11 +8,15 @@ import linkedin from '../../assets/img/socials/linkedin.png';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import logo from '../../assets/img/logo.png';
 import ScheduleMeeting from '../../components/scheduleMeetings/ScheduleMeetings';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from '../loader/Loader';
 
 
 const ReceivedCompany = () => {
   const { userId } = useParams();
   const clientId = '1036461909018-v32f9s35hefkbeq70gterh12sioug5a5.apps.googleusercontent.com';
+  const [loading, setLoading] = useState(true);
 
   const [company, setCompany] = useState({
     company_name: '',
@@ -33,29 +37,34 @@ const ReceivedCompany = () => {
     const tokenId = response.credential;
 
     try {
+      setLoading(true);
       console.log('Google login response:', response);
-      const res = await axios.post('  https://waqar123.pythonanywhere.com/auth/custom-google-login/', {
+      const res = await axios.post('  http://54.84.254.221/auth/custom-google-login/', {
         access_token: tokenId,
         profile_type: 'company',
       });
 
       localStorage.setItem('authToken', res.data.auth_token);
       await shareProfile();
+      setGoogleLoginVisible(false);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error('Google login error:', error);
-      alert('Failed to login with Google.');
+      toast.error('Failed to login with Google.');
     }
   };
 
   const handleGoogleFailure = (error) => {
+    setLoading(false);
     console.error('Google login failure:', error);
-    alert('Failed to login with Google.');
+    toast.error('Failed to login with Google.');
   };
 
   const fetchCompanyData = useCallback(async () => {
     const token = localStorage.getItem('authToken');
     try {
-      const response = await axios.get(`  https://waqar123.pythonanywhere.com/api/companies/${userId}/`, {
+      const response = await axios.get(`  http://54.84.254.221/api/companies/${userId}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -73,6 +82,7 @@ const ReceivedCompany = () => {
         linkedin: response.data.linkedin || '',
         employees: response.data.employees || [],
       });
+      setLoading(false);
 
       // Create interaction when profile is viewed
       await createInteraction(userId);
@@ -85,7 +95,7 @@ const ReceivedCompany = () => {
     const token = localStorage.getItem('authToken');
     try {
       await axios.post(
-        '  https://waqar123.pythonanywhere.com/api/create_interaction/',
+        '  http://54.84.254.221/api/create_interaction/',
         {
           user: companyId,
           interaction_type: 'view_profile',
@@ -119,14 +129,15 @@ const ReceivedCompany = () => {
 const shareProfile = async () => {
   const token = localStorage.getItem('authToken');
   try {
-    const userResponse = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me/', {
+    setLoading(true);
+    const userResponse = await axios.get('  http://54.84.254.221/auth/users/me/', {
       headers: {
         Authorization: `Token ${token}`,
       },
     });
     const { id, email, profile_type } = userResponse.data;
 
-    const endpoint = profile_type === 'employee' ? `  https://waqar123.pythonanywhere.com/api/employees/${email}/` : `  https://waqar123.pythonanywhere.com/api/profiles/${userId}/`;
+    const endpoint = profile_type === 'employee' ? `  http://54.84.254.221/api/employees/${email}/` : `  http://54.84.254.221/api/profiles/${userId}/`;
 
 
     // Check if profile exists before creating
@@ -141,7 +152,7 @@ const shareProfile = async () => {
         // Profile does not exist, create it
         try {
           await axios.post(
-            '  https://waqar123.pythonanywhere.com/api/profiles/',
+            '  http://54.84.254.221/api/profiles/',
             {
               user: id,
               first_name: userResponse.data.first_name,
@@ -154,10 +165,12 @@ const shareProfile = async () => {
               },
             }
           );
+          setLoading(false);
         } catch (createError) {
+          setLoading(false);
           if (createError.response && createError.response.status === 400) {
             console.error('Profile already exists:', createError.response.data);
-            alert('Profile already exists.');
+            toast.warn('Profile already exists.');
           } else {
             throw createError;
           }
@@ -168,19 +181,22 @@ const shareProfile = async () => {
     }
 
     try {
-      await axios.post('  https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: company.email }, {
+      await axios.post('http://54.84.254.221/api/share-profile/', { shared_to: company.email }, {
         headers: {
           Authorization: `Token ${token}`,
         },
       });
-      alert('Profile shared back successfully!');
+      toast.success('Profile shared back successfully!');
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error('Error sharing profile back:', error);
-      alert('Failed to share profile back.');
+      toast.error('Failed to share profile back. Check you internet connection and try again.');
     }
   } catch (error) {
+    setLoading(false);
     console.error('Error fetching user data:', error);
-    alert('Failed to fetch user data.');
+    toast.error('Failed to fetch user data.');
   }
 };
 
@@ -202,10 +218,13 @@ const shareProfile = async () => {
     link.download = `${company.admin_name}.vcf`;
     link.click();
     URL.revokeObjectURL(url);
+    toast.success('Contact added successfully! Check Downloads for the contact file.');
   };
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
+      {loading && <Loader />}
+      <ToastContainer />
       <div className={styles.digitalProfileContainer}>
         <div className={styles.profileCard}>
           <div className={styles.profileHeaderCompany}>
@@ -236,8 +255,7 @@ const shareProfile = async () => {
               )}
             </div>
           </div>
-        </div>
-        <div className={styles.cardActions}>
+          <div className={styles.cardActions}>
           <button onClick={shareProfileBack} className={styles.actionButton}>
             <i className="ri-share-forward-line"></i> <span>Share Your Profile Back</span>
           </button>
@@ -251,11 +269,12 @@ const shareProfile = async () => {
               cookiePolicy={'single_host_origin'}
             />
           )}
-          <ScheduleMeeting
+        </div>
+        </div>
+        <ScheduleMeeting
            attendeeEmail={company.email}
            userId={userId}
            />
-        </div>
       </div>
     </GoogleOAuthProvider>
   );

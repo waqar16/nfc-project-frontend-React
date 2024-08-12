@@ -25,7 +25,7 @@ const TeamManagement = () => {
   const fetchCompanyAndEmployees = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const companyResponse = await axios.get('  https://waqar123.pythonanywhere.com/api/companies/', {
+      const companyResponse = await axios.get('  http://54.84.254.221/api/companies/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -50,7 +50,7 @@ const TeamManagement = () => {
 
   const fetchEmployees = async (token) => {
     try {
-      const employeeResponse = await axios.get('https://waqar123.pythonanywhere.com/api/employees/', {
+      const employeeResponse = await axios.get('http://54.84.254.221/api/employees/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -82,14 +82,14 @@ const TeamManagement = () => {
 
     try {
       if (isEditing) {
-        await axios.put(`https://waqar123.pythonanywhere.com/api/employees/${employee.email}/`, employee, {
+        await axios.put(`http://54.84.254.221/api/employees/${employee.email}/`, employee, {
           headers: {
             Authorization: `Token ${token}`,
           },
         });
         alert('Employee updated successfully!');
       } else {
-        await axios.post('https://waqar123.pythonanywhere.com/api/employees/', employee, {
+        await axios.post('http://54.84.254.221/api/employees/', employee, {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -133,7 +133,7 @@ const TeamManagement = () => {
   const handleDelete = async (email) => {
     const token = localStorage.getItem('authToken');
     try {
-      await axios.delete(`https://waqar123.pythonanywhere.com/api/employees/delete/${email}/`, {
+      await axios.delete(`http://54.84.254.221/api/employees/delete/${email}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },

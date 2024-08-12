@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../sidebar/Sidebar';
 import styles from '../../assets/css/profiles/CompanyProfile.module.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from '../loader/Loader';
 
 const CompanyProfile = () => {
 
@@ -22,13 +25,14 @@ const CompanyProfile = () => {
     employees: [],
   });
   const [profileExists, setProfileExists] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     
     const fetchCompanyData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('  https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const userResponse = await axios.get('http://54.84.254.221/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -43,8 +47,19 @@ const CompanyProfile = () => {
           return;
         }
 
+        const updatedCompany = {
+          user: id,
+          company_name,
+          admin_name,
+          email,
+        };
+
+        setCompany(updatedCompany);
+        setLoading(false);  
+
         try {
-          const companyResponse = await axios.get(`  https://waqar123.pythonanywhere.com/api/companies/${userId}/`, {
+          setLoading(true)
+          const companyResponse = await axios.get(`http://54.84.254.221/api/companies/${userId}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -64,7 +79,9 @@ const CompanyProfile = () => {
             employees: companyResponse.data.employees || [],
           });
           setProfileExists(true);
+          setLoading(false)
         } catch (error) {
+          
           if (error.response && error.response.status === 404) {
             // Company profile does not exist
             setCompany({
@@ -81,12 +98,19 @@ const CompanyProfile = () => {
               employees: [],
             });
             setProfileExists(false);
+            setLoading(false)
           } else {
+            setLoading(false)
+            navigate('/login');
             console.error('Error fetching company profile:', error);
+            toast.error('Error fetching company profile')
           }
         }
       } catch (error) {
+        setLoading(false)
         console.error('Error fetching user data:', error);
+        toast.error('Error fetching company data')
+        navigate('/login')
       }
     };
 
@@ -115,19 +139,22 @@ const CompanyProfile = () => {
 
 
   const handleSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault();
     try {
       const authToken = localStorage.getItem('authToken');
 
       if (profileExists) {
-        await axios.put(`  https://waqar123.pythonanywhere.com/api/companies/${userId}/`, company, {
+        await axios.put(`http://54.84.254.221/api/companies/${userId}/`, company, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
         });
-        alert('Company profile updated successfully!');
+        setLoading(false)
+        toast.success('Company profile updated successfully!');
+
       } else {
-        const createResponse = await axios.post('  https://waqar123.pythonanywhere.com/api/companies/', company, {
+        const createResponse = await axios.post('http://54.84.254.221/api/companies/', company, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -141,13 +168,15 @@ const CompanyProfile = () => {
           id: createdCompanyId,
         }));
 
-        alert('Company profile created successfully!');
-        setProfileExists(true); // Update profile existence state
+        toast.success('Company profile created successfully!');
+        setProfileExists(true);
+        setLoading(false)
       }
 
     } catch (error) {
+      setLoading(false)
       console.error('Error updating/creating company profile:', error);
-      alert('Failed to update/create company profile.');
+      toast.error('Failed to update/create company profile.');
     }
   };
 
@@ -197,6 +226,7 @@ const CompanyProfile = () => {
               value={company.admin_name}
               onChange={handleChange}
               className={styles.input}
+              required
             />
           </label>
           {/* Email */}
@@ -285,7 +315,8 @@ const CompanyProfile = () => {
 
         </form>
       </div>
-
+      <ToastContainer/>
+      {loading && <Loader/>}
     </div>
   );
 };

@@ -6,11 +6,15 @@ import ShareProfileModal from '../shareProfileModal/ShareProfileModal';
 import { useParams, useNavigate } from 'react-router-dom';
 import logo from '../../assets/img/logo.png';  // Logo image for the company
 import linkedin from '../../assets/img/socials/linkedin.png';  // LinkedIn icon image
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from '../loader/Loader';
 
 const CompanyCard = () => {
   const { userId, username } = useParams();
   const navigate = useNavigate();
   const [receivedCards, setReceivedCards] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shareLink, setShareLink] = useState('');
   const [profileTypeWhoShared , setProfileTypeWhoShared] = useState('');
@@ -28,74 +32,77 @@ const CompanyCard = () => {
   });
 
   // Fetch company data
-  useEffect(() => {
-    const fetchCompanyData = async () => {
+  const fetchCompanyData = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('authToken');
+      const userResponse = await axios.get('http://54.84.254.221/auth/users/me/', {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+
+      const { id, company_name, admin_name, email, profile_type, username: authenticatedUsername } = userResponse.data;
+
+      // Ensure the profile type and userId match
+      if (profile_type !== 'company' || userId !== id.toString() || username !== authenticatedUsername) {
+        navigate('/not-authorized');
+        return;
+      }
+
       try {
-        const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://waqar123.pythonanywhere.com/auth/users/me/', {
+        const companyResponse = await axios.get(`http://54.84.254.221/api/companies/${userId}/`, {
           headers: {
             Authorization: `Token ${token}`,
           },
         });
 
-        const { id, company_name, admin_name, email, profile_type, username: authenticatedUsername } = userResponse.data;
-
-        // Ensure the profile type and userId match
-        if (profile_type !== 'company' || userId !== id.toString() || username !== authenticatedUsername) {
-          navigate('/not-authorized');
-          return;
-        }
-
-        try {
-          const companyResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/companies/${userId}/`, {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          });
-
-          setCompany({
-            company_name: companyResponse.data.company_name || '',
-            admin_name: companyResponse.data.admin_name || '',
-            email: email || '',
-            phone: companyResponse.data.phone || '',
-            companyLogo: companyResponse.data.companyLogo || logo,
-            address: companyResponse.data.address || '',
-            company_description: companyResponse.data.company_description || '',
-            website: companyResponse.data.website || '',
-            linkedin: companyResponse.data.linkedin || '',
-            employees: companyResponse.data.employees || [],
-          });
-        } catch (error) {
-          if (error.response && error.response.status === 404) {
-            setCompany({
-              company_name: company_name || '',
-              admin_name: admin_name || '',
-              email: email || '',
-              companyLogo: logo,
-              phone: '',
-              address: '',
-              company_description: '',
-              website: '',
-              linkedin: '',
-              employees: [],
-            });
-          } else {
-            console.error('Error fetching company profile:', error);
-          }
-        }
+        setCompany({
+          company_name: companyResponse.data.company_name || '',
+          admin_name: companyResponse.data.admin_name || '',
+          email: email || '',
+          phone: companyResponse.data.phone || '',
+          companyLogo: companyResponse.data.companyLogo || logo,
+          address: companyResponse.data.address || '',
+          company_description: companyResponse.data.company_description || '',
+          website: companyResponse.data.website || '',
+          linkedin: companyResponse.data.linkedin || '',
+          employees: companyResponse.data.employees || [],
+        });
+        setLoading(false);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        if (error.response && error.response.status === 404) {
+          setCompany({
+            company_name: company_name || '',
+            admin_name: admin_name || '',
+            email: email || '',
+            companyLogo: logo,
+            phone: '',
+            address: '',
+            company_description: '',
+            website: '',
+            linkedin: '',
+            employees: [],
+          });
+          setLoading(false);
+        } else {
+          setLoading(false);
+          console.error('Error fetching company profile:', error);
+          toast.error('Failed to fetch company profile.');
+        }
       }
-    };
-
-    fetchCompanyData();
-  }, [navigate, userId, username]);
-
+    } catch (error) {
+      setLoading(false);
+      console.error('Error fetching user data:', error);
+      toast.error('Failed to fetch user data.');
+    }
+  };
   // Fetch received cards
   const fetchReceivedCards = useCallback(async () => {
     try {
+      // setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://waqar123.pythonanywhere.com/api/received-cards/', {
+      const response = await axios.get('http://54.84.254.221/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -103,7 +110,7 @@ const CompanyCard = () => {
       //   setProfileTypeWhoShared(response.data.profile_type_who_shared);
       const cards = await Promise.all(response.data.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
-        const userResponse = await axios.get(`https://waqar123.pythonanywhere.com/api/profiles/${card.shared_from}/`, {
+        const userResponse = await axios.get(`http://54.84.254.221/api/profiles/${card.shared_from}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -114,20 +121,26 @@ const CompanyCard = () => {
         };
       }));
       setReceivedCards(cards);
+      // setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error('Error fetching received cards:', error);
+      toast.error('Failed to fetch received cards.');
     }
   }, []);
 
   useEffect(() => {
+    fetchCompanyData();
     fetchReceivedCards();
-  }, [fetchReceivedCards]);
+  }, [navigate, userId, username, fetchReceivedCards]);
+
 
   // Handle share profile to card
   const handleShareToCard = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://waqar123.pythonanywhere.com/api/share-profile-url/', {}, {
+      const response = await axios.post('http://54.84.254.221/api/share-profile-url/', {}, {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -137,27 +150,30 @@ const CompanyCard = () => {
       setIsModalOpen(true);
     } catch (error) {
       console.error('Error generating share link:', error);
-      alert('Failed to generate share link.');
+      toast.error('Failed to generate share link.');
+    } finally {
+      setLoading(false); // Set loading to false after the request is complete
     }
   };
-
   // Handle share profile
   const handleShareProfile = async (recipient) => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://waqar123.pythonanywhere.com/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('http://54.84.254.221/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
       });
-      alert('Profile shared successfully!');
+      toast.success('Profile shared successfully!');
       setIsModalOpen(false);
     } catch (error) {
       console.error('Error sharing profile:', error);
-      alert('Failed to share profile.');
+      toast.error('Failed to share profile.');
+    } finally {
+      setLoading(false); // Set loading to false after the request is complete
     }
   };
-
   // Handle show details of received card
   const handleShowDetails = (profileId) => {
     console.log('Profile ID:', profileTypeWhoShared);
@@ -261,6 +277,14 @@ const CompanyCard = () => {
     </div>
         </div>
       </div>
+
+      <div className={styles.cardActions}>
+        <button onClick={handleShareToCard} className={styles.actionButton}>
+          <i className="ri-share-forward-line"></i> <span>Share Profile</span>
+        </button>
+      </div>
+      {loading && <Loader />}
+      <ToastContainer />
     </>
   );
 };
