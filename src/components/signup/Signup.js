@@ -12,7 +12,7 @@ const SignupPage = () => {
   const toggleSignupMode = () => setIsPersonalSignup(!isPersonalSignup); // Function to toggle signup mode
   const navigate = useNavigate();
 
-  const clientId = '1036461909018-v32f9s35hefkbeq70gterh12sioug5a5.apps.googleusercontent.com';
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
   const handleGoogleSuccess = async (response) => {
     const tokenId = response.credential;
@@ -20,7 +20,7 @@ const SignupPage = () => {
     try {
       console.log('Google login response:', response);
       const profileType = isPersonalSignup ? "individual" : "company";
-      const res = await axios.post('  http://54.84.254.221/auth/custom-google-login/', {
+      const res = await axios.post('http://54.84.254.221/auth/custom-google-login/', {
         access_token: tokenId,
         profile_type: profileType,
         authentication_type: 'google'

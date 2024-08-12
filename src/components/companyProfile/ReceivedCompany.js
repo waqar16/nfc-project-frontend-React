@@ -15,7 +15,7 @@ import Loader from '../loader/Loader';
 
 const ReceivedCompany = () => {
   const { userId } = useParams();
-  const clientId = '1036461909018-v32f9s35hefkbeq70gterh12sioug5a5.apps.googleusercontent.com';
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const [loading, setLoading] = useState(true);
 
   const [company, setCompany] = useState({

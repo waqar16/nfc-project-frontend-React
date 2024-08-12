@@ -15,7 +15,7 @@ import Loader from '../loader/Loader';
 const DigitalProfile = () => {
   const { userId, username } = useParams();
   const navigate = useNavigate();
-  const [profileTypeWhoShared , setProfileTypeWhoShared] = useState('');
+  const [profileTypeWhoShared, setProfileTypeWhoShared] = useState('');
   const [loading, setLoading] = useState(true);
 
   const [user, setUser] = useState({
@@ -78,8 +78,8 @@ const DigitalProfile = () => {
     } catch (error) {
       console.error('Error fetching user data:', error);
       setLoading(false);
-      toast.error('Failed to fetch user data.');  
-      
+      toast.error('Failed to fetch user data.');
+
     }
   }, [navigate, userId, username]);
 
@@ -133,7 +133,7 @@ const DigitalProfile = () => {
           Authorization: `Token ${token}`
         }
       });
-  
+
       setShareLink(response.data.profile_url);
       setIsModalOpen(true);
       setLoading(false);
@@ -143,7 +143,7 @@ const DigitalProfile = () => {
       setLoading(false);
     }
   };
-  
+
   const handleWriteToNFC = async () => {
     try {
       const token = localStorage.getItem('authToken');
@@ -157,7 +157,7 @@ const DigitalProfile = () => {
       console.error('Error writing to NFC:', error);
       toast.error('Failed to write profile to NFC.');
     }
-    
+
   };
 
   const handleShareProfile = async (recipient) => {
@@ -194,22 +194,22 @@ const DigitalProfile = () => {
     const secondsPast = (now.getTime() - date.getTime()) / 1000;
 
     if (secondsPast < 60) {
-        return `${Math.floor(secondsPast)} seconds ago`;
+      return `${Math.floor(secondsPast)} seconds ago`;
     }
     if (secondsPast < 3600) {
-        return `${Math.floor(secondsPast / 60)} minutes ago`;
+      return `${Math.floor(secondsPast / 60)} minutes ago`;
     }
     if (secondsPast < 86400) {
-        return `${Math.floor(secondsPast / 3600)} hours ago`;
+      return `${Math.floor(secondsPast / 3600)} hours ago`;
     }
     if (secondsPast < 2592000) {
-        return `${Math.floor(secondsPast / 86400)} days ago`;
+      return `${Math.floor(secondsPast / 86400)} days ago`;
     }
     if (secondsPast < 31536000) {
-        return `${Math.floor(secondsPast / 2592000)} months ago`;
+      return `${Math.floor(secondsPast / 2592000)} months ago`;
     }
     return `${Math.floor(secondsPast / 31536000)} years ago`;
-}
+  }
 
   return (
     <>
@@ -217,19 +217,19 @@ const DigitalProfile = () => {
         <Sidebar profileType={localStorage.getItem('profile_type')} />
         <div className={styles.profileCard}>
           <div className={styles.profileHeader}>
-          <div className={styles.profileinfo}>
-          <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
-          <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
-          <div className={styles.position}>{user.position}</div>
-          </div>
+            <div className={styles.profileinfo}>
+              <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
+              <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
+              <div className={styles.position}>{user.position}</div>
+            </div>
           </div>
 
           <div className={styles.profileBody}>
             <div className={styles.profileAbout}>
               <p className={styles.titleText}>About Me</p>
               <p className={styles.bio}>{user.bio}</p>
-              </div>
-              <p className={styles.titleText}>Contact me</p>
+            </div>
+            <p className={styles.titleText}>Contact me</p>
             <div className={styles.contactInfo}>
               <p><i className="ri-mail-fill"></i> {user.email}</p>
               <p><i className="ri-phone-fill"></i> {user.phone}</p>
@@ -256,39 +256,39 @@ const DigitalProfile = () => {
         </div>
 
         <ShareProfileModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onShare={handleShareProfile}
-        shareLink={shareLink}  // Pass the share link to the modal
-      />
-<div className={styles.receivedCardsSection}>
-    <div className={styles.receivedCardsList}>
-    <h2>Received Digital Cards</h2>
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onShare={handleShareProfile}
+          shareLink={shareLink}  // Pass the share link to the modal
+        />
+        <div className={styles.receivedCardsSection}>
+          <div className={styles.receivedCardsList}>
+            <h2>Received Digital Cards</h2>
 
-        {receivedCards.length > 0 ? (
-            receivedCards
+            {receivedCards.length > 0 ? (
+              receivedCards
                 .sort((a, b) => new Date(b.shared_at) - new Date(a.shared_at)) // Sort by shared_at date in descending order
                 .map(card => (
-                    <div key={card.id} className={styles.receivedCard}>
-                        {/* <img src={card.shared_from_user.profilePic || 'https://via.placeholder.com/150'} alt="Profile" className={styles.receivedCardPic} /> */}
-                        <div className={styles.receivedCardDetails}>
-                            <div className={styles.receivedCardName}>
-                                {` From: ${card.shared_from_user.email}`}
-                            </div>
-                            <div className={styles.receivedCardDate}>Received on: {timeAgo(new Date(card.shared_at))}</div>
-          <span
-            onClick={() => handleShowDetails(card.shared_from_user.user, card.profile_type_who_shared)}
-            className={styles.showDetailsButton}
-          >
-            View Card
-          </span>
-                        </div>
+                  <div key={card.id} className={styles.receivedCard}>
+                    {/* <img src={card.shared_from_user.profilePic || 'https://via.placeholder.com/150'} alt="Profile" className={styles.receivedCardPic} /> */}
+                    <div className={styles.receivedCardDetails}>
+                      <div className={styles.receivedCardName}>
+                        {` From: ${card.shared_from_user.email}`}
+                      </div>
+                      <div className={styles.receivedCardDate}>Received on: {timeAgo(new Date(card.shared_at))}</div>
+                      <span
+                        onClick={() => handleShowDetails(card.shared_from_user.user, card.profile_type_who_shared)}
+                        className={styles.showDetailsButton}
+                      >
+                        View Card
+                      </span>
                     </div>
+                  </div>
                 ))
-        ) : (
-            <p>No received cards</p>
-        )}
-    </div>
+            ) : (
+              <p>No received cards</p>
+            )}
+          </div>
         </div>
       </div>
       <div className={styles.cardActions}>

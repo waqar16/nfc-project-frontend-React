@@ -6,6 +6,8 @@ import styles from '../../assets/css/profiles/UserProfile.module.css';
 import Loader from '../loader/Loader'; 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { uploadFileToS3 } from '../../s3Service';
+
 
 const UserProfile = () => {
   const { userId, username } = useParams();
@@ -19,16 +21,15 @@ const UserProfile = () => {
     address: '',
     bio: '',
     position: '',
-    website: null,
-    facebook: null,
-    instagram: null,
-    linkedin: null,
-    whatsapp: null,
-    github: null, 
+    website: '',
+    facebook: '',
+    instagram: '',
+    linkedin: '',
+    whatsapp: '',
+    github: '', 
     profile_pic: 'https://placehold.co/150x150',
   });
-  const [profileExists, setProfileExists] = useState(false);
-  const [loading, setLoading] = useState(true);  // Add a loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -49,19 +50,8 @@ const UserProfile = () => {
           return;
         }
 
-        const updatedUser = {
-          user: id,
-          first_name,
-          last_name,
-          email,
-          profile_pic: localStorage.getItem('profile_pic') || 'https://placehold.co/150x150',
-        };
-
-        setUser(updatedUser);
-        setLoading(false);  
-
+        // Fetch the profile data from the API
         try {
-          setLoading(true);  // Set loading to true when fetching profile data
           const profileResponse = await axios.get(`http://54.84.254.221/api/profiles/${id}/`, {
             headers: {
               Authorization: `Token ${token}`,
@@ -71,21 +61,25 @@ const UserProfile = () => {
           setUser(prevUser => ({
             ...prevUser,
             ...profileResponse.data,
+            profile_pic: profileResponse.data.profile_pic || 'https://placehold.co/150x150',
           }));
-
-          setProfileExists(true);
-          setLoading(false);  // Set loading to false after fetching profile data
         } catch (error) {
-          setLoading(false);  // Set loading to false if there's an error fetching profile data
           if (error.response && error.response.status === 404) {
-            setProfileExists(false);
+            // Profile does not exist, initialize with default values
+            setUser(prevUser => ({
+              ...prevUser,
+              user: id,
+              first_name,
+              last_name,
+              email,
+              profile_pic: 'https://placehold.co/150x150',
+            }));
           } else {
             console.error('Error fetching profile:', error);
-            // navigate('/login');
+            toast.error('Failed to fetch profile data.');
           }
         }
       } catch (error) {
-        setLoading(false);  // Set loading to false if there's an error fetching user data
         console.error('Error fetching user data:', error);
         navigate('/login');
       } finally {
@@ -104,57 +98,49 @@ const UserProfile = () => {
     }));
   };
 
-  const handleProfilePicChange = event => {
+  const handleProfilePicChange = async event => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
+      setLoading(true);
+      try {
+        const uploadResponse = await uploadFileToS3(file);
+        const profilePicUrl = uploadResponse.Location; // URL of the uploaded file
+
         setUser(prevUser => ({
           ...prevUser,
-          profile_pic: reader.result,
+          profile_pic: profilePicUrl,
         }));
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        toast.error('Failed to upload profile picture.');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setLoading(true);  // Set loading to true when form is submitted
-    // const formData = new FormData();
-    // Object.keys(user).forEach(key => {
-    //   formData.append(key, user[key]);
-    // });
-
+    setLoading(true); 
     try {
       const authToken = localStorage.getItem('authToken');
-      const url = profileExists
-        ? `http://54.84.254.221/api/profiles/${user.user}/`
-        : 'http://54.84.254.221/api/profiles/';
-      const method = profileExists ? 'put' : 'post';
+      const url = `http://54.84.254.221/api/profiles/${user.user}/`;
+      const method = 'put';
 
       await axios[method](url, user, {
         headers: {
           Authorization: `Token ${authToken}`,
-          // 'Content-Type': 'multipart/form-data',
         },
       });
 
-      toast.success(profileExists ? 'Profile updated successfully!' : 'Profile created successfully!');
-      setLoading(false);
-      
-      const profileResponse = await axios.get(`http://54.84.254.221/api/profiles/${user.user}/`, {
-        headers: {
-          Authorization: `Token ${authToken}`,
-        },
-      });
-
-      setUser(profileResponse.data);
-      setProfileExists(true);
+      toast.success('Profile updated successfully!');
+      setUser(prevUser => ({
+        ...prevUser,
+        profile_pic: user.profile_pic,
+      }));
     } catch (error) {
-      console.error('Error updating/creating profile:', error);
-      toast.error('Failed to update/create profile.');
-      setLoading(false);
+      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile.');
     } finally {
       setLoading(false);  
     }
@@ -176,6 +162,7 @@ const UserProfile = () => {
               id="profilePicInput"
               className={styles.profilePicInput}
               onChange={handleProfilePicChange}
+              accept="image/*" 
             />
           </div>
           <div className={styles.profileDetails}>
@@ -223,7 +210,7 @@ const UserProfile = () => {
             </label>
           ))}
           <button type="submit" className={styles.buttonSaveProfile}>
-            {profileExists ? 'Update Profile' : 'Save Profile'}
+            Update Profile
           </button>
         </form>
       </div>
