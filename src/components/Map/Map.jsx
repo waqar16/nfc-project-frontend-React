@@ -15,7 +15,7 @@ function Map() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('  https://54.84.254.221/api/geo-data/', {
+        const response = await axios.get('  https://api.onesec.shop/api/geo-data/', {
           headers: { Authorization: `Token ${localStorage.getItem('authToken')}` }
         });
         const apiData = response.data;

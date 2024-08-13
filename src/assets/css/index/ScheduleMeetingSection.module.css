@@ -5,6 +5,9 @@
     align-items: center;
     padding: 40px 50px;
     background: linear-gradient(to right, rgb(11, 147, 193), rgb(155, 20, 155), rgb(252, 171, 19));
+    /* background: linear-gradient(to right, pink, orange, purple, yellow); */
+    background-size: 400% 400%;
+    animation: changeGradient 8s linear infinite;
     border-radius: 20px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     margin: 20px;
@@ -19,6 +22,23 @@
   
 }
 
+@keyframes changeGradient {
+0% {
+    background-position: 0% 50%;
+}
+25% {
+    background-position: 50% 50%;
+}
+50% {
+    background-position: 100% 50%;
+}
+75% {
+    background-position: 50% 50%;
+}
+100% {
+    background-position: 0% 50%;
+}
+}
 .scheduleMeetingSection:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);

@@ -34,7 +34,7 @@ const ActivationSentTemplate = () => {
       setCanResend(false); // Disable button to prevent multiple clicks
 
       const email = localStorage.getItem('email'); // Assuming the email is stored in localStorage
-      await axios.post('https://54.84.254.221/auth/users/resend_activation/', { email });
+      await axios.post('https://api.onesec.shop/auth/users/resend_activation/', { email });
 
       toast.success('Activation email resent successfully!');
 

@@ -2,6 +2,8 @@ import { React, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from '../../assets/css/index/ScheduleMeetingSection.module.css';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const ScheduleMeetingSection = () => {
   const navigate = useNavigate();
@@ -12,13 +14,16 @@ const ScheduleMeetingSection = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    AOS.init({
+      duration: 1200,
+    });
 
     const token = localStorage.getItem('authToken');
     const userInfo = async () => {
       if (token) {
         setIsAuthenticated(true);
         try {
-          const response = await axios.get('  https://54.84.254.221/auth/users/me', {
+          const response = await axios.get('  https://api.onesec.shop/auth/users/me', {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -46,7 +51,7 @@ const ScheduleMeetingSection = () => {
   };
 
   return (
-    <div className={styles.scheduleMeetingSection}>
+    <div data-aos="fade-up" className={styles.scheduleMeetingSection}>
       {/* <div className={styles.content}>
           <h2 className={styles.title}>Schedule a Meeting</h2>
           <p className={styles.description}>

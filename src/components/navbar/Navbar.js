@@ -26,7 +26,7 @@ const Navbar = () => {
       if (token) {
         setIsAuthenticated(true);
         try {
-          const response = await axios.get('  https://54.84.254.221/auth/users/me', {
+          const response = await axios.get('  https://api.onesec.shop/auth/users/me', {
             headers: {
               Authorization: `Token ${token}`,
             },

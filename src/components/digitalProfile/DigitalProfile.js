@@ -11,6 +11,9 @@ import whatsapp from '../../assets/img/socials/whatsapp.png';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
+
 
 const DigitalProfile = () => {
   const { userId, username } = useParams();
@@ -39,7 +42,7 @@ const DigitalProfile = () => {
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('  https://54.84.254.221/auth/users/me/', {
+      const userResponse = await axios.get('  https://api.onesec.shop/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -51,7 +54,7 @@ const DigitalProfile = () => {
       if (profile_type !== profile_type || userId !== id.toString() || username !== authenticatedUsername) {
         navigate('/not-authorized'); // Redirect to not authorized page
       } else {
-        const endpoint = profile_type === 'employee' ? `  https://54.84.254.221/api/employees/${email}/` : `  https://54.84.254.221/api/profiles/${id}/`;
+        const endpoint = profile_type === 'employee' ? `  https://api.onesec.shop/api/employees/${email}/` : `  https://api.onesec.shop/api/profiles/${id}/`;
         const profileResponse = await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`
@@ -87,14 +90,14 @@ const DigitalProfile = () => {
     try {
       // setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://54.84.254.221/api/received-cards/', {
+      const response = await axios.get('https://api.onesec.shop/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
       });
       const cards = await Promise.all(response.data.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
-        const userResponse = await axios.get(`https://54.84.254.221/api/profiles/${card.shared_from}/`, {
+        const userResponse = await axios.get(`https://api.onesec.shop/api/profiles/${card.shared_from}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -115,6 +118,9 @@ const DigitalProfile = () => {
   }, []);
 
   useEffect(() => {
+    Aos.init({
+      duration: 1200,
+    });
 
     const fetchData = async () => {
       await fetchUserData();
@@ -128,7 +134,7 @@ const DigitalProfile = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://54.84.254.221/api/share-profile-url/', {}, {
+      const response = await axios.post('https://api.onesec.shop/api/share-profile-url/', {}, {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -147,7 +153,7 @@ const DigitalProfile = () => {
   const handleWriteToNFC = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      axios.post('https://54.84.254.221/api/nfc-write/', user, {
+      axios.post('https://api.onesec.shop/api/nfc-write/', user, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -164,7 +170,7 @@ const DigitalProfile = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://54.84.254.221/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('https://api.onesec.shop/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -215,7 +221,7 @@ const DigitalProfile = () => {
     <>
       <div className={styles.digitalProfileContainer}>
         <Sidebar profileType={localStorage.getItem('profile_type')} />
-        <div className={styles.profileCard}>
+        <div data-aos="flip-right" className={styles.profileCard}>
           <div className={styles.profileHeader}>
             <div className={styles.profileinfo}>
               <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
@@ -261,7 +267,7 @@ const DigitalProfile = () => {
           onShare={handleShareProfile}
           shareLink={shareLink}  // Pass the share link to the modal
         />
-        <div className={styles.receivedCardsSection}>
+        <div data-aos="flip-right" className={styles.receivedCardsSection}>
           <div className={styles.receivedCardsList}>
             <h2>Received Digital Cards</h2>
 

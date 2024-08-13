@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../../assets/css/FAQs/Faqs.module.css';
+import AoS from 'aos';
+import 'aos/dist/aos.css';
 
 const Faq = () => {
   const [open, setOpen] = useState({});
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    AoS.init({
+      duration: 1200,
+    });
   }, []);
 
   const toggleFAQ = (index) => {
@@ -43,7 +48,7 @@ const Faq = () => {
   ];
 
   return (
-    <div className={styles.faq}>
+    <div data-aos="fade-left" className={styles.faq}>
       <h2 className={styles.faq__title}>FAQs</h2>
       {faqData.map((faq, index) => (
         <div key={index} className={styles.faq__item}>

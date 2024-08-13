@@ -17,7 +17,7 @@ const NfcCard = () => {
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('  https://54.84.254.221/auth/users/me/', {
+      const userResponse = await axios.get('  https://api.onesec.shop/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }

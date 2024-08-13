@@ -16,7 +16,7 @@ const defaultOption = options[0];
 
   const fetchInteractionFrequency = async (frequency) => {
     try {
-      const response = await axios.get(`  https://54.84.254.221/api/interaction-frequency/${frequency.toLowerCase()}`, {
+      const response = await axios.get(`  https://api.onesec.shop/api/interaction-frequency/${frequency.toLowerCase()}`, {
         headers: {
           Authorization: `Token ${localStorage.getItem('authToken')}`,
         },

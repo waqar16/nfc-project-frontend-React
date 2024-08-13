@@ -33,7 +33,7 @@ const EmployeeProfile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('  https://54.84.254.221/auth/users/me/', {
+        const userResponse = await axios.get('  https://api.onesec.shop/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -60,7 +60,7 @@ const EmployeeProfile = () => {
         })
 
         try {
-          const profileResponse = await axios.get(`  https://54.84.254.221/api/employees/${email}/`, {
+          const profileResponse = await axios.get(`  https://api.onesec.shop/api/employees/${email}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -166,7 +166,7 @@ const EmployeeProfile = () => {
       const authToken = localStorage.getItem('authToken');
       if (profileExists) {
         
-        await axios.put(`  https://54.84.254.221/api/employees/${user.email}/`, formData, {
+        await axios.put(`  https://api.onesec.shop/api/employees/${user.email}/`, formData, {
           headers: {
             Authorization: `Token ${authToken}`,
             'Content-Type': 'multipart/form-data',
@@ -174,7 +174,7 @@ const EmployeeProfile = () => {
         });
         alert('Profile updated successfully!');
       } else {
-        await axios.post('  https://54.84.254.221/api/employees/', formData, {
+        await axios.post('  https://api.onesec.shop/api/employees/', formData, {
           headers: {
             Authorization: `Token ${authToken}`,
             'Content-Type': 'multipart/form-data',
@@ -184,7 +184,7 @@ const EmployeeProfile = () => {
       }
       
       // Fetch updated profile data
-      const profileResponse = await axios.get(`  https://54.84.254.221/api/employees/${user.email}/`, {
+      const profileResponse = await axios.get(`  https://api.onesec.shop/api/employees/${user.email}/`, {
         headers: {
           Authorization: `Token ${authToken}`,
         },

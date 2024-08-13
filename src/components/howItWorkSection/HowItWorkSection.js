@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // Import the AOS CSS
 import styles from '../../assets/css/index/HowItWorksSection.module.css';
 
 const steps = [
@@ -9,10 +11,17 @@ const steps = [
 ];
 
 const HowItWorksSection = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1200,
+    });
+  }
+  , []);
+
   return (
     <section className={styles.howItWorksSection} >
-      <h2 className={styles.title}>How It Works</h2>
-      <div className={styles.stepsGrid}>
+      <h2 data-aos="fade-up" className={styles.title}>How It Works</h2>
+      <div data-aos="fade-up" className={styles.stepsGrid}>
         {steps.map((step, index) => (
           <div key={index} className={styles.stepCard}>
             <i className={`${step.icon} ${styles.icon}`}></i>

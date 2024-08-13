@@ -1,18 +1,23 @@
 import React from 'react';
 import styles from '../../assets/css/About/AboutUs.module.css';
 import { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const AboutUs = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    AOS.init({
+      duration: 1200,
+    });
   }, []);
   return (
-    <div className={styles.aboutUs}>
+    <div data-aos="fade-left" className={styles.aboutUs}>
       <h2 className={styles.aboutUs__title}>About Us</h2>
       <p className={styles.aboutUs__intro}>
         Welcome to our platform! We provide an innovative solution for managing profiles, writing information to NFC cards, and scheduling appointments seamlessly. Our platform is designed to support multiple organizations under a white-label model.
-      </p>
+      </p> 
       
       <div className={styles.aboutUs__section}>
         <h3 className={styles.aboutUs__subtitle}>Our Mission</h3>

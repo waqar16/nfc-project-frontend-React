@@ -1,7 +1,11 @@
-import React from 'react';
 import styles from '../../assets/css/index/FeatureSection.module.css';
+import React, { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // Import the AOS CSS
+
 
 const features = [
+
   {
     icon: 'ri-user-line',
     title: 'Profile Management',
@@ -25,10 +29,17 @@ const features = [
 ];
 
 const FeaturesSection = () => {
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1200, 
+    });
+  }, []);
+
   return (
     <section className={styles.featuresSection}>
-      <h2 className={styles.title}>Core Features</h2>
-      <div className={styles.featuresGrid}>
+      <h2 data-aos="fade-up" className={styles.title}>Core Features</h2>
+      <div data-aos="fade-up" className={styles.featuresGrid}>
         {features.map((feature, index) => (
           <div key={index} className={styles.featureCard}>
             <i className={`${feature.icon} ${styles.icon}`}></i>

@@ -1,8 +1,10 @@
 .aboutUs {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 100px auto;
     padding: 20px;
     padding-top: 8rem;
+    background-color: white;
+    padding: 50px;
   }
   
   .aboutUs__title {
