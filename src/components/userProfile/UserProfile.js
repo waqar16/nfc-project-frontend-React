@@ -37,7 +37,7 @@ const UserProfile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
+        const userResponse = await axios.get('https://api.onese.shop/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -52,7 +52,7 @@ const UserProfile = () => {
 
         // Fetch the profile data from the API
         try {
-          const profileResponse = await axios.get(`http://localhost:8000/api/profiles/${id}/`, {
+          const profileResponse = await axios.get(`https://api.onese.shop/api/profiles/${id}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -124,7 +124,7 @@ const UserProfile = () => {
     setLoading(true); 
     try {
       const authToken = localStorage.getItem('authToken');
-      const url = `http://localhost:8000/api/profiles/${user.user}/`;
+      const url = `https://api.onese.shop/api/profiles/${user.user}/`;
       const method = 'put';
 
       await axios[method](url, user, {
