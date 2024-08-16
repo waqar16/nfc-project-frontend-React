@@ -61,7 +61,7 @@ const CompanySignup = () => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('  https://api.onesec.shop/auth/users/', {
+      const response = await axios.post('  http://localhost:8000/auth/users/', {
         company_name: companyName,
         admin_name: adminName,
         email,

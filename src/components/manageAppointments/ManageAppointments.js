@@ -14,7 +14,7 @@ const ManageAppointments = () => {
         // Simulate API call with dummy data
         const fetchAppointments = async () => {
             try {
-                const appointmentsdata = await axios.get('https://api.onesec.shop/api/get-meetings/',
+                const appointmentsdata = await axios.get('http://localhost:8000/api/get-meetings/',
                     { headers: { Authorization: `Token ${localStorage.getItem('authToken')}` } }
                 )
 

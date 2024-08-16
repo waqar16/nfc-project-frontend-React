@@ -17,7 +17,7 @@ const Activation = () => {
     try {
       setLoading(true);
       // Activate user account
-      const response = await axios.post('https://api.onesec.shop/auth/users/activation/', {
+      const response = await axios.post('http://localhost:8000/auth/users/activation/', {
         uid,
         token,
       });
@@ -32,7 +32,7 @@ const Activation = () => {
         // const password = localStorage.getItem('password');
 
         // // Login user
-        // const loginResponse = await axios.post('  https://api.onesec.shop/auth/token/login/', {
+        // const loginResponse = await axios.post('  http://localhost:8000/auth/token/login/', {
         //   email,
         //   password,
         // });
@@ -49,7 +49,7 @@ const Activation = () => {
     // finally{
     //           // Fetch user data
     //           const authToken = localStorage.getItem('authToken');
-    //           const userResponse = await axios.get('  https://api.onesec.shop/auth/users/me/', {
+    //           const userResponse = await axios.get('  http://localhost:8000/auth/users/me/', {
     //             headers: {
     //               Authorization: `Token ${authToken}`,
     //             },
@@ -62,7 +62,7 @@ const Activation = () => {
     //             user: userResponse.data.id,
     //             profile_type: localStorage.getItem('profile_type'),
     //           }
-    //           await axios.post('  https://api.onesec.shop/api/profile_type/', profile, {
+    //           await axios.post('  http://localhost:8000/api/profile_type/', profile, {
     //             headers: {
     //               Authorization: `Token ${authToken}`,
     //             },
@@ -75,6 +75,9 @@ const Activation = () => {
     //             navigate('/profile-summary');
     //           }
     // }
+    finally{
+      setLoading(false);
+    }
   };
 
   return (
