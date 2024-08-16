@@ -26,11 +26,36 @@ const ScheduleMeeting = ({ attendeeEmail, userId }) => {
     }));
   };
 
+  // Form validation
+  const validateForm = () => {
+    if (!meetingDetails.title) {
+      setMessage('Meeting title is required.');
+      return false;
+    }
+    if (!meetingDetails.description) {
+      setMessage('Meeting description is required.');
+      return false;
+    }
+    if (!meetingDetails.time) {
+      setMessage('Meeting time is required.');
+      return false;
+    }
+    if (!attendeeEmail) {
+      setMessage('Attendee email is required.');
+      return false;
+    }
+    return true;
+  };
+
   const handleAuthAndSchedule = async () => {
+    if (!validateForm()) {
+      return; // Exit if validation fails
+    }
+
     try {
       const dateString = date.toISOString().split('T')[0];
       const combinedDateTime = `${dateString}T${meetingDetails.time}:00.000Z`;
-  
+
       const authUrl = `https://api.onesec.shop/google/auth-request/?title=${encodeURIComponent(meetingDetails.title)}&description=${encodeURIComponent(meetingDetails.description)}&start_datetime=${combinedDateTime}&attendee_email=${encodeURIComponent(attendeeEmail)}&user_id=${encodeURIComponent(userId)}`;
       
       window.location.href = authUrl;
@@ -99,7 +124,12 @@ const ScheduleMeeting = ({ attendeeEmail, userId }) => {
         <button type="button" onClick={handleAuthAndSchedule} className={styles.button}>
           Schedule Meeting
         </button>
-        {message && <p className={styles.message}>{message}</p>}
+        {message && (
+          <p className={styles.message}>
+            <i className="fas fa-exclamation-circle" style={{ marginRight: '8px' }}></i>
+            {message}
+          </p>
+        )}
       </form>
     </div> 
   );

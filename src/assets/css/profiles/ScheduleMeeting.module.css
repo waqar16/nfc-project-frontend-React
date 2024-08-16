@@ -19,6 +19,12 @@
   margin-bottom: 30px;
 }
 
+.message{
+  color:  red;
+  text-align: left;
+}
+
+
 .customCalendar {
   width: 100%;
   max-width: 800px;
