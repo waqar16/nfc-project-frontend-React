@@ -1,6 +1,6 @@
 .scheduleMeeting {
   padding: 50px;
-  max-width: 70%;
+  /* max-width: 70%; */
   /* margin: 0 auto; */
   /* padding: 20px; */
   background-color: #fff;
@@ -26,7 +26,7 @@
   border: none;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .react-calendar {

@@ -61,7 +61,7 @@ const PersonalSignup = () => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('  https://api.onese.shop/auth/users/', {
+      const response = await axios.post('  https://api.onesec.shop/auth/users/', {
         first_name: firstName,
         last_name: lastName,
         email,
