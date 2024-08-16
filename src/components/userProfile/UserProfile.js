@@ -8,28 +8,30 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { uploadFileToS3 } from '../../s3Service';
 
-
 const UserProfile = () => {
   const { userId, username } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState({
     user: '',
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone: '',
-    address: '',
-    bio: '',
-    position: '',
-    website: '',
-    facebook: '',
-    instagram: '',
-    linkedin: '',
-    whatsapp: '',
-    github: '', 
+    first_name: null,
+    last_name: null,
+    email: null,
+    phone: null,
+    address: null,
+    bio: null,
+    position: null,
+    website: null,
+    facebook: null,
+    instagram: null,
+    linkedin: null,
+    whatsapp: null,
+    github: null,
     profile_pic: 'https://placehold.co/150x150',
   });
+  
   const [loading, setLoading] = useState(true);
+  const [profileExists, setProfileExists] = useState(false); // Track if profile exists
+  const [isSubmitting, setIsSubmitting] = useState(false);  // Track form submission state
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -58,11 +60,14 @@ const UserProfile = () => {
             },
           });
 
+          // If the profile exists, set it in the state and mark it as existing
           setUser(prevUser => ({
             ...prevUser,
             ...profileResponse.data,
             profile_pic: profileResponse.data.profile_pic || 'https://placehold.co/150x150',
           }));
+          setProfileExists(true); // Mark profile as existing
+
         } catch (error) {
           if (error.response && error.response.status === 404) {
             // Profile does not exist, initialize with default values
@@ -74,6 +79,7 @@ const UserProfile = () => {
               email,
               profile_pic: 'https://placehold.co/150x150',
             }));
+            setProfileExists(false); // Mark profile as not existing
           } else {
             console.error('Error fetching profile:', error);
             toast.error('Failed to fetch profile data.');
@@ -121,28 +127,39 @@ const UserProfile = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    setIsSubmitting(true); // Disable the submit button during submission
     setLoading(true); 
+    
+
     try {
       const authToken = localStorage.getItem('authToken');
       const url = `https://api.onesec.shop/api/profiles/${user.user}/`;
-      const method = 'put';
 
-      await axios[method](url, user, {
-        headers: {
-          Authorization: `Token ${authToken}`,
-        },
-      });
+      if (!profileExists) {
+        // If profile does not exist, create it using POST
+        await axios.post('https://api.onesec.shop/api/profiles/', user, {
+          headers: {
+            Authorization: `Token ${authToken}`,
+          },
+        });
+        toast.success('Profile created successfully!');
+        setProfileExists(true); // Mark profile as existing after creation
+      } else {
+        // If profile exists, update it using PUT
+        await axios.put(url, user, {
+          headers: {
+            Authorization: `Token ${authToken}`,
+          },
+        });
+        toast.success('Profile updated successfully!');
+      }
 
-      toast.success('Profile updated successfully!');
-      setUser(prevUser => ({
-        ...prevUser,
-        profile_pic: user.profile_pic,
-      }));
     } catch (error) {
       console.error('Error updating profile:', error);
-      toast.error('Failed to update profile.');
+      toast.error('Failed to update or create profile.');
     } finally {
       setLoading(false);  
+      setIsSubmitting(false); // Re-enable the submit button
     }
   };
 
@@ -209,8 +226,12 @@ const UserProfile = () => {
               )}
             </label>
           ))}
-          <button type="submit" className={styles.buttonSaveProfile}>
-            Update Profile
+          <button 
+            type="submit" 
+            className={styles.buttonSaveProfile} 
+            disabled={isSubmitting || loading} // Disable button while submitting
+          >
+            {profileExists ? 'Update Profile' : 'Create Profile'}
           </button>
         </form>
       </div>
