@@ -1,78 +1,166 @@
-/* ManageAppointments.module.css */
-
-.manageAppointmentsSection{
+.manageAppointmentsSection {
   margin-top: 120px;
+  min-height: 100vh;
 }
 
-.appointmentList{
-  width: 600px;
+.appointmentList {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.appointmentItem{
-  background: white;
+.appointmentItem {
+  background: linear-gradient(135deg, #ffffff, #f7f9fc);
   padding: 20px;
-  /* background-color: rgba(255, 255, 255, 0.1); */
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
 }
 
-/* .appointmentItem:hover{
-  background: linear-gradient(to right, rgb(11, 147, 193), purple, orange);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-} */
+.appointmentItem:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.appointmentItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(49deg, #00c6ff, #0072ff, #8e2de2, #fc248d);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
 .manageAppointments {
   padding: 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+.message {
+  color: #d9534f;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.error {
+  color: #d9534f;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.appointmentTitle {
+  font-size: 22px;
+  margin: 0 0 10px;
+  color: #333;
+}
+
+.appointmentDescription {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.appointmentStatus {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.appointmentStatus span {
+  color: #666;
+}
+
+.deleteButton {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #dc3545;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+.loadMoreButton {
+  margin-top: 20px;
+  background: linear-gradient(to right, #6660FB, #FC4D53);
+  width: 30%;
+  color: #fff;
+  font-weight: var(--font-semi-bold);
+  padding: 1rem;
+  border-radius: 5rem; /* Ensure this is set */
+  cursor: pointer;
+  text-align: center; 
+  transition: transform 0.3s ease;
+}
+
+
+.loadMoreButton:hover {
+  background: linear-gradient(to right, #7773fc, #f5676b);
+  border-radius: 5rem; 
+}
+
+/* Placeholder card styles */
+.placeholderCard {
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  animation: pulse 1.5s infinite ease-in-out;
+  position: relative;
+}
+
+.placeholderTitle,
+.placeholderDescription,
+.placeholderInfo {
+  background: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.placeholderTitle {
+  height: 20px;
+  width: 60%;
+}
+
+.placeholderDescription {
+  height: 15px;
+  width: 80%;
+}
+
+.placeholderInfo {
+  height: 15px;
+  width: 40%;
+}
+
+@keyframes pulse {
+  0% {
+      opacity: 1;
   }
-  
-  .title {
-    font-size: 24px;
-    margin-bottom: 20px;
+  50% {
+      opacity: 0.6;
   }
-  
-  .message {
-    color: #d9534f;
+  100% {
+      opacity: 1;
   }
-  
-  .appointmentList {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .appointmentItem {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    padding: 15px;
-    background-color: #f9f9f9;
-  }
-  
-  .appointmentTitle {
-    font-size: 20px;
-    margin: 0 0 10px;
-  }
-  
-  .appointmentDescription {
-  font-size: 1.2rem;
-  }
-  
-  .deleteButton {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #dc3545;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .deleteButton:hover {
-    background-color: #c82333;
-  }
-  
+}

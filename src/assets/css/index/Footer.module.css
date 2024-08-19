@@ -2,7 +2,7 @@
   text-align: center;
   /* background: linear-gradient(135deg, #c3cfe2 100%,#f5f7fa 0%, #c3cfe2 100%); */
   padding-top: 50px;
-  color: white;
+  /* color: white; */
 }
 
 
@@ -13,9 +13,9 @@
   /* width: 100%; */
   /* position: fixed; */
   /* background: linear-gradient(135deg, #e3ebf8 0%, #d0d1fd 33%, #e8d2fc 66%, #f8dac7 100%);   */
-  background-color: rgb(36, 35, 35);
+  /* background-color: rgb(36, 35, 35); */
   padding: 50px;
-  color: white;
+  /* color: white; */
 }
 
 .footerImg {
@@ -34,7 +34,7 @@
 }
 
 .footerContent p{
-  color: white;
+  /* color: white; */
   line-height: 30px;
 }
 
@@ -64,7 +64,7 @@
 
 .followOneclick a {
   /* color: black; */
-  color: white;
+  /* color: white; */
   font-size: 30px;
   text-decoration: none;
 }
@@ -87,14 +87,14 @@
 
 .footerInstagram {
   background-color: #E1306C;
-  color: white;
+  /* color: white; */
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 20px;
 }
 
 .footerInstagram a {
-  color: white;
+  /* color: white; */
   text-decoration: none;
 }
 

@@ -44,7 +44,7 @@ const Footer = () => {
           </ul>
         </div>
         <div className={styles.followOneclick}>
-          <h3>Follow One Click</h3>
+          <h3>Follow One Sec</h3>
           <ul>
             <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><i className="ri-facebook-line"></i></a></li>
             <li><a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><i className="ri-instagram-line"></i></a></li>
@@ -58,7 +58,7 @@ const Footer = () => {
         </a>
       </div> */}
       <div className={styles.footerOuter}>
-        <p>© 2024 by One Click. All rights reserved.</p>
+        <p>© 2024 by One Sec. All rights reserved.</p>
       </div>
     </footer>
   );

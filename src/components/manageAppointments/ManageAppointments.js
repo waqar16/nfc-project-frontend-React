@@ -1,41 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styles from '../../assets/css/profiles/ManageAppointments.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import axios from 'axios';
-
 
 const ManageAppointments = () => {
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [loadingNextPage, setLoadingNextPage] = useState(false);
+
+    const fetchAppointments = useCallback(async () => {
+        try {
+            const response = await axios.get(`https://api.onesec.shop/api/get-meetings/?page=${page}`, {
+                headers: { Authorization: `Token ${localStorage.getItem('authToken')}` }
+            });
+
+            const newAppointments = Array.isArray(response.data.results) ? response.data.results : [];
+            setAppointments(prev => [...prev, ...newAppointments]);
+            setHasMore(response.data.next !== null);
+
+            setLoading(false);
+            setLoadingNextPage(false);
+        } catch (error) {
+            setError('Error fetching appointments.');
+            setLoading(false);
+            setLoadingNextPage(false);
+            console.error('Error fetching appointments:', error);
+        }
+    }, [page]);
 
     useEffect(() => {
-        // Simulate API call with dummy data
-        const fetchAppointments = async () => {
-            try {
-                const appointmentsdata = await axios.get('https://api.onesec.shop/api/get-meetings/',
-                    { headers: { Authorization: `Token ${localStorage.getItem('authToken')}` } }
-                )
-
-                console.log(appointmentsdata.data)
-                setAppointments(appointmentsdata.data);
-                setLoading(false);
-            } catch (error) {
-                setError('Error fetching appointments.');
-                setLoading(false);
-                console.error('Error fetching appointments:', error);
-            }
-        };
-
         fetchAppointments();
-    }, []);
+    }, [fetchAppointments]);
 
-    const handleDelete = (id) => {
+    const handleLoadMore = () => {
+        if (!loadingNextPage && hasMore) {
+            setLoadingNextPage(true);
+            setPage(prevPage => prevPage + 1);
+        }
+    };
+
+    const handleDelete = async (id) => {
         try {
-            // Simulate delete action
-            setAppointments((prevAppointments) =>
-                prevAppointments.filter((appointment) => appointment.id !== id)
+            // Assume you have a DELETE API endpoint for appointments
+            // await axios.delete(`https://api.onesec.shop/api/delete-appointment/${id}/`, {
+            //     headers: { Authorization: `Token ${localStorage.getItem('authToken')}` }
+            // });
+
+            setAppointments(prevAppointments =>
+                prevAppointments.filter(appointment => appointment.id !== id)
             );
             setMessage('Appointment deleted successfully!');
         } catch (error) {
@@ -44,40 +60,60 @@ const ManageAppointments = () => {
         }
     };
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>{error}</p>;
-
     return (
         <div className={styles.manageAppointmentsSection}>
             <Sidebar profileType={localStorage.getItem('profile_type')} />
-            <h2 className={styles.title}>Upcomming Appointments</h2>
+            <h2 className={styles.title}>Upcoming Appointments</h2>
             <div className={styles.manageAppointments}>
-
                 {message && <p className={styles.message}>{message}</p>}
-                {appointments.length === 0 ? (
+                {error && <p className={styles.error}>{error}</p>}
+                {appointments.length === 0 && !loading && !loadingNextPage ? (
                     <p>No appointments available.</p>
                 ) : (
                     <div className={styles.appointmentList}>
-                        {appointments.map((appointment) => (
-                            <div key={appointment.id} className={styles.appointmentItem}>
-                                <h3 className={styles.appointmentTitle}>{appointment.title}</h3>
-                                <p className={styles.appointmentDescription}>{appointment.description}</p>
-                                <p><strong>Host:</strong> {appointment.host_email}</p>
-                                <p><strong>Date:</strong> {appointment.datetime}</p>
-                                <p className={styles.appointmentStatus}>
-                                    Status:
-                                    <span
-                                        style={{
-                                            color: appointment.meeting_status === 'pending' ? 'red' : appointment.meeting_status === 'completed' ? 'green' : 'black'
-                                        }}
-                                    >
-                                        {appointment.meeting_status}
-                                    </span>
-                                </p>                             
-                                  {/* <button onClick={() => handleDelete(appointment.id)} className={styles.deleteButton}>Delete</button> */}
+                        {loading && !appointments.length ? (
+                            [...Array(3)].map((_, index) => (
+                                <div key={index} className={styles.placeholderCard}>
+                                    <div className={styles.placeholderTitle}></div>
+                                    <div className={styles.placeholderDescription}></div>
+                                    <div className={styles.placeholderInfo}></div>
+                                </div>
+                            ))
+                        ) : (
+                            appointments.map((appointment, index) => (
+                                <div key={index} className={styles.appointmentItem}>
+                                    <i className="ri-calendar-event-line"></i>
+                                    <h3 className={styles.appointmentTitle}>{appointment.title}</h3>
+                                    <p className={styles.appointmentDescription}>{appointment.description}</p>
+                                    <p><i className="ri-user-line"></i> Host: {appointment.host_email}</p>
+                                    <p><i className="ri-time-line"></i> Date: {new Date(appointment.datetime).toLocaleString()}</p>
+                                    <p className={styles.appointmentStatus}>
+                                        <i className="ri-check-double-line"></i> Status:
+                                        <span className={styles.statusText}>
+                                            {appointment.meeting_status === 'pending' ? 'Pending' :
+                                                appointment.meeting_status === 'completed' ? 'Completed' : 'Unknown'}
+                                        </span>
+                                    </p>
+                                    {/* <button onClick={() => handleDelete(appointment.id)} className={styles.deleteButton}>
+                                        <i className="ri-delete-bin-6-line"></i> Delete
+                                    </button> */}
+                                </div>
+                            ))
+                        )}
+                        {loadingNextPage && (
+                            <div className={styles.placeholderCard}>
+                                <div className={styles.placeholderTitle}></div>
+                                <div className={styles.placeholderDescription}></div>
+                                <div className={styles.placeholderInfo}></div>
                             </div>
-                        ))}
+                        )}
                     </div>
+                )}
+                {!loading && hasMore && !loadingNextPage && (
+                    <button onClick={handleLoadMore} className={styles.loadMoreButton}>
+                        <i className="ri-loader-4-line" style={{ marginRight: '8px' }}></i>
+                        Load More
+                    </button>
                 )}
             </div>
         </div>
