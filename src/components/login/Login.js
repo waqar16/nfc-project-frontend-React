@@ -10,7 +10,7 @@ const LoginPage = () => {
   const [isPersonalLogin, setIsPersonalLogin] = useState(true); // State to toggle between personal and company login
   const toggleLoginMode = () => setIsPersonalLogin(!isPersonalLogin); // Function to toggle login mode
   const navigate = useNavigate();
-  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const clientId = process.env.GOOGLE_CLIENT_ID;
   const closeProfile = useCallback(() => {
     const profile = document.getElementById('profile');
     if (profile) {
