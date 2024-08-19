@@ -12,7 +12,7 @@ const SignupPage = () => {
   const toggleSignupMode = () => setIsPersonalSignup(!isPersonalSignup); // Function to toggle signup mode
   const navigate = useNavigate();
 
-  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
   const handleGoogleSuccess = async (response) => {
     const tokenId = response.credential;

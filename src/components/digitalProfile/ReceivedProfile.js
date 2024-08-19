@@ -14,7 +14,7 @@ import Loader from '../loader/Loader';
 const ReceivedProfile = () => {
   const { userId, email } = useParams();
   const [loading, setloading] = useState(true)
-  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
   const [user, setUser] = useState({
     user: null,
