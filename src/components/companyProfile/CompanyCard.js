@@ -95,7 +95,7 @@ const CompanyCard = () => {
     } catch (error) {
       setLoading(false);
       console.error('Error fetching user data:', error);
-      toast.error('Failed to fetch user data.');
+      toast.warn('Make sure create profile first to display data.');
     }
   };
   // Fetch received cards
@@ -126,7 +126,6 @@ const CompanyCard = () => {
     } catch (error) {
       setLoading(false);
       console.error('Error fetching received cards:', error);
-      toast.error('Failed to fetch received cards.');
     }
   }, []);
 

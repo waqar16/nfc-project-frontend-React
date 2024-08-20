@@ -145,12 +145,12 @@ const PersonalLogin = ({ navigate }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('  https://api.onesec.shop/auth/token/login/', {
+      const response = await axios.post('https://api.onesec.shop/auth/token/login/', {
         email,
         password,
       });
 
-      // const response2 = await axios.get('  https://api.onesec.shop/api/profile_type/', {
+      // const response2 = await axios.get('https://api.onesec.shop/api/profile_type/', {
       // });
 
       // console.log(response2.data.profile_type);
@@ -173,12 +173,15 @@ const PersonalLogin = ({ navigate }) => {
         });
 
         const { id, username, profile_type } = userResponse.data;
+        localStorage.setItem('userId', id);
+        localStorage.setItem('profile_type', profile_type);
+        localStorage.setItem('username', username);
 
         if (profile_type === 'company') {
-          navigate(`/company-analytics/${id}/${username}`);
+          navigate(`/company-profile/${id}/${username}`);
         }
         else if (profile_type === 'individual') {
-          navigate(`/user-analytics/${id}/${username}`);
+          navigate(`/user-profile/${id}/${username}`);
         }
         else if (profile_type === 'employee') {
           navigate(`/employee-profile/${id}/${username}`);
@@ -251,7 +254,7 @@ const CompanyLogin = ({ navigate }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('  https://api.onesec.shop/auth/token/login/', {
+      const response = await axios.post('https://api.onesec.shop/auth/token/login/', {
         email,
         password,
       });
@@ -272,7 +275,7 @@ const CompanyLogin = ({ navigate }) => {
         window.dispatchEvent(event);
 
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('  https://api.onesec.shop/auth/users/me/', {
+        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -285,8 +288,10 @@ const CompanyLogin = ({ navigate }) => {
         }
         else if (profile_type === 'individual') {
           navigate(`/user-analytics/${id}/${username}`);
+        } 
+        else if (profile_type === 'employee') {
+          navigate(`/employee-profile/${id}/${username}`);
         }
-
         // Hard refresh the page
         window.location.reload();
 

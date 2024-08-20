@@ -11,6 +11,7 @@ const ActivationSentTemplate = () => {
   const [loading, setLoading] = useState(false); // Loading state for the loader
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     let countdown;
     if (!canResend) {
       countdown = setInterval(() => {

@@ -80,10 +80,9 @@ const DigitalProfile = () => {
         setLoading(false);
       }
     } catch (error) {
-      console.error('Error fetching user data:', error);
+      console.error('Make sure create profile first to display data:', error);
       setLoading(false);
-      toast.error('Failed to fetch user data.');
-
+      toast.warn('Make sure create profile first to display data.');
     }
   }, [navigate, userId, username]);
 
@@ -113,8 +112,7 @@ const DigitalProfile = () => {
       console.log('Received cards:', cards);
     } catch (error) {
       setLoading(false)
-      console.error('Error fetching received cards:', error);
-      toast.error('Failed to fetch received cards.');
+      // toast.error('Failed to fetch received cards.');
     }
   }, []);
 

@@ -7,7 +7,6 @@ import CompanySignupLayout from './layout/authentication/CompanySignupLayout'
 import PersonalSignupLayout from './layout/authentication/PersonalSignupLayout'
 import PersonalLoginLayout from './layout/authentication/PersonalLoginLayout'
 import Navbar from './components/navbar/Navbar';
-import Footer from './components/footer/Footer';
 import UserProfileLayout from  './layout/userProfile/UserProfileLayout'
 import CompanyProfileLayout from  './layout/companyProfile/CompanyProfileLayout'
 import FAQsLayout from  './layout/FAQs/FaqsLayout'
@@ -39,6 +38,7 @@ function App() {
   
   useEffect(() => {
     window.scrollTo(0, 0);
+    
   }, []);
   return (
     <Router>
@@ -79,7 +79,6 @@ function App() {
           <Route path="/company-analytics/:userId/:username" element={<CompanyAnalyticsLayout/>}/>
 
         </Routes>
-        <Footer />
       </div>
     </Router>
   );
