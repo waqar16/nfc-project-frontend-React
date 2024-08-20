@@ -45,8 +45,15 @@ const ScheduleMeetingSection = () => {
   const handleCreateNowButtonClick = () => {
     if (isAuthenticated & profileType === 'individual') {
       navigate(`/digital-profile/${userId}/${username}`);
-    } else {
-      navigate('/personal-login');
+    }
+    else if (isAuthenticated & profileType === 'company') {
+      navigate(`/company-card/${userId}/${username}`);
+    }
+    else if (isAuthenticated & profileType === 'employee') {
+      navigate(`/digital-profile/${userId}/${username}`);
+    }
+    else {
+      navigate('/login');
     }
   };
 
