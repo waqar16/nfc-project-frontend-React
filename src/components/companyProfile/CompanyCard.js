@@ -9,6 +9,7 @@ import linkedin from '../../assets/img/socials/linkedin.png';  // LinkedIn icon 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
+import { Link } from 'react-router-dom';
 
 const CompanyCard = () => {
   const { userId, username } = useParams();
@@ -108,7 +109,7 @@ const CompanyCard = () => {
         }
       });
       //   setProfileTypeWhoShared(response.data.profile_type_who_shared);
-      const cards = await Promise.all(response.data.map(async (card) => {
+      const cards = await Promise.all(response.data.results.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
         const userResponse = await axios.get(`https://api.onesec.shop/api/profiles/${card.shared_from}/`, {
           headers: {
@@ -174,10 +175,10 @@ const CompanyCard = () => {
       setLoading(false); // Set loading to false after the request is complete
     }
   };
-  // Handle show details of received card
-  const handleShowDetails = (profileId) => {
-    console.log('Profile ID:', profileTypeWhoShared);
-    if (profileTypeWhoShared === 'company') {
+
+  const handleShowDetails = (profileId, sharedProfileType) => {
+    console.log('Profile Type:', profileTypeWhoShared);
+    if (sharedProfileType === 'company') {
       navigate(`/company/${profileId}`);
     }
     else {
@@ -265,7 +266,7 @@ const CompanyCard = () => {
                                 {` From: ${card.shared_from_user.email}`}
                             </div>
                             <div className={styles.receivedCardDate}>Received on: {timeAgo(new Date(card.shared_at))}</div>
-                            <span onClick={() => handleShowDetails(card.shared_from_user.user)} className={styles.showDetailsButton}>
+                            <span onClick={() => handleShowDetails(card.shared_from_user.user, card.profile_type_who_shared)} className={styles.showDetailsButton}>
                                 View Card
                             </span>
                         </div>
@@ -275,6 +276,8 @@ const CompanyCard = () => {
             <p>No received cards</p>
         )}
     </div>
+    <Link to="received-cards">Load More</Link>
+
         </div>
       </div>
 

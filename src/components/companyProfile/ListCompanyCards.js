@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from '../../assets/css/profiles/ManageAppointments.module.css';
 import Sidebar from '../sidebar/Sidebar';
+import {useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const ManageAppointments = () => {
-    const [appointments, setAppointments] = useState([]);
+const ListCompanyCards = () => {
+    const [receivedCards, setReceivedCards] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
@@ -12,29 +13,31 @@ const ManageAppointments = () => {
     const [hasMore, setHasMore] = useState(true);
     const [loadingNextPage, setLoadingNextPage] = useState(false);
 
-    const fetchAppointments = useCallback(async () => {
+    const navigate = useNavigate();
+
+    const fetchCards = useCallback(async () => {
         try {
-            const response = await axios.get(`https://api.onesec.shop/api/get-meetings/?page=${page}`, {
+            const response = await axios.get(`https://api.onesec.shop/api/received-cards/?page=${page}`, {
                 headers: { Authorization: `Token ${localStorage.getItem('authToken')}` }
             });
 
-            const newAppointments = Array.isArray(response.data.results) ? response.data.results : [];
-            setAppointments(prev => [...prev, ...newAppointments]);
+            const newCards = Array.isArray(response.data.results) ? response.data.results : [];
+            setReceivedCards(prev => [...prev, ...newCards]);
             setHasMore(response.data.next !== null);
 
             setLoading(false);
             setLoadingNextPage(false);
         } catch (error) {
-            setError('Error fetching appointments.');
+            setError('Error fetching received cards.');
             setLoading(false);
             setLoadingNextPage(false);
-            console.error('Error fetching appointments:', error);
+            console.error('Error fetching received cards:', error);
         }
     }, [page]);
 
     useEffect(() => {
-        fetchAppointments();
-    }, [fetchAppointments]);
+        fetchCards();
+    }, [fetchCards]);
 
     const handleLoadMore = () => {
         if (!loadingNextPage && hasMore) {
@@ -43,35 +46,27 @@ const ManageAppointments = () => {
         }
     };
 
-    const handleDelete = async (id) => {
-        try {
-            // Assume you have a DELETE API endpoint for appointments
-            // await axios.delete(`https://api.onesec.shop/api/delete-appointment/${id}/`, {
-            //     headers: { Authorization: `Token ${localStorage.getItem('authToken')}` }
-            // });
-
-            setAppointments(prevAppointments =>
-                prevAppointments.filter(appointment => appointment.id !== id)
-            );
-            setMessage('Appointment deleted successfully!');
-        } catch (error) {
-            setMessage('Error deleting appointment.');
-            console.error('Error deleting appointment:', error);
+    const handleViewDetails = (profileId, sharedProfileType) => {
+        if (sharedProfileType === 'company') {
+          navigate(`/company/${profileId}`);
         }
-    };
+        else {
+          navigate(`/profile/${profileId}`);
+        }
+      };
 
     return (
         <div className={styles.manageAppointmentsSection}>
             <Sidebar profileType={localStorage.getItem('profile_type')} />
-            <h2 className={styles.title}>Appointments</h2>
+            <h2 className={styles.title}>Received Cards</h2>
             <div className={styles.manageAppointments}>
                 {message && <p className={styles.message}>{message}</p>}
                 {error && <p className={styles.error}>{error}</p>}
-                {appointments.length === 0 && !loading && !loadingNextPage ? (
-                    <p>No appointments available.</p>
+                {receivedCards.length === 0 && !loading && !loadingNextPage ? (
+                    <p>No received cards available.</p>
                 ) : (
                     <div className={styles.appointmentList}>
-                        {loading && !appointments.length ? (
+                        {loading && !receivedCards.length ? (
                             [...Array(3)].map((_, index) => (
                                 <div key={index} className={styles.placeholderCard}>
                                     <div className={styles.placeholderTitle}></div>
@@ -80,23 +75,16 @@ const ManageAppointments = () => {
                                 </div>
                             ))
                         ) : (
-                            appointments.map((appointment, index) => (
+                            receivedCards.map((card, index) => (
                                 <div key={index} className={styles.appointmentItem}>
-                                    <i className="ri-calendar-event-line"></i>
-                                    <h3 className={styles.appointmentTitle}>{appointment.title}</h3>
-                                    <p className={styles.appointmentDescription}>{appointment.description}</p>
-                                    {/* <p><i className="ri-user-line"></i> Host: {appointment.host_email}</p> */}
-                                    <p><i className="ri-time-line"></i> Date: {new Date(appointment.datetime).toLocaleString()}</p>
-                                    <p className={styles.appointmentStatus}>
-                                        <i className="ri-check-double-line"></i> Status:
-                                        <span className={styles.statusText}>
-                                            {appointment.meeting_status === 'pending' ? 'Pending' :
-                                                appointment.meeting_status === 'completed' ? 'Completed' : 'Unknown'}
-                                        </span>
-                                    </p>
-                                    {/* <button onClick={() => handleDelete(appointment.id)} className={styles.deleteButton}>
-                                        <i className="ri-delete-bin-6-line"></i> Delete
-                                    </button> */}
+                                    {/* <h3 className={styles.cardTitle}>Card ID: {card.id}</h3> */}
+                                    <p><i className="ri-time-line"></i> Shared At: {new Date(card.shared_at).toLocaleString()}</p>
+                                    <p><i className="ri-user-line"></i> Shared from: {card.shared_from_email}</p>
+                                    {/* <p><i className="ri-user-line"></i> Shared With: {card.user}</p> */}
+                                    <p><i className="ri-profile-line"></i> Profile Type: {card.profile_type_who_shared}</p>
+                                    <button onClick={() => handleViewDetails(card.shared_from, card.profile_type_who_shared)} className={styles.viewCardButton}>
+                                        <i className="ri-eye-line"></i> View Details
+                                    </button>
                                 </div>
                             ))
                         )}
@@ -120,4 +108,4 @@ const ManageAppointments = () => {
     );
 };
 
-export default ManageAppointments;
+export default ListCompanyCards;

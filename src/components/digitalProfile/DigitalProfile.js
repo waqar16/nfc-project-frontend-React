@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
+import { Link } from 'react-router-dom';
 
 
 const DigitalProfile = () => {
@@ -54,7 +55,7 @@ const DigitalProfile = () => {
       if (profile_type !== profile_type || userId !== id.toString() || username !== authenticatedUsername) {
         navigate('/not-authorized'); // Redirect to not authorized page
       } else {
-        const endpoint = profile_type === 'employee' ? `  https://api.onesec.shop/api/employees/${email}/` : `  https://api.onesec.shop/api/profiles/${id}/`;
+        const endpoint = profile_type === 'employee' ? `https://api.onesec.shop/api/employees/${email}/` : `  https://api.onesec.shop/api/profiles/${id}/`;
         const profileResponse = await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`
@@ -95,7 +96,7 @@ const DigitalProfile = () => {
           Authorization: `Token ${token}`
         }
       });
-      const cards = await Promise.all(response.data.map(async (card) => {
+      const cards = await Promise.all(response.data.results.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
         const userResponse = await axios.get(`https://api.onesec.shop/api/profiles/${card.shared_from}/`, {
           headers: {
@@ -295,6 +296,7 @@ const DigitalProfile = () => {
               <p>No received cards</p>
             )}
           </div>
+          <Link to="received-cards">Load More</Link>
         </div>
       </div>
       <div className={styles.cardActions}>

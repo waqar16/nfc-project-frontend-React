@@ -11,12 +11,16 @@ import ScheduleMeeting from '../../components/scheduleMeetings/ScheduleMeetings'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
+import {useNavigate } from 'react-router-dom';
+
 
 
 const ReceivedCompany = () => {
   const { userId } = useParams();
   const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   const [company, setCompany] = useState({
     company_name: '',
@@ -64,7 +68,7 @@ const ReceivedCompany = () => {
   const fetchCompanyData = useCallback(async () => {
     const token = localStorage.getItem('authToken');
     try {
-      const response = await axios.get(`  https://api.onesec.shop/api/companies/${userId}/`, {
+      const response = await axios.get(`https://api.onesec.shop/api/companies/${userId}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -88,6 +92,10 @@ const ReceivedCompany = () => {
       await createInteraction(userId);
     } catch (error) {
       console.error('Error fetching company data:', error);
+      navigate('*');
+    }
+    finally {
+      setLoading(false);
     }
   }, [userId]);
 

@@ -164,3 +164,171 @@
       opacity: 1;
   }
 }
+
+
+.appointmentsGrid {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.column {
+  flex: 1;
+  min-width: 300px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.columnTitle {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .appointmentsGrid {
+    flex-direction: column;
+  }
+
+  .column {
+    min-width: 100%;
+  }
+}
+
+.manageAppointmentsSection {
+  margin-top: 120px;
+  min-height: 100vh;
+}
+
+.manageAppointments {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+.appointmentContainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.appointmentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.appointmentItem {
+  background: linear-gradient(135deg, #ffffff, #f7f9fc);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  position: relative;
+}
+
+.appointmentItem:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.appointmentTitle {
+  font-size: 22px;
+  margin: 0 0 10px;
+  color: #333;
+}
+
+.appointmentDescription {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.appointmentStatus {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.appointmentStatus span {
+  color: #666;
+}
+
+.placeholderCard {
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  animation: pulse 1.5s infinite ease-in-out;
+  position: relative;
+}
+
+.placeholderTitle,
+.placeholderDescription,
+.placeholderInfo {
+  background: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.placeholderTitle {
+  height: 20px;
+  width: 60%;
+}
+
+.placeholderDescription {
+  height: 15px;
+  width: 80%;
+}
+
+.placeholderInfo {
+  height: 15px;
+  width: 40%;
+}
+
+.loadMoreButton {
+  margin-top: 20px;
+  background: linear-gradient(to right, #6660FB, #FC4D53);
+  width: 30%;
+  color: #fff;
+  font-weight: var(--font-semi-bold);
+  padding: 1rem;
+  border-radius: 5rem;
+  cursor: pointer;
+  text-align: center; 
+  transition: transform 0.3s ease;
+}
+
+.loadMoreButton:hover {
+  background: linear-gradient(to right, #7773fc, #f5676b);
+}
+
+@keyframes pulse {
+  0% {
+      opacity: 1;
+  }
+  50% {
+      opacity: 0.6;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+

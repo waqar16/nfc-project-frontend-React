@@ -32,6 +32,8 @@ import EmployeeSignup from './components/employeeSignup/EmployeeSignup';
 import CompanyCardLayout from './layout/companyProfile/CompanyCardLayout';
 import ReceivedCompanyLayout from './layout/companyProfile/ReceivedCompantLayout';
 import ManageAppointmentsLayout from './layout/scheduleMeetings/ManageAppointmentsLayout';
+import ListReceivedCards from './layout/userProfile/ListReceivedCardsLayout';  
+import ListCompanyProfile from './layout/companyProfile/ListCompanyCardLayout';
 
 function App() {
   
@@ -63,8 +65,10 @@ function App() {
           <Route path="/activate/:uid/:token" element={<Activation />} />
           <Route path="/activation-sent" element={<ActivationSentTemplate />} />
           <Route path="/digital-profile/:userId/:username" element={<DigitalProfileLayout />} />
+          <Route path="/digital-profile/:userId/:username/received-cards" element={<ListReceivedCards />} />
           <Route path="/manage-appointments/:userId/:username" element={<ManageAppointmentsLayout />} />
           <Route path="/company-card/:userId/:username" element={<CompanyCardLayout />} />
+          <Route path="/company-card/:userId/:username/received-cards" element={<ListCompanyProfile />} />
           <Route path="/profile/:userId/" element={<ReceivedProfileLayout />} />
           <Route path="/company/:userId/" element={<ReceivedCompanyLayout />} />
           <Route path="/user-analytics/:userId/:username" element={<AnalyticsLayout/>}/>
