@@ -50,7 +50,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
+    localStorage.clear();
     setIsAuthenticated(false);
     navigate('/');
     const profile = document.getElementById('profile');

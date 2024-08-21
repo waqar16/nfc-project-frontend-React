@@ -25,6 +25,8 @@ const EmployeeProfile = () => {
     whatsapp: '',
     github: '', 
     profile_pic: 'https://placehold.co/150x150',
+    receive_marketing_emails: false,
+
   });
   const [profileExists, setProfileExists] = useState(false);
 
@@ -81,6 +83,8 @@ const EmployeeProfile = () => {
             whatsapp: profileResponse.data.whatsapp || '',
             github: profileResponse.data.github || '',
             profile_pic: profileResponse.data.profile_pic || 'https://placehold.co/150x150',
+            receiveMarketingEmails: profileResponse.data.receiveMarketingEmails || false,
+
           });
           setProfileExists(true);
         } catch (error) {
@@ -121,13 +125,29 @@ const EmployeeProfile = () => {
     fetchUserData();
   }, [navigate, username]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUser((prevUser) => ({
-      ...prevUser,
-      [name]: value,
-    }));
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setUser((prevUser) => ({
+  //     ...prevUser,
+  //     [name]: value,
+  //   }));
+  // };
+
+  const handleChange = e => {
+    const { name, value, type, checked } = e.target;
+    if (type === 'checkbox') {
+      setUser(prevUser => ({
+        ...prevUser,
+        [name]: checked,
+      }));
+    } else {
+      setUser(prevUser => ({
+        ...prevUser,
+        [name]: value,
+      }));
+    }
   };
+
 
   const handleProfilePicChange = (event) => {
     const file = event.target.files[0];
@@ -370,6 +390,16 @@ const EmployeeProfile = () => {
               onChange={handleChange}
               className={styles.input}
             />
+          </label>
+          <label className={styles.label}>
+            <input
+              type="checkbox"
+              name="receive_marketing_emails"
+              checked={user.receive_marketing_emails}
+              onChange={handleChange}
+              className={styles.checkbox}
+            />
+            Receive marketing emails
           </label>
           <button type="submit" className={styles.buttonSaveProfile}>
             {profileExists ? 'Update Profile' : 'Save Profile'}

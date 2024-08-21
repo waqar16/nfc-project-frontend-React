@@ -22,6 +22,7 @@ const CompanyProfile = () => {
     company_description: '',
     website: '',
     linkedin: '',
+    receive_marketing_emails: false,
     employees: [],
   });
   const [profileExists, setProfileExists] = useState(false);
@@ -77,6 +78,7 @@ const CompanyProfile = () => {
             website: companyResponse.data.website || '',
             linkedin: companyResponse.data.linkedin || '',
             employees: companyResponse.data.employees || [],
+            receiveMarketingEmails: companyResponse.data.receive_marketing_emails || false,
           });
           setProfileExists(true);
           setLoading(false)
@@ -117,13 +119,31 @@ const CompanyProfile = () => {
     fetchCompanyData();
   }, [navigate, userId, username]);
 
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setCompany((prevCompany) => ({
+  //     ...prevCompany,
+  //     [name]: value,
+  //   }));
+  // };
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCompany((prevCompany) => ({
-      ...prevCompany,
-      [name]: value,
-    }));
+    const { name, value, type, checked } = e.target;
+  
+    if (type === 'checkbox') {
+      setCompany((prevCompany) => ({
+        ...prevCompany,
+        [name]: checked,
+      }));
+    } else {
+      setCompany((prevCompany) => ({
+        ...prevCompany,
+        [name]: value,
+      }));
+    }
   };
+  
+
 
   const handlecompanyLogoChange = (e) => {
     const file = e.target.files[0];
@@ -307,6 +327,16 @@ const CompanyProfile = () => {
               onChange={handleChange}
               className={styles.input}
             />
+          </label>
+          <label className={styles.label}>
+            <input
+              type="checkbox"
+              name="receive_marketing_emails"
+              checked={company.receive_marketing_emails}
+              onChange={handleChange}
+              className={styles.checkbox}
+            />
+            Receive marketing emails
           </label>
           {/* Submit Button */}
           <button type='submit' onClick={handleSubmit} className={styles.buttonSaveProfile}>

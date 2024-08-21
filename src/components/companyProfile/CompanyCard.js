@@ -152,7 +152,7 @@ const CompanyCard = () => {
       console.error('Error generating share link:', error);
       toast.error('Failed to generate share link.');
     } finally {
-      setLoading(false); // Set loading to false after the request is complete
+      setLoading(false);
     }
   };
   // Handle share profile

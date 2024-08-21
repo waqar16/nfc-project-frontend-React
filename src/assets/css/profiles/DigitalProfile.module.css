@@ -8,6 +8,17 @@
     /* padding: 20px; */
 
 }
+.qrCodeContainer {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qrCodeContainer p {
+  margin-bottom: 10px;
+}
+
 
 .profileCard {
   height: 100%;

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Sidebar from '../sidebar/Sidebar'; 
+import Sidebar from '../sidebar/Sidebar';
 import styles from '../../assets/css/profiles/UserProfile.module.css';
-import Loader from '../loader/Loader'; 
+import Loader from '../loader/Loader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { uploadFileToS3 } from '../../s3Service';
@@ -27,11 +27,13 @@ const UserProfile = () => {
     whatsapp: null,
     github: null,
     profile_pic: 'https://placehold.co/150x150',
+    receive_marketing_emails: false,
   });
-  
+
   const [loading, setLoading] = useState(true);
   const [profileExists, setProfileExists] = useState(false); // Track if profile exists
   const [isSubmitting, setIsSubmitting] = useState(false);  // Track form submission state
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -65,6 +67,7 @@ const UserProfile = () => {
             ...prevUser,
             ...profileResponse.data,
             profile_pic: profileResponse.data.profile_pic || 'https://placehold.co/150x150',
+            receiveMarketingEmails: profileResponse.data.receiveMarketingEmails || false,
           }));
           setProfileExists(true); // Mark profile as existing
 
@@ -80,6 +83,7 @@ const UserProfile = () => {
               profile_pic: 'https://placehold.co/150x150',
             }));
             setProfileExists(false); // Mark profile as not existing
+            // setReceiveMarketingEmails(false);
           } else {
             console.error('Error fetching profile:', error);
             toast.error('Failed to fetch profile data.');
@@ -96,13 +100,28 @@ const UserProfile = () => {
     fetchUserData();
   }, [navigate, userId, username]);
 
+  // const handleChange = e => {
+  //   const { name, value } = e.target;
+  //   setUser(prevUser => ({
+  //     ...prevUser,
+  //     [name]: value,
+  //   }));
+  // };
   const handleChange = e => {
-    const { name, value } = e.target;
-    setUser(prevUser => ({
-      ...prevUser,
-      [name]: value,
-    }));
+    const { name, value, type, checked } = e.target;
+    if (type === 'checkbox') {
+      setUser(prevUser => ({
+        ...prevUser,
+        [name]: checked,
+      }));
+    } else {
+      setUser(prevUser => ({
+        ...prevUser,
+        [name]: value,
+      }));
+    }
   };
+
 
   const handleProfilePicChange = async event => {
     const file = event.target.files[0];
@@ -128,8 +147,8 @@ const UserProfile = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     setIsSubmitting(true); // Disable the submit button during submission
-    setLoading(true); 
-    
+    setLoading(true);
+
 
     try {
       const authToken = localStorage.getItem('authToken');
@@ -158,7 +177,7 @@ const UserProfile = () => {
       console.error('Error updating profile:', error);
       toast.error('Failed to update or create profile.');
     } finally {
-      setLoading(false);  
+      setLoading(false);
       setIsSubmitting(false); // Re-enable the submit button
     }
   };
@@ -179,7 +198,7 @@ const UserProfile = () => {
               id="profilePicInput"
               className={styles.profilePicInput}
               onChange={handleProfilePicChange}
-              accept="image/*" 
+              accept="image/*"
             />
           </div>
           <div className={styles.profileDetails}>
@@ -226,9 +245,20 @@ const UserProfile = () => {
               )}
             </label>
           ))}
-          <button 
-            type="submit" 
-            className={styles.buttonSaveProfile} 
+
+          <label className={styles.label}>
+            <input
+              type="checkbox"
+              name="receive_marketing_emails"
+              checked={user.receive_marketing_emails}
+              onChange={handleChange}
+              className={styles.checkbox}
+            />
+            Receive marketing emails
+          </label>
+          <button
+            type="submit"
+            className={styles.buttonSaveProfile}
             disabled={isSubmitting || loading} // Disable button while submitting
           >
             {profileExists ? 'Update Profile' : 'Create Profile'}

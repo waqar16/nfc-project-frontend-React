@@ -176,6 +176,8 @@ const PersonalLogin = ({ navigate }) => {
         localStorage.setItem('userId', id);
         localStorage.setItem('profile_type', profile_type);
         localStorage.setItem('username', username);
+        localStorage.setItem('authentication_type', 'manual');
+
 
         if (profile_type === 'company') {
           navigate(`/company-profile/${id}/${username}`);
@@ -282,6 +284,10 @@ const CompanyLogin = ({ navigate }) => {
         });
 
         const { id, username, profile_type } = userResponse.data;
+        localStorage.setItem('userId', id);
+        localStorage.setItem('profile_type', profile_type);
+        localStorage.setItem('username', username);
+        localStorage.setItem('authentication_type', 'manual');
 
         if (profile_type === 'company') {
           navigate(`/company-analytics/${id}/${username}`);
