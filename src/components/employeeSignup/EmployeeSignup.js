@@ -67,7 +67,7 @@ const EmployeeSignup = () => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('https://letsconnect.onesec.shop/auth/users/', {
+      const response = await axios.post('https://api.onesec.shop/auth/users/', {
         first_name: firstName,
         last_name: lastName,
         email,

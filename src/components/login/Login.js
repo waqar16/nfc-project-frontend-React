@@ -5,6 +5,7 @@ import axios from 'axios';
 import logo from '../../assets/img/logo.png';
 // import google from '../../assets/img/socials/google.png';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { ToastContainer, toast } from 'react-toastify';
 
 const LoginPage = () => {
   const [isPersonalLogin, setIsPersonalLogin] = useState(true); // State to toggle between personal and company login
@@ -28,7 +29,7 @@ const LoginPage = () => {
     try {
       console.log('Google login response:', response);
       const profileType = isPersonalLogin ? "individual" : "company";
-      const res = await axios.post(`https://letsconnect.onesec.shop/auth/custom-google-login/`, {
+      const res = await axios.post(`https://api.onesec.shop/auth/custom-google-login/`, {
         access_token: tokenId,
         profile_type: profileType
       });
@@ -62,7 +63,8 @@ const LoginPage = () => {
       if (error.response && error.response.data && error.response.data.error) {
         alert(`${error.response.data.error}`);
     } else {
-        alert('An unexpected error occurred. Please try again.');
+        // alert('An unexpected error occurred. Please try again.');
+        toast.error("An unexpected error occurred. Please try again.")
     }
     }
   };
@@ -122,6 +124,7 @@ const LoginPage = () => {
           </p>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
@@ -147,12 +150,12 @@ const PersonalLogin = ({ navigate }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://letsconnect.onesec.shop/auth/token/login/', {
+      const response = await axios.post('https://api.onesec.shop/auth/token/login/', {
         email,
         password,
       });
 
-      // const response2 = await axios.get('https://letsconnect.onesec.shop/api/profile_type/', {
+      // const response2 = await axios.get('https://api.onesec.shop/api/profile_type/', {
       // });
 
       // console.log(response2.data.profile_type);
@@ -168,7 +171,7 @@ const PersonalLogin = ({ navigate }) => {
         window.dispatchEvent(event);
 
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://letsconnect.onesec.shop/auth/users/me/', {
+        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -258,12 +261,12 @@ const CompanyLogin = ({ navigate }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://letsconnect.onesec.shop/auth/token/login/', {
+      const response = await axios.post('https://api.onesec.shop/auth/token/login/', {
         email,
         password,
       });
 
-      // const response2 = await axios.get('  https://letsconnect.onesec.shop/api/profile_type/', {
+      // const response2 = await axios.get('  https://api.onesec.shop/api/profile_type/', {
       // });
 
       // console.log(response2.data.profile_type);
@@ -279,7 +282,7 @@ const CompanyLogin = ({ navigate }) => {
         window.dispatchEvent(event);
 
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://letsconnect.onesec.shop/auth/users/me/', {
+        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }

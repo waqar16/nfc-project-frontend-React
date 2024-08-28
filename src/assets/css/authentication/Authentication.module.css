@@ -125,6 +125,15 @@ textarea {
     cursor: pointer;
   }
   
+  .error{
+    color: red;
+    display: flex;
+    /* margin-top: -8px !important; */
+    align-items: start;
+    float: left !important;
+    text-align: left !important;
+    font-size: 0.8rem;
+  }
   
   .login__title {
     margin: 0;

@@ -37,7 +37,7 @@ const CompanyCard = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('https://letsconnect.onesec.shop/auth/users/me/', {
+      const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -52,7 +52,7 @@ const CompanyCard = () => {
       }
 
       try {
-        const companyResponse = await axios.get(`https://letsconnect.onesec.shop/api/companies/${userId}/`, {
+        const companyResponse = await axios.get(`https://api.onesec.shop/api/companies/${userId}/`, {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -103,7 +103,7 @@ const CompanyCard = () => {
     try {
       // setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://letsconnect.onesec.shop/api/received-cards/', {
+      const response = await axios.get('https://api.onesec.shop/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -111,7 +111,7 @@ const CompanyCard = () => {
       //   setProfileTypeWhoShared(response.data.profile_type_who_shared);
       const cards = await Promise.all(response.data.results.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
-        const userResponse = await axios.get(`https://letsconnect.onesec.shop/api/profiles/${card.shared_from}/`, {
+        const userResponse = await axios.get(`https://api.onesec.shop/api/profiles/${card.shared_from}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -140,7 +140,7 @@ const CompanyCard = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://letsconnect.onesec.shop/api/share-profile-url/', {}, {
+      const response = await axios.post('https://api.onesec.shop/api/share-profile-url/', {}, {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -160,7 +160,7 @@ const CompanyCard = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://letsconnect.onesec.shop/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('https://api.onesec.shop/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },

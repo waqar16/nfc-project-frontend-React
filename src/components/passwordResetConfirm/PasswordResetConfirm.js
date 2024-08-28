@@ -31,7 +31,7 @@ const PasswordResetConfirm = () => {
     }
 
     try {
-      await axios.post('  https://letsconnect.onesec.shop/auth/users/reset_password_confirm/', {
+      await axios.post('  https://api.onesec.shop/auth/users/reset_password_confirm/', {
         uid,
         token,
         new_password: newPassword,
