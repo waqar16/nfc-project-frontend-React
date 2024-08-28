@@ -17,7 +17,7 @@ const ListCompanyCards = () => {
 
     const fetchCards = useCallback(async () => {
         try {
-            const response = await axios.get(`https://api.onesec.shop/api/received-cards/?page=${page}`, {
+            const response = await axios.get(`http://localhost:8000/api/received-cards/?page=${page}`, {
                 headers: { Authorization: `Token ${localStorage.getItem('authToken')}` }
             });
 

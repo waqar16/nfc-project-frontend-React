@@ -16,7 +16,7 @@ const Sidebar = ({ profileType }) => {
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('  https://api.onesec.shop/auth/users/me/', {
+      const response = await axios.get('  http://localhost:8000/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }

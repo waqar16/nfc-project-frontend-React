@@ -313,4 +313,3 @@ const DigitalProfile = () => {
 
 export default DigitalProfile;
 
-

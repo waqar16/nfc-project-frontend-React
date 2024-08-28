@@ -23,7 +23,7 @@ const ScheduleMeetingSection = () => {
       if (token) {
         setIsAuthenticated(true);
         try {
-          const response = await axios.get('  https://api.onesec.shop/auth/users/me', {
+          const response = await axios.get('  http://localhost:8000/auth/users/me', {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -74,7 +74,7 @@ const ScheduleMeetingSection = () => {
       <div className={styles.content}>
         <h2 className={styles.title}>Unmatched First Impression</h2>
         <p className={styles.description}>
-          With your elegent one sec NFC Digital Cards
+          With your elegant One Sec NFC Digital Cards, Effortlessly manage your personal and professional profiles, update NFC cards, and share digital cards with just a few taps.
         </p>
         <button to="/schedule-meeting" onClick={handleCreateNowButtonClick} className={styles.ctaButton}>Create Now</button>
       </div>

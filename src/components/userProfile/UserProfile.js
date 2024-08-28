@@ -41,13 +41,21 @@ const UserProfile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
+        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`,
           },
         });
 
         const { id, first_name, last_name, email, profile_type, username: authenticatedUsername } = userResponse.data;
+        // const token = localStorage.getItem('authToken')
+        // const profile_type = localStorage.getItem('profile_type')
+        // const authenticatedUsername = localStorage.getItem('username')
+        // const email = localStorage.getItem('profile_type')
+        // const id = localStorage.getItem('userId')
+        // const first_name = localStorage.getItem('first_name')
+        // const last_name = localStorage.getItem('last_name')
+
 
         if (profile_type !== 'individual' || userId !== id.toString() || username !== authenticatedUsername) {
           navigate('/not-authorized');
@@ -56,7 +64,7 @@ const UserProfile = () => {
 
         // Fetch the profile data from the API
         try {
-          const profileResponse = await axios.get(`https://api.onesec.shop/api/profiles/${id}/`, {
+          const profileResponse = await axios.get(`http://localhost:8000/api/profiles/${id}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -66,7 +74,7 @@ const UserProfile = () => {
           setUser(prevUser => ({
             ...prevUser,
             ...profileResponse.data,
-            profile_pic: profileResponse.data.profile_pic || 'https://placehold.co/150x150',
+            profile_pic: profileResponse.data.profile_pic || localStorage.getItem('profile_pic') || 'https://placehold.co/150x150',
             receiveMarketingEmails: profileResponse.data.receiveMarketingEmails || false,
           }));
           setProfileExists(true); // Mark profile as existing
@@ -80,7 +88,7 @@ const UserProfile = () => {
               first_name,
               last_name,
               email,
-              profile_pic: 'https://placehold.co/150x150',
+              profile_pic: localStorage.getItem('profile_pic') || 'https://placehold.co/150x150',
             }));
             setProfileExists(false); // Mark profile as not existing
             // setReceiveMarketingEmails(false);
@@ -89,7 +97,8 @@ const UserProfile = () => {
             toast.error('Failed to fetch profile data.');
           }
         }
-      } catch (error) {
+      } 
+      catch (error) {
         console.error('Error fetching user data:', error);
         navigate('/login');
       } finally {
@@ -146,17 +155,17 @@ const UserProfile = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setIsSubmitting(true); // Disable the submit button during submission
+    // setIsSubmitting(true);
     setLoading(true);
 
 
     try {
       const authToken = localStorage.getItem('authToken');
-      const url = `https://api.onesec.shop/api/profiles/${user.user}/`;
+      const url = `http://localhost:8000/api/profiles/${user.user}/`;
 
       if (!profileExists) {
         // If profile does not exist, create it using POST
-        await axios.post('https://api.onesec.shop/api/profiles/', user, {
+        await axios.post('http://localhost:8000/api/profiles/', user, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -215,14 +224,14 @@ const UserProfile = () => {
             { label: 'Email', name: 'email', type: 'text', readOnly: true },
             { label: 'Position', name: 'position', type: 'text' },
             { label: 'Phone', name: 'phone', type: 'text' },
-            { label: 'Address', name: 'address', type: 'text' },
+            { label: 'Address', name: 'address', type: 'text', },
             { label: 'Bio', name: 'bio', type: 'textarea' },
-            { label: 'Website (Optional)', name: 'website', type: 'url' },
+            // { label: 'Website (Optional)', name: 'website', type: 'url' },
             { label: 'Facebook (Optional)', name: 'facebook', type: 'url' },
             { label: 'Instagram (Optional)', name: 'instagram', type: 'url' },
             { label: 'LinkedIn (Optional)', name: 'linkedin', type: 'url' },
-            { label: 'GitHub (Optional)', name: 'github', type: 'url' },
-            { label: 'WhatsApp (Optional)', name: 'whatsapp', type: 'number' },
+            // { label: 'GitHub (Optional)', name: 'github', type: 'url' },
+            // { label: 'WhatsApp (Optional)', name: 'whatsapp', type: 'number' },
           ].map(({ label, name, type, readOnly = false }) => (
             <label key={name} className={styles.label}>
               {label}:
@@ -232,6 +241,7 @@ const UserProfile = () => {
                   value={user[name]}
                   onChange={handleChange}
                   className={styles.textarea}
+                  required
                 />
               ) : (
                 <input

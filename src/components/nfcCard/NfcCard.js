@@ -14,10 +14,13 @@ const NfcCard = () => {
     isActive: true, 
   });
 
+  // State to manage the feature status
+  const [featureUnderDevelopment, setFeatureUnderDevelopment] = useState(true);
+
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('  https://api.onesec.shop/auth/users/me/', {
+      const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -37,7 +40,6 @@ const NfcCard = () => {
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
-
     }
   }, [navigate, userId, username]);
 
@@ -45,11 +47,16 @@ const NfcCard = () => {
     window.scrollTo(0, 0);
 
     fetchUserData();
-  }, []); 
+  }, [fetchUserData]); 
 
   return (
     <div className={styles.nfcContainer}>
       <Sidebar profileType={localStorage.getItem('profile_type')} />
+      {featureUnderDevelopment && (
+          <div className={styles.comingSoonBanner}>
+            <p className={styles.comingSoonText}>Feature Under Development - Coming Soon!</p>
+          </div>
+        )}
       <div className={styles.card}>
         <img src={logo} alt="Logo" className={styles.logo} />
         <div className={styles.userInfo}>

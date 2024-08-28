@@ -24,7 +24,7 @@ const Home = () => {
       if (token) {
         setIsAuthenticated(true);
         try {
-          const response = await axios.get('  https://api.onesec.shop/auth/users/me', {
+          const response = await axios.get('  http://localhost:8000/auth/users/me', {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -63,9 +63,10 @@ const Home = () => {
     <div className={styles.home}>
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <h1 data-aos="fade-left">Revolutionize Your Business Cards</h1>
-          <p data-aos="fade-up">Our innovative NFC Business Card platform helps you manage profiles, write information to NFC cards, and schedule appointments seamlessly. Say goodbye to traditional business cards and embrace the future.</p>
-          <div className={styles.btnDiv}>
+          <h1 data-aos="fade-left">Revolutionize Networking with NFC Business and Digital Cards</h1>
+          <p data-aos="fade-up">
+            Our NFC Eco System simplifies professional networking by helping you manage profiles, write to NFC cards, share digital cards, and schedule appointments effortlessly. Leave traditional business cards behind and embrace a smarter future.
+          </p>          <div className={styles.btnDiv}>
             <button className={styles.ctaButton1} onClick={handleCompanyButtonClick}>
               For Company <i className="ri-arrow-right-line"></i>
             </button>

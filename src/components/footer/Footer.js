@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../../assets/css/index/Footer.module.css';
 import Logo from '../../assets/img/logo.png';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -16,24 +17,26 @@ const Footer = () => {
         <div className={styles.offices}>
           <h3>Quick Links</h3>
           <ul>
-            <li>Home</li>
-            <li>About us</li>
-            <li>FAQs</li>
-            <li>Contact</li>
-            <li>Terms & Conditions</li>
+            <li><Link to="/">
+              Home
+            </Link></li>
+            <li><Link to="/about-us">
+              About us
+            </Link></li>
           </ul>
         </div>
         <div className={styles.offices}>
           <h3>Quick Actions</h3>
           <ul>
-            <li>Shedule an Appointment</li>
-            <li>Schedule Metting</li>
-            <li>Bussiness Cards</li>
-            <li>Pricing</li>
-            <li>Support</li>
+          <li><Link to="/faqs">
+              FAQs
+            </Link></li>
+            <li><Link to="/terms-and-conditions">
+              Terms and Conditions
+            </Link></li>
           </ul>
         </div>
-        <div className={styles.offices}>
+        {/* <div className={styles.offices}>
           <h3>Offices</h3>
           <ul>
             <li>Karachi</li>
@@ -42,7 +45,7 @@ const Footer = () => {
             <li>Rawalpindi</li>
             <li>Kharian</li>
           </ul>
-        </div>
+        </div> */}
         <div className={styles.followOneclick}>
           <h3>Follow One Sec</h3>
           <ul>

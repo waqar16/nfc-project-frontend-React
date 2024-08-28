@@ -12,12 +12,13 @@ import Footer from '../../components/footer/Footer';
 function HomeLayout() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true); // Track loading state
+  const [userLoggedIn, setUserLoggedin] = useState(false); // Track loading state
 
   useEffect(() => {
     // Check for auth token in localStorage
     const token = localStorage.getItem('authToken');
-
-    if (token) {
+    setUserLoggedin(true)
+    if (userLoggedIn) {
       // If token exists, fetch id, username, and profile_type from localStorage
       const id = localStorage.getItem('userId');
       const username = localStorage.getItem('username');
@@ -33,20 +34,20 @@ function HomeLayout() {
           navigate(`/employee-profile/${id}/${username}`);
         }
       } else {
-        console.error("Missing required data in localStorage");
+        console.error("Missing required data in localStorage"); 
       }
     } else {
       // If token does not exist, render landing page and reset UI if necessary
-      window.scrollTo(0, 0);
-      const profile = document.getElementById('profile');
-      if (profile) {
-        profile.classList.remove('show-profile');
-      }
+      // window.scrollTo(0, 0);
+      // const profile = document.getElementById('profile');
+      // if (profile) {
+      //   profile.classList.remove('show-profile');
+      // }
     }
 
     // Set loading to false after processing
     setLoading(false);
-  }, [navigate]);
+  }, []);
 
   // Render only when the authentication check is complete
   if (loading) {

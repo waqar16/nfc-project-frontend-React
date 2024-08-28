@@ -20,7 +20,7 @@ const SignupPage = () => {
     try {
       console.log('Google login response:', response);
       const profileType = isPersonalSignup ? "individual" : "company";
-      const res = await axios.post('https://api.onesec.shop/auth/custom-google-login/', {
+      const res = await axios.post('http://localhost:8000/auth/custom-google-login/', {
         access_token: tokenId,
         profile_type: profileType,
         authentication_type: 'google'
@@ -154,7 +154,7 @@ const PersonalSignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('  https://api.onesec.shop/auth/users/', {
+      const response = await axios.post('  http://localhost:8000/auth/users/', {
         first_name: firstName,
         last_name: lastName,
         email,
@@ -303,7 +303,7 @@ const CompanySignup = ({ navigate }) => {
     setPasswordError('');
 
     try {
-      const response = await axios.post('  https://api.onesec.shop/auth/users/', {
+      const response = await axios.post('  http://localhost:8000/auth/users/', {
         company_name: companyName,
         admin_name: adminName,
         email,

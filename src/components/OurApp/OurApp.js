@@ -15,10 +15,13 @@ const DownloadSection = () => {
 
   return (
     <section data-aos="fade-up" className={styles.downloadSection}>
-      <h2 className={styles.title}>Download Our App</h2>
+      <h2 className={styles.title}>Download The Latest Version Of Our App</h2>
       <p className={styles.subtitle}>
-        Download One Sec APP From Google Play Store And Apple APP Store To Manage Your Business And Personal Info By Your Self
+        Experience the full potential of our NFC Eco System with our mobile app. Download the One Sec APP from the Google Play Store or Apple App Store to:
       </p>
+      {/* <p className={styles.featuresDescription}>
+        Manage your business and personal profiles effortlessly, write and update information on your NFC cards on-the-go, create and share digital cards directly from your mobile device, schedule and manage appointments with ease, and access real-time analytics to track interactions.
+      </p> */}
       <div className={styles.badges}>
         <img src={googlePlayBadge} alt="Get it on Google Play" className={styles.badge} />
         <img src={appStoreBadge} alt="Available on the App Store" className={styles.badge} />
