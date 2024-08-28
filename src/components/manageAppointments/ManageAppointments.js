@@ -14,7 +14,7 @@ const ManageAppointments = () => {
 
     const fetchAppointments = useCallback(async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/get-meetings/?page=${page}`, {
+            const response = await axios.get(`https://letsconnect.onesec.shop/api/get-meetings/?page=${page}`, {
                 headers: { Authorization: `Token ${localStorage.getItem('authToken')}` }
             });
 
@@ -46,7 +46,7 @@ const ManageAppointments = () => {
     const handleDelete = async (id) => {
         try {
             // Assume you have a DELETE API endpoint for appointments
-            // await axios.delete(`http://localhost:8000/api/delete-appointment/${id}/`, {
+            // await axios.delete(`https://letsconnect.onesec.shop/api/delete-appointment/${id}/`, {
             //     headers: { Authorization: `Token ${localStorage.getItem('authToken')}` }
             // });
 

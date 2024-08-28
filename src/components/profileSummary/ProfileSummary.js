@@ -20,7 +20,7 @@ const ProfileSummary = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('  http://localhost:8000/auth/users/me/', {
+        const userResponse = await axios.get('  https://letsconnect.onesec.shop/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }

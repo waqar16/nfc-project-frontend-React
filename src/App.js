@@ -45,7 +45,7 @@ function App() {
       <div className="App">
         <Navbar />
         <Routes>
-          <Route path="/api/employees/complete-registration/:uid/:e_mail/:first_name/:last_name" element={<EmployeeSignup />} />
+          <Route path="/complete-registration/:uid/:e_mail/:first_name/:last_name" element={<EmployeeSignup />} />
           <Route path="/account-deletion" element={<AccountDeletion />} />
           <Route path="/login" element={<LoginLayout />} />
           <Route path="/signup" element={<SignupForm />} />

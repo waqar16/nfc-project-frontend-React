@@ -30,7 +30,7 @@ const AccountDeletion = () => {
 
             if (token) {
                 try {
-                    const response = await axios.get('http://localhost:8000/auth/users/me', {
+                    const response = await axios.get('https://letsconnect.onesec.shop/auth/users/me', {
                         headers: {
                             Authorization: `Token ${token}`,
                         },
@@ -78,7 +78,7 @@ const AccountDeletion = () => {
         try {
             const authToken = localStorage.getItem('authToken');
             const requestData = authType === 'google' ? {} : { current_password: password };
-            const endpoint = authType === 'google' ? `http://localhost:8000/auth/delete-user/` : `  http://localhost:8000/auth/users/me/`;
+            const endpoint = authType === 'google' ? `https://letsconnect.onesec.shop/auth/delete-user/` : `  https://letsconnect.onesec.shop/auth/users/me/`;
             const response = await axios.delete(endpoint, {
                 headers: {
                     Authorization: `Token ${authToken}`,

@@ -25,7 +25,7 @@ const TeamManagement = () => {
   const fetchCompanyAndEmployees = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const companyResponse = await axios.get('  http://localhost:8000/api/companies/', {
+      const companyResponse = await axios.get('  https://letsconnect.onesec.shop/api/companies/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -50,7 +50,7 @@ const TeamManagement = () => {
 
   const fetchEmployees = async (token) => {
     try {
-      const employeeResponse = await axios.get('http://localhost:8000/api/employees/', {
+      const employeeResponse = await axios.get('https://letsconnect.onesec.shop/api/employees/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -82,14 +82,14 @@ const TeamManagement = () => {
 
     try {
       if (isEditing) {
-        await axios.put(`http://localhost:8000/api/employees/${employee.email}/`, employee, {
+        await axios.put(`https://letsconnect.onesec.shop/api/employees/${employee.email}/`, employee, {
           headers: {
             Authorization: `Token ${token}`,
           },
         });
         alert('Employee updated successfully!');
       } else {
-        await axios.post('http://localhost:8000/api/employees/', employee, {
+        await axios.post('https://letsconnect.onesec.shop/api/employees/', employee, {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -133,7 +133,7 @@ const TeamManagement = () => {
   const handleDelete = async (email) => {
     const token = localStorage.getItem('authToken');
     try {
-      await axios.delete(`http://localhost:8000/api/employees/delete/${email}/`, {
+      await axios.delete(`https://letsconnect.onesec.shop/api/employees/delete/${email}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
