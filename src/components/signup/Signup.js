@@ -35,7 +35,16 @@ const SignupPage = () => {
       localStorage.setItem('authentication_type', res.data.authentication_type);
 
       // Redirect or perform additional actions
-      navigate('/');
+      
+      if (res.data.profile_type === 'company') {
+        navigate(`/company-profile/${res.data.user_id}/${res.data.username}`);
+      }
+      else if (res.data.profile_type === 'individual') {
+        navigate(`/user-profile/${res.data.user_id}/${res.data.username}`);
+      }
+      else if (res.data.profile_type === 'employee') {
+        navigate(`/employee-profile/${res.data.user_id}/${res.data.username}`);
+      }
       window.location.reload();
 
     } catch (error) {
