@@ -20,6 +20,8 @@
   flex: 1;
   max-width: 700px;
   text-align: center;
+  overflow-y: hidden;
+
 }
 
 .heroContent h1 {
@@ -27,7 +29,8 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  font-size: 2.48rem !important;
+  font-size: 2.5rem !important;
+  word-spacing: 10px;
   margin-bottom: 20px;
   /* letter-spacing: 1.3px !important; */
   line-height: 3rem !important;

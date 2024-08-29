@@ -219,8 +219,16 @@ img {
   display: flex;
   max-width: 1160px;
   justify-content: space-between;
+  /* width: fit-content; */
+  /* gap: 2.3rem; */
   align-items: center;
+
 }
+
+* {
+  overflow-x: hidden !important;
+}
+
 
 .nav__logo {
   height: 20px;
