@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import axios from 'axios';
+// import axios from 'axios';
 import styles from '../../assets/css/profiles/ScheduleMeeting.module.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ScheduleMeeting = ({ attendeeEmail, userId }) => {
   const [date, setDate] = useState(new Date());
@@ -13,6 +15,19 @@ const ScheduleMeeting = ({ attendeeEmail, userId }) => {
     time: ''
   });
   const [message, setMessage] = useState('');
+
+    const getQueryParams = (search) => {
+      return new URLSearchParams(search);
+  };
+
+  const queryParams = getQueryParams(location.search);
+  const status = queryParams.get('status');
+
+  if (status === 'success') {
+    toast.success('Meeting scheduled successfully.');
+  } else if (status === 'failure') {
+    toast.error('Error scheduling meeting.');
+  }
 
   const handleDateChange = (date) => {
     setDate(date);
@@ -131,6 +146,7 @@ const ScheduleMeeting = ({ attendeeEmail, userId }) => {
           </p>
         )}
       </form>
+      <ToastContainer/>
     </div> 
   );
 };
