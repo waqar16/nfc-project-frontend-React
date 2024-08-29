@@ -38,4 +38,26 @@
     margin-bottom: 10px;
     font-size: 1.1rem;
   }
+
+  @media screen and (max-width: 768px) {
+    .aboutUs__title {
+      font-size: 2rem;
+    }
+  
+    .aboutUs__intro {
+      font-size: 1.1rem;
+    }
+  
+    .aboutUs__subtitle {
+      font-size: 1.5rem;
+    }
+  
+    .aboutUs__list li {
+      font-size: 1rem;
+    }
+
+    .aboutUs {
+      margin-top: 10px;
+    }
+  }
   

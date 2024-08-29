@@ -45,4 +45,18 @@
     padding: 10px 20px;
     max-height: 500px; /* Adjust this to a value that fits your content */
   }
+
+  @media screen and (max-width: 768px) {
+    .faq__question {
+      font-size: 1rem;
+    }
   
+    .faq__answer {
+      padding: 0 10px;
+    }
+
+    .faq {
+      margin-top: -60px;
+    }
+    
+  }
