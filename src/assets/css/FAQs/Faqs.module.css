@@ -3,6 +3,8 @@
     margin: 0 auto;
     padding: 20px;
     padding-top: 8rem;
+    overflow: hidden;
+
   }
   
   .faq__title {
