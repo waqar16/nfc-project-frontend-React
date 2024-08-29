@@ -20,7 +20,7 @@ const ScheduleMeeting = ({ attendeeEmail, userId }) => {
       return new URLSearchParams(search);
   };
 
-  const queryParams = getQueryParams(location.search);
+  const queryParams = getQueryParams(window.location.search);
   const status = queryParams.get('status');
 
   if (status === 'success') {

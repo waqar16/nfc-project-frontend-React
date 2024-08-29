@@ -20,7 +20,8 @@
   flex: 1;
   max-width: 700px;
   text-align: center;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
+  overflow: hidden;
 
 }
 

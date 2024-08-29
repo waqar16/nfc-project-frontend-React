@@ -17,10 +17,10 @@ const Footer = () => {
         <div className={styles.offices}>
           <h3>Quick Links</h3>
           <ul>
-            <li><Link to="/">
+            <li><Link className={styles.link} to="/">
               Home
             </Link></li>
-            <li><Link to="/about-us">
+            <li><Link className={styles.link} to="/about-us">
               About us
             </Link></li>
           </ul>
@@ -28,10 +28,10 @@ const Footer = () => {
         <div className={styles.offices}>
           <h3>Quick Actions</h3>
           <ul>
-          <li><Link to="/faqs">
+          <li><Link className={styles.link} to="/faqs">
               FAQs
             </Link></li>
-            <li><Link to="/terms-and-conditions">
+            <li><Link className={styles.link} to="/terms-and-conditions">
               Terms and Conditions
             </Link></li>
           </ul>
