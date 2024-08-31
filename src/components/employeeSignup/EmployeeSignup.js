@@ -74,6 +74,7 @@ const EmployeeSignup = () => {
         username,
         password,
         profile_type: 'employee', 
+        authentication_type:'manual'
       });
 
       if (response.status === 201) {

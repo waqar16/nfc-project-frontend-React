@@ -3,12 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../sidebar/Sidebar'; 
 import styles from '../../assets/css/profiles/UserProfile.module.css';
-// import ProfilSummary from '../profileSummary/ProfileSummary'
-// import styles from '../../assets/css/profiles/ProfileSummary.module.css';
+import Loader from '../loader/Loader';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { uploadFileToS3 } from '../../s3Service';
+
 
 
 const EmployeeProfile = () => {
-  const {username } = useParams(); 
+  const {userId, username } = useParams(); 
   const navigate = useNavigate();
   const [user, setUser] = useState({
     first_name: '',
@@ -29,46 +32,50 @@ const EmployeeProfile = () => {
 
   });
   const [profileExists, setProfileExists] = useState(false);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
     const fetchUserData = async () => {
       try {
+        setLoading(true);
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('  https://api.onesec.shop/auth/users/me/', {
+        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
         });
 
         if (userResponse.status !== 200) {
-          console.log("khkkh")
+
           navigate('/login');
+          return;
         }
 
         const { id, first_name, last_name, email, profile_type, username: authenticatedUsername } = userResponse.data;
         console.log(profile_type)
         // Check if the userId and username from the URL match the authenticated user
-        if (profile_type !== 'employee' || username !== authenticatedUsername) {
-          // console.log(`UserId from URL: ${userId}, User ID from response: ${id}`);
-          console.log(`Username from URL: ${username}, Authenticated Username: ${authenticatedUsername}`);
+        if (profile_type !== 'employee' || userId !== id.toString() || username !== authenticatedUsername) {
           navigate('/not-authorized');
           return;
         }
-        setUser({
-          first_name: first_name,
-          last_name: last_name,
-          email: email
-        })
+
+        // setUser({
+        //   first_name: first_name,
+        //   last_name: last_name,
+        //   email: email
+        // })
 
         try {
-          const profileResponse = await axios.get(`  https://api.onesec.shop/api/employees/${email}/`, {
+          const profileResponse = await axios.get(`https://api.onesec.shop/api/employees/${email}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
           });
 
           setUser({
+            user: id,
             first_name: first_name,
             last_name: last_name,
             email: email,
@@ -83,14 +90,16 @@ const EmployeeProfile = () => {
             whatsapp: profileResponse.data.whatsapp || '',
             github: profileResponse.data.github || '',
             profile_pic: profileResponse.data.profile_pic || 'https://placehold.co/150x150',
-            receiveMarketingEmails: profileResponse.data.receiveMarketingEmails || false,
+            receive_marketing_emails: profileResponse.data.receive_marketing_emails || false,
 
           });
           setProfileExists(true);
+          setLoading(false);
         } catch (error) {
           if (error.response && error.response.status === 404) {
             // Profile does not exist
             setUser({
+              user: id,
               first_name: first_name,
               last_name: last_name,
               email: email,
@@ -105,17 +114,20 @@ const EmployeeProfile = () => {
               whatsapp: '',
               github: '', 
               profile_pic: 'https://placehold.co/150x150',
+              receive_marketing_emails: false,
             });
             setProfileExists(false);
+            setLoading(false);
           } else {
             console.error('Error fetching profile:', error);
+            setLoading(false);
           }
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          // Handle case where profile does not exist
           setProfileExists(false);
-          navigate('/login'); // Navigate to login page or relevant route
+          setLoading(false);
+          navigate('/login'); 
         } else {
           console.error('Error fetching profile:', error);
         }
@@ -124,14 +136,6 @@ const EmployeeProfile = () => {
 
     fetchUserData();
   }, [navigate, username]);
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setUser((prevUser) => ({
-  //     ...prevUser,
-  //     [name]: value,
-  //   }));
-  // };
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
@@ -149,62 +153,55 @@ const EmployeeProfile = () => {
   };
 
 
-  const handleProfilePicChange = (event) => {
+  const handleProfilePicChange = async event => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUser((prevUser) => ({
+      setLoading(true);
+      try {
+        const uploadResponse = await uploadFileToS3(file);
+        const profilePicUrl = uploadResponse.Location; // URL of the uploaded file
+
+        setUser(prevUser => ({
           ...prevUser,
-          profile_pic: reader.result
+          profile_pic: profilePicUrl,
         }));
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        toast.error('Failed to upload profile picture.');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('first_name', user.first_name);
-    formData.append('last_name', user.last_name);
-    formData.append('email', user.email);
-    formData.append('phone', user.phone);
-    formData.append('address', user.address);
-    formData.append('position', user.position);
-    formData.append('bio', user.bio);
-    formData.append('facebook', user.facebook);
-    formData.append('instagram', user.instagram);
-    formData.append('linkedin', user.linkedin);
-    formData.append('whatsapp', user.whatsapp);
-    formData.append('github', user.github);
-    formData.append('website', user.website);
-    if (user.profilePic) {
-      formData.append('profile_pic', user.profile_pic);
-    }
+    setLoading(true);
+
     try {
       const authToken = localStorage.getItem('authToken');
       if (profileExists) {
-        
-        await axios.put(`  https://api.onesec.shop/api/employees/${user.email}/`, formData, {
+        await axios.put(`https://api.onesec.shop/api/employees/${user.email}/`, user, {
           headers: {
             Authorization: `Token ${authToken}`,
-            'Content-Type': 'multipart/form-data',
           },
         });
-        alert('Profile updated successfully!');
+        // alert('Profile updated successfully!');
+        toast.success('Profile updated successfully!');
+        setLoading(false);
       } else {
-        await axios.post('  https://api.onesec.shop/api/employees/', formData, {
+        await axios.post('  https://api.onesec.shop/api/employees/', user, {
           headers: {
             Authorization: `Token ${authToken}`,
-            'Content-Type': 'multipart/form-data',
           },
         });
-        alert('Profile created successfully!');
+        // alert('Profile created successfully!');
+        setLoading(false);
+        toast.success('Profile created successfully!');
       }
       
       // Fetch updated profile data
-      const profileResponse = await axios.get(`  https://api.onesec.shop/api/employees/${user.email}/`, {
+      const profileResponse = await axios.get(`https://api.onesec.shop/api/employees/${user.email}/`, {
         headers: {
           Authorization: `Token ${authToken}`,
         },
@@ -213,8 +210,10 @@ const EmployeeProfile = () => {
       setUser(profileResponse.data);
       setProfileExists(true);
     } catch (error) {
+      setLoading(false);
       console.error('Error updating/creating profile:', error);
-      alert('Failed to update/create profile.');
+      // alert('Failed to update/create profile.');
+      toast.error('Failed to update/create profile.');
     }
   };
 
@@ -295,7 +294,7 @@ const EmployeeProfile = () => {
               value={user.position}
               onChange={handleChange}
               className={styles.input}
-              readOnly 
+              // readOnly 
               required
             />
           </label>
@@ -406,6 +405,8 @@ const EmployeeProfile = () => {
           </button>
         </form>
       </div>
+      {loading && <Loader />}
+      <ToastContainer />
     </div>
   );
 };

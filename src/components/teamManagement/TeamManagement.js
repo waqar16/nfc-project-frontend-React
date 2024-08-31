@@ -436,7 +436,7 @@ const TeamManagement = () => {
     setLoading(true);
     const token = localStorage.getItem('authToken');
     try {
-      await axios.delete(`https://api.onesec.shop/api/employees/${emailToDelete}/`, {
+      await axios.delete(`https://api.onesec.shop/api/employees/delete/${emailToDelete}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },

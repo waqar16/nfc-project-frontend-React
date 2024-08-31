@@ -332,3 +332,20 @@
   }
 }
 
+
+@media screen and (max-width: 768px) {
+  .loadMoreButton {
+    margin-top: 20px;
+    background: linear-gradient(to right, #6660FB, #FC4D53);
+    width: 70%;
+    color: #fff;
+    font-weight: var(--font-semi-bold);
+    padding: 1rem;
+    border-radius: 5rem;
+    cursor: pointer;
+    text-align: center; 
+    transition: transform 0.3s ease;
+  }
+  
+}
+

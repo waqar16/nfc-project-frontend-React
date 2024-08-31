@@ -75,7 +75,7 @@ const UserProfile = () => {
             ...prevUser,
             ...profileResponse.data,
             profile_pic: profileResponse.data.profile_pic || localStorage.getItem('profile_pic') || 'https://placehold.co/150x150',
-            receiveMarketingEmails: profileResponse.data.receiveMarketingEmails || false,
+            receive_marketing_emails: profileResponse.data.receive_marketing_emails || false,
           }));
           setProfileExists(true); // Mark profile as existing
 
@@ -91,7 +91,7 @@ const UserProfile = () => {
               profile_pic: localStorage.getItem('profile_pic') || 'https://placehold.co/150x150',
             }));
             setProfileExists(false); // Mark profile as not existing
-            // setReceiveMarketingEmails(false);
+            // setreceive_marketing_emails(false);
           } else {
             console.error('Error fetching profile:', error);
             toast.error('Failed to fetch profile data.');

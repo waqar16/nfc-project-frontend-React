@@ -69,7 +69,7 @@ function App() {
           <Route path="/manage-appointments/:userId/:username" element={<ManageAppointmentsLayout />} />
           <Route path="/company-card/:userId/:username" element={<CompanyCardLayout />} />
           <Route path="/company-card/:userId/:username/received-cards" element={<ListCompanyProfile />} />
-          <Route path="/profile/:userId/" element={<ReceivedProfileLayout />} />
+          <Route path="/profile/:identifier/" element={<ReceivedProfileLayout />} />
           <Route path="/company/:userId/" element={<ReceivedCompanyLayout />} />
           <Route path="/user-analytics/:userId/:username" element={<AnalyticsLayout/>}/>
           <Route path="/employee-profile/:userId/:username" element={<EmployeeProfileLayout/>}/>

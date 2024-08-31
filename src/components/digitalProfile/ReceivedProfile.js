@@ -5,14 +5,15 @@ import { useParams } from 'react-router-dom';
 import facebook from '../../assets/img/socials/facebook.png';
 import instagram from '../../assets/img/socials/instagram.png';
 import linkedin from '../../assets/img/socials/linkedin.png';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+// import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import ScheduleMeeting from '../../components/scheduleMeetings/ScheduleMeetings';
 import { ToastContainer, toast } from 'react-toastify';
 import Loader from '../loader/Loader';
+import { useGoogleLogin } from '@react-oauth/google';
 
 
 const ReceivedProfile = () => {
-  const { userId, email } = useParams();
+  const { identifier } = useParams();
   const [loading, setloading] = useState(true)
   const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
@@ -30,24 +31,40 @@ const ReceivedProfile = () => {
     profilePic: 'https://via.placeholder.com/150',
   });
 
-  const [isGoogleLoginVisible, setGoogleLoginVisible] = useState(false);
+  // const [isGoogleLoginVisible, setGoogleLoginVisible] = useState(false);
   const [profileType, setProfileType] = useState();
+  const [userId, setUserId] = useState();
+  const [email, serUrlEmail] = useState();
 
   const handleGoogleSuccess = async (response) => {
-    const tokenId = response.credential;
+    // const tokenId = response.credential;
+    const access_token = response.access_token;
 
     try {
       console.log('Google login response:', response);
-      const res = await axios.post('https://api.onesec.shop/auth/custom-google-login/', {
-        access_token: tokenId,
+      console.log('Google login response:', access_token);
+      const res = await axios.post('https://api.onesec.shop/api/share-back-profile/', {
+        access_token: access_token,
         profile_type: 'individual',
       });
 
-      localStorage.setItem('authToken', res.data.auth_token);
+      if (res.status === 200) {
+        localStorage.setItem('userId', res.data.user_id);
+        localStorage.setItem('authToken', res.data.auth_token);
+        localStorage.setItem('profile_type', res.data.profile_type);
+        localStorage.setItem('username', res.data.username);
+        localStorage.setItem('first_name', res.data.first_name);
+        localStorage.setItem('last_name', res.data.last_name);
+        localStorage.setItem('email', res.data.email);
+        localStorage.setItem('authentication_type', 'google');
+        localStorage.setItem('profile_pic', res.data.profile_pic);
+        // window.location.reload();
+      }
       await shareProfile();
     } catch (error) {
       console.error('Google login error:', error);
-      alert('Failed to login with Google.');
+      // alert('Failed to login with Google.');
+      toast.error('Failed to login with Google.');
     }
   };
 
@@ -56,15 +73,25 @@ const ReceivedProfile = () => {
     alert('Failed to login with Google.');
   };
 
+
+
   const fetchUserData = useCallback(async () => {
     try {
-      if (email) {
-        setProfileType('employee');
-      }
-      const endpoint = profileType === 'employee' ? `  https://api.onesec.shop/api/employees/${email}/` : `  https://api.onesec.shop/api/profiles/${userId}/`;
+      const isEmail = identifier.includes('@');
+      const profileType = isEmail ? 'employee' : 'profile'; // Ensure profileType is correctly set
+      
+      // Construct endpoint URL based on profile type
+      const endpoint = profileType === 'employee'
+        ? `https://api.onesec.shop/api/employees/${identifier}/` // Use identifier for email
+        : `https://api.onesec.shop/api/profiles/${identifier}/`;
+
       const profileResponse = await axios.get(endpoint);
 
+      console.log('Profile response:', profileResponse.status);
+
+
       const profileData = profileResponse.data;
+      console.log('Profile data:', profileData);
       setUser({
         user: profileData.user,
         firstName: profileData.first_name || '',
@@ -84,8 +111,14 @@ const ReceivedProfile = () => {
       // Create interaction when profile is viewed
       await createInteraction(profileData.user);
     } catch (error) {
+      if (error.response.status === 404) {
+        toast.error('Profile not found.');
+        setloading(false)
+        return;
+      }
       setloading(false)
       console.error('Error fetching user data:', error);
+      console.log('Error fetching user data:', error.response.status)
       toast.error("Error fetching user data")
     }
   }, [userId, profileType, email]);
@@ -100,7 +133,7 @@ const ReceivedProfile = () => {
           interaction_type: 'view_profile',
         },
       );
-      // console.log('Interaction created successfully');
+      console.log('Interaction created successfully');
     } catch (error) {
       console.error('Error creating interaction:', error);
     }
@@ -111,21 +144,37 @@ const ReceivedProfile = () => {
     fetchUserData();
   }, []);
 
+  // const shareProfileBack = async () => {
+  //   setloading(true)
+  //   const token = localStorage.getItem('authToken');
+  //   if (!token) {
+  //     setGoogleLoginVisible(true);
+  //     setloading(false)
+  //   } else {
+  //     await shareProfile();
+  //   }
+  // };
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: handleGoogleSuccess,
+    onError: handleGoogleFailure,
+    scope: 'openid profile email',
+  });
+
   const shareProfileBack = async () => {
-    setloading(true)
     const token = localStorage.getItem('authToken');
     if (!token) {
-      setGoogleLoginVisible(true);
-      setloading(false)
+      googleLogin();
     } else {
       await shareProfile();
     }
   };
-  const shareProfileBackButton = profileType !== 'company' && (
-    <button onClick={shareProfileBack} className={styles.actionButton}>
-      <i className="ri-share-forward-line"></i> <span>Share Your Profile Back</span>
-    </button>
-  );
+
+  // const shareProfileBackButton = profileType !== 'company' && (
+  //   <button onClick={shareProfileBack} className={styles.actionButton}>
+  //     <i className="ri-share-forward-line"></i> <span>Share Your Profile Back</span>
+  //   </button>
+  // );
 
   const shareProfile = async () => {
     setloading(true)
@@ -139,7 +188,7 @@ const ReceivedProfile = () => {
       const { id, first_name, last_name, email, profile_type } = userResponse.data;
 
       try {
-        const endpoint = profile_type === 'employee' ? `https://api.onesec.shop/api/employees/${email}/` : `  https://api.onesec.shop/api/profiles/${userId}/`;
+        const endpoint = profile_type === 'employee' ? `https://api.onesec.shop/api/employees/${identifier}/` : `  https://api.onesec.shop/api/profiles/${identifier}/`;
         await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`,
@@ -171,8 +220,10 @@ const ReceivedProfile = () => {
           Authorization: `Token ${token}`,
         },
       });
+      setloading(false)
       toast.success('Profile shared back successfully!');
     } catch (error) {
+      setloading(false)
       console.error('Error sharing profile back:', error);
       toast.error('Failed to share profile back.');
     }
@@ -201,7 +252,7 @@ const ReceivedProfile = () => {
 
 
   return (
-    <GoogleOAuthProvider clientId={clientId}>
+    // <GoogleOAuthProvider clientId={clientId}>
       <div className={styles.digitalProfileContainer}>
         <ToastContainer/>
         {loading && <Loader/>}
@@ -250,13 +301,13 @@ const ReceivedProfile = () => {
           <button onClick={addToContacts} className={styles.actionButton}>
             <i className="ri-user-add-line"></i> <span>Add to Contacts</span>
           </button>
-          {isGoogleLoginVisible && (
+          {/* {isGoogleLoginVisible && (
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onFailure={handleGoogleFailure}
               cookiePolicy={'single_host_origin'}
             />
-          )}
+          )} */}
         </div>
         </div>
         <ScheduleMeeting
@@ -264,8 +315,8 @@ const ReceivedProfile = () => {
           userId={userId}
         />
       </div>
-    </GoogleOAuthProvider>
-  );
+    // </GoogleOAuthProvider>
+  );  
 };
 
 export default ReceivedProfile;
