@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 // import axios from 'axios';
@@ -16,18 +16,20 @@ const ScheduleMeeting = ({ attendeeEmail, userId }) => {
   });
   const [message, setMessage] = useState('');
 
+  useEffect(() => {
     const getQueryParams = (search) => {
       return new URLSearchParams(search);
-  };
+    };
 
-  const queryParams = getQueryParams(window.location.search);
-  const status = queryParams.get('status');
+    const queryParams = getQueryParams(window.location.search);
+    const status = queryParams.get('status');
 
-  if (status === 'success') {
-    toast.success('Meeting scheduled successfully.');
-  } else if (status === 'failure') {
-    toast.error('Error scheduling meeting.');
-  }
+    if (status === 'success') {
+      setMessage({ type: 'success', text: 'Meeting scheduled successfully.' });
+    } else if (status === 'failure') {
+      setMessage({ type: 'error', text: 'Error scheduling meeting.' });
+    }
+  }, []); 
 
   const handleDateChange = (date) => {
     setDate(date);
@@ -64,7 +66,7 @@ const ScheduleMeeting = ({ attendeeEmail, userId }) => {
 
   const handleAuthAndSchedule = async () => {
     if (!validateForm()) {
-      return; // Exit if validation fails
+      return; 
     }
 
     try {
@@ -140,11 +142,11 @@ const ScheduleMeeting = ({ attendeeEmail, userId }) => {
           Schedule Meeting
         </button>
         {message && (
-          <p className={styles.message}>
-            <i className="fas fa-exclamation-circle" style={{ marginRight: '8px' }}></i>
-            {message}
-          </p>
-        )}
+  <p className={`${styles.message} ${message.type === 'success' ? styles.success : styles.error}`}>
+    <i className={`fas ${message.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`} style={{ marginRight: '8px' }}></i>
+    {message.text}
+  </p>
+)}
       </form>
       <ToastContainer/>
     </div> 
