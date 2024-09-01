@@ -428,7 +428,7 @@ const TeamManagement = () => {
       phone: emp.phone,
       company: emp.company,
     });
-    setOriginalEmail(emp.email);
+    setOriginalEmail(emp.email); 
     setIsEditing(true);
   };
 

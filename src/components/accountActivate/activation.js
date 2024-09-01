@@ -108,7 +108,7 @@ const Activation = () => {
 
   return (
     <div className={styles.login}>
-      <form className={styles.login__form} onSubmit={(e) => e.preventDefault()}>
+      <form className={styles.login__fom} onSubmit={(e) => e.preventDefault()}>
         <h2 className={styles.login__title}>Activating Your Account....</h2>
         {message && <p style={{ color: message.includes('successfully') ? 'green' : 'red' }}>{message}</p>}
       </form>

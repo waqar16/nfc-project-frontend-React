@@ -7,6 +7,8 @@ import Loader from '../loader/Loader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { uploadFileToS3 } from '../../s3Service';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 const UserProfile = () => {
   const { userId, username } = useParams();
@@ -131,6 +133,11 @@ const UserProfile = () => {
     }
   };
 
+  const handlePhoneChange = (value) => {
+    setUser({ ...user, phone: value });
+  };
+
+
 
   const handleProfilePicChange = async event => {
     const file = event.target.files[0];
@@ -223,15 +230,15 @@ const UserProfile = () => {
             { label: 'Last Name', name: 'last_name', type: 'text' },
             { label: 'Email', name: 'email', type: 'text', readOnly: true },
             { label: 'Position', name: 'position', type: 'text' },
-            { label: 'Phone', name: 'phone', type: 'text' },
+            { label: 'Phone', name: 'phone', type: 'phone' },
             { label: 'Address', name: 'address', type: 'text', },
             { label: 'Bio', name: 'bio', type: 'textarea' },
-            // { label: 'Website (Optional)', name: 'website', type: 'url' },
+            { label: 'Website (Optional)', name: 'website', type: 'url' },
             { label: 'Facebook (Optional)', name: 'facebook', type: 'url' },
             { label: 'Instagram (Optional)', name: 'instagram', type: 'url' },
             { label: 'LinkedIn (Optional)', name: 'linkedin', type: 'url' },
             // { label: 'GitHub (Optional)', name: 'github', type: 'url' },
-            // { label: 'WhatsApp (Optional)', name: 'whatsapp', type: 'number' },
+            { label: 'WhatsApp (Optional)', name: 'whatsapp', type: 'phone' },
           ].map(({ label, name, type, readOnly = false }) => (
             <label key={name} className={styles.label}>
               {label}:
@@ -239,9 +246,18 @@ const UserProfile = () => {
                 <textarea
                   name={name}
                   value={user[name]}
+                  placeholder={name==='bio' ? 'Tell us about yourself...' : ''}
                   onChange={handleChange}
                   className={styles.textarea}
                   required
+                />
+              ) : type === 'phone' ? (
+                <PhoneInput
+                  country={'sa'}
+                  value={user.phone}
+                  onChange={handlePhoneChange}
+                  inputClass={styles.input}
+                  specialLabel=""
                 />
               ) : (
                 <input
@@ -251,7 +267,16 @@ const UserProfile = () => {
                   onChange={handleChange}
                   className={styles.input}
                   readOnly={readOnly}
-                />
+                  placeholder={
+                    name === 'website' ? 'https://example.com' :
+                    name === 'facebook' ? 'https://facebook.com/username' :
+                    name === 'instagram' ? 'https://instagram.com/username' :
+                    name === 'linkedin' ? 'https://linkedin.com/in/username' :
+                    name === 'position' ? 'e.g Software Engineer' : 
+                    name === 'address' ? 'e.g Riyadh, Saudi Arabia' : ''
+
+                  }             
+                  />
               )}
             </label>
           ))}

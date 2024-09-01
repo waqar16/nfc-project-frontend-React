@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Label
 } from 'recharts';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
@@ -167,8 +167,12 @@ const Analytics = () => {
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={interactionFrequency}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="Period" />
-                <YAxis tickFormatter={(tick) => Math.round(tick)} />
+                <XAxis dataKey="Period">
+                <Label value="Period" offset={-5} position="insideBottom" />
+                </XAxis>
+                <YAxis tickFormatter={(tick) => Math.round(tick)}>
+                <Label value="Count" angle={-90} position="insideLeft" style={{ textAnchor: 'middle' }} />
+              </YAxis>
                 <Tooltip />
                 <Line type="monotone" dataKey="Count" stroke="purple" />
               </LineChart>
@@ -189,14 +193,18 @@ const Analytics = () => {
               />
             </div>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={peakInteractionTime}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="period" />
-                <YAxis tickFormatter={(tick) => Math.round(tick)} />
-                <Tooltip />
-                <Bar dataKey="count" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
+            <BarChart data={peakInteractionTime}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="period">
+                <Label value="Period" offset={-5} position="insideBottom" />
+              </XAxis>
+              <YAxis tickFormatter={(tick) => Math.round(tick)}>
+                <Label value="Count" angle={-90} position="insideLeft" style={{ textAnchor: 'middle' }} />
+              </YAxis>
+              <Tooltip />
+              <Bar dataKey="count" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
           </div>
         </div>
       </div>

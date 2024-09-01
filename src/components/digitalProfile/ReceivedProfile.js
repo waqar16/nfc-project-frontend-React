@@ -295,12 +295,19 @@ const ReceivedProfile = () => {
             </div>
           </div>
           <div className={styles.cardActions}>
+          <div className={styles.cardActionscontent}>
           <button onClick={shareProfileBack} className={styles.actionButton}>
-            <i className="ri-share-forward-line"></i> <span>Share Your Profile Back</span>
+            <i className="ri-share-forward-line"></i>
           </button>
+          <span>Share Back</span>
+          </div>
+          <div className={styles.cardActionscontent}>
+
           <button onClick={addToContacts} className={styles.actionButton}>
-            <i className="ri-user-add-line"></i> <span>Add to Contacts</span>
+            <i className="ri-user-add-line"></i> 
           </button>
+          <span>Add Contact</span>
+          </div>
           {/* {isGoogleLoginVisible && (
             <GoogleLogin
               onSuccess={handleGoogleSuccess}

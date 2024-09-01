@@ -7,6 +7,8 @@ import Loader from '../loader/Loader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { uploadFileToS3 } from '../../s3Service';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 
 
@@ -150,6 +152,10 @@ const EmployeeProfile = () => {
         [name]: value,
       }));
     }
+  };
+
+  const handlePhoneChange = (value) => {
+    setUser({ ...user, phone: value });
   };
 
 
@@ -299,13 +305,13 @@ const EmployeeProfile = () => {
             />
           </label>
           <label className={styles.label}>
-            Phone:
-            <input
-              type="text"
-              name="phone"
+            Phone Number:
+            <PhoneInput
+              country={'sa'}
               value={user.phone}
-              onChange={handleChange}
-              className={styles.input}
+              onChange={handlePhoneChange}
+              inputClass={styles.input}
+              specialLabel=""
               required
             />
           </label>
@@ -316,6 +322,7 @@ const EmployeeProfile = () => {
               name="address"
               value={user.address}
               onChange={handleChange}
+              placeholder='Riyadh, Saudi Arabia'
               className={styles.input}
               required
             />
@@ -326,6 +333,7 @@ const EmployeeProfile = () => {
               name="bio"
               value={user.bio}
               onChange={handleChange}
+              placeholder='Tell us about yourself'
               className={styles.textarea}
               required
             ></textarea>
@@ -336,6 +344,7 @@ const EmployeeProfile = () => {
               type="url"
               name="website"
               value={user.website}
+              placeholder='https://example.com'
               onChange={handleChange}
               className={styles.input}
             />
@@ -346,6 +355,7 @@ const EmployeeProfile = () => {
               type="url"
               name="facebook"
               value={user.facebook}
+              placeholder='https://facebook.com/username'
               onChange={handleChange}
               className={styles.input}
             />
@@ -356,6 +366,7 @@ const EmployeeProfile = () => {
               type="url"
               name="instagram"
               value={user.instagram}
+              placeholder='https://instagram.com/username'
               onChange={handleChange}
               className={styles.input}
             />
@@ -366,11 +377,12 @@ const EmployeeProfile = () => {
               type="url"
               name="linkedin"
               value={user.linkedin}
+              placeholder='https://linkedin.com/in/username'
               onChange={handleChange}
               className={styles.input}
             />
           </label>
-          <label className={styles.label}>
+          {/* <label className={styles.label}>
             Github (Optional):
             <input
               type="url"
@@ -379,15 +391,15 @@ const EmployeeProfile = () => {
               onChange={handleChange}
               className={styles.input}
             />
-          </label>
+          </label> */}
           <label className={styles.label}>
             Whatsapp (Optional):
-            <input
-              type='number'
-              name="whatsapp"
-              value={user.whatsapp}
-              onChange={handleChange}
-              className={styles.input}
+            <PhoneInput
+              country={'sa'}
+              value={user.phone}
+              onChange={handlePhoneChange}
+              inputClass={styles.input}
+              specialLabel=""
             />
           </label>
           <label className={styles.label}>

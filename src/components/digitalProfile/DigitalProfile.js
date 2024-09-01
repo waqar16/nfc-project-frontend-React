@@ -29,10 +29,12 @@ const DigitalProfile = () => {
     phone: '',
     position: '',
     address: '',
+    website: '',
     bio: '',
     facebook: '',
     instagram: '',
     linkedin: '',
+    whatsapp: '',
     profilePic: 'https://via.placeholder.com/150',
   });
 
@@ -72,9 +74,11 @@ const DigitalProfile = () => {
           position: profileData.position || '',
           address: profileData.address || '',
           bio: profileData.bio || '',
+          website: profileData.website || '',
           facebook: profileData.facebook || '',
           instagram: profileData.instagram || '',
           linkedin: profileData.linkedin || '',
+          whatsapp: profileData.whatsapp || '',
           profilePic: profileData.profile_pic || 'https://via.placeholder.com/150',
         });
         setLoading(false);
@@ -216,6 +220,9 @@ const DigitalProfile = () => {
     return `${Math.floor(secondsPast / 31536000)} years ago`;
   }
 
+
+  
+
   return (
     <>
       <div className={styles.digitalProfileContainer}>
@@ -239,6 +246,8 @@ const DigitalProfile = () => {
               <p><i className="ri-mail-fill"></i> {user.email}</p>
               <p><i className="ri-phone-fill"></i> {user.phone}</p>
               <p><i className="ri-map-pin-fill"></i> {user.address}</p>
+              <p><i className="ri-global-fill"></i> <a href={user.website} target="_blank" rel="noopener noreferrer">{user.website}</a></p>
+
             </div>
             <div className={styles.socialIcons}>
               {user.facebook && (
@@ -256,8 +265,29 @@ const DigitalProfile = () => {
                   <img className={styles.icon} src={linkedin} alt="LinkedIn" />
                 </a>
               )}
+              {user.whatsapp && (
+                <a
+                href={`https://wa.me/${user.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img className={styles.icon} src={whatsapp} alt="WhatsApp" />
+              </a>
+              )}
             </div>
           </div>
+          <div className={styles.cardActions}>
+          <div className={styles.cardActionscontent}>
+
+        <button onClick={handleShareToCard} className={styles.actionButton}>
+          <i className="ri-share-forward-line"></i> 
+        </button>
+        <span>Share Profile</span>
+        {/* <button onClick={handleWriteToNFC} className={styles.actionButton}>
+          <i className="ri-wifi-line"></i> <span>Write to NFC</span>
+        </button> */}
+      </div>
+      </div>
         </div>
 
         <ShareProfileModal
@@ -297,14 +327,7 @@ const DigitalProfile = () => {
           <Link to="received-cards">Load More</Link>
         </div>
       </div>
-      <div className={styles.cardActions}>
-        <button onClick={handleShareToCard} className={styles.actionButton}>
-          <i className="ri-share-forward-line"></i> <span>Share Profile</span>
-        </button>
-        <button onClick={handleWriteToNFC} className={styles.actionButton}>
-          <i className="ri-wifi-line"></i> <span>Write to NFC</span>
-        </button>
-      </div>
+
       {loading && <Loader />}
       <ToastContainer />
     </>

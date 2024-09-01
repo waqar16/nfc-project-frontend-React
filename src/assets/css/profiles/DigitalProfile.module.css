@@ -38,13 +38,13 @@
 }
 
 .profileCard .profileHeader {
-  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
-  background: linear-gradient(49deg, #00c6ff, #0072ff, #8e2de2, #fc248d);
-  /* padding: 20px; */
+  background-image: url('../../img/R.jpg'); /* Replace with the actual path to your image */
+  background-size: cover; /* Ensures the image covers the entire element */
+  background-position: center; /* Centers the image */
   border-bottom: 1px solid #ddd;
   display: flex;
   justify-content: center;
-  height: 200px ;
+  height: 200px;
 }
 
 .profileHeaderCompany{
@@ -146,12 +146,18 @@ padding: 20px;
 .icon{
   height: 30px;
 }
-
+.cardActionscontent{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  
+}
 .cardActions {
   display: flex;
   justify-content: center;
   flex-direction: row;
-  align-items: center;
+  padding: 10px;
+  gap: 20px;
   margin-bottom:100px;
 }
 
@@ -174,9 +180,11 @@ padding: 20px;
 }
 
 .actionButton:hover {
-  width: 160px; /* Expanded width to fit the text */
-  border-radius: 20px; /* Adjusts the border-radius to make it less round and more like a traditional button */
-  padding: 15px 20px; /* Adjust padding if needed */
+  /* width: 160px; 
+  border-radius: 20px; 
+  padding: 15px 20px;  */
+  background-color: #8398f5;
+
 }
 
 .actionButton i{
@@ -374,10 +382,10 @@ padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: white;
+  /* background-color: white; */
   padding: 0px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
   margin-top: 20px;
 }
 

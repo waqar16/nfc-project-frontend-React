@@ -63,7 +63,7 @@ const CompanyCard = () => {
           admin_name: companyResponse.data.admin_name || '',
           email: email || '',
           phone: companyResponse.data.phone || '',
-          companyLogo: companyResponse.data.companyLogo || logo,
+          companyLogo: companyResponse.data.company_logo || logo,
           address: companyResponse.data.address || '',
           company_description: companyResponse.data.company_description || '',
           website: companyResponse.data.website || '',
@@ -241,6 +241,14 @@ const CompanyCard = () => {
               )}
             </div>
           </div>
+          <div className={styles.cardActions}>
+            <div className={styles.cardActionscontent}>
+        <button onClick={handleShareToCard} className={styles.actionButton}>
+          <i className="ri-share-forward-line"></i> 
+        </button>
+        <span>Share Profile</span>
+      </div>
+        </div>
         </div>
 
         <ShareProfileModal
@@ -280,11 +288,6 @@ const CompanyCard = () => {
         </div>
       </div>
 
-      <div className={styles.cardActions}>
-        <button onClick={handleShareToCard} className={styles.actionButton}>
-          <i className="ri-share-forward-line"></i> <span>Share Profile</span>
-        </button>
-      </div>
       {loading && <Loader />}
       <ToastContainer />
     </>

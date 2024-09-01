@@ -2,14 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../sidebar/Sidebar';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import styles from '../../assets/css/profiles/CompanyProfile.module.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
+import { uploadFileToS3 } from '../../s3Service';
+
 
 const CompanyProfile = () => {
 
   const { userId, username } = useParams();
+  const [logo, setLogo] = useState(null);
+
   const navigate = useNavigate();
   const [company, setCompany] = useState({
     user: userId,
@@ -17,7 +23,7 @@ const CompanyProfile = () => {
     admin_name: '',
     email: '',
     phone: '',
-    companyLogo: '',
+    company_logo: null,
     address: '',
     company_description: '',
     website: '',
@@ -72,13 +78,13 @@ const CompanyProfile = () => {
             admin_name: companyResponse.data.admin_name || '',
             email: email || '',
             phone: companyResponse.data.phone || '',
-            companyLogo: companyResponse.data.companyLogo || '',
+            company_logo: companyResponse.data.company_logo || '',
             address: companyResponse.data.address || '',
             company_description: companyResponse.data.company_description || '',
             website: companyResponse.data.website || '',
             linkedin: companyResponse.data.linkedin || '',
             employees: companyResponse.data.employees || [],
-            receiveMarketingEmails: companyResponse.data.receive_marketing_emails || false,
+            receive_marketing_emails: companyResponse.data.receive_marketing_emails || false,
           });
           setProfileExists(true);
           setLoading(false)
@@ -91,7 +97,7 @@ const CompanyProfile = () => {
               company_name: company_name || '',
               admin_name: admin_name || '',
               email: email || '',
-              companyLogo: '',
+              company_logo: '',
               phone: '',
               address: '',
               company_description: '',
@@ -127,34 +133,66 @@ const CompanyProfile = () => {
   //   }));
   // };
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked } = e.target;
   
+  //   if (type === 'checkbox') {
+  //     setCompany((prevCompany) => ({
+  //       ...prevCompany,
+  //       [name]: checked,
+  //     }));
+  //   } else {
+  //     setCompany((prevCompany) => ({
+  //       ...prevCompany,
+  //       [name]: value,
+  //     }));
+  //   }
+  // };
+
+  const handleChange = e => {
+    const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
-      setCompany((prevCompany) => ({
+      setCompany(prevCompany => ({
         ...prevCompany,
         [name]: checked,
       }));
     } else {
-      setCompany((prevCompany) => ({
+      setCompany(prevCompany => ({
         ...prevCompany,
         [name]: value,
       }));
     }
   };
+
+  const handlePhoneChange = (value) => {
+    setCompany({ ...company, phone: value });
+  };
   
 
 
-  const handlecompanyLogoChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setCompany((prevCompany) => ({
-        ...prevCompany,
-        companyLogo: reader.result,
-      }));
-    };
-    reader.readAsDataURL(file);
+  const handlecompany_logoChange = async event => {
+    const file = event.target.files[0];
+    if (file) {
+      setLoading(true);
+      try {
+        const uploadResponse = await uploadFileToS3(file);
+        const profileLogoUrl = uploadResponse.Location; 
+        console.log('Profile Logo URL:', profileLogoUrl);
+  
+        // Update the logo URL in the company object
+        setCompany(prevCompany => ({
+          ...prevCompany,
+          company_logo: profileLogoUrl
+        }));
+        setLogo(profileLogoUrl);
+  
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        toast.error('Failed to upload logo.');
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
 
@@ -217,6 +255,19 @@ const CompanyProfile = () => {
       <div className={styles.formContainer}>
         <h2>Company Profile Management</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.profilePicContainer}>
+            <img src={company.company_logo} alt="Profile" className={styles.profilePic} />
+            <label htmlFor="profilePicInput" className={styles.editIcon}>
+              <i className="ri-edit-2-line"></i>
+            </label>
+            <input
+              type="file"
+              id="profilePicInput"
+              className={styles.profilePicInput}
+              onChange={handlecompany_logoChange}
+              accept="image/*"
+            />
+          </div>
           {/* Hidden input for company ID */}
           <input
             type="hidden"
@@ -256,6 +307,7 @@ const CompanyProfile = () => {
               type="email"
               name="email"
               value={company.email}
+              placeholder='email@example.com'
               onChange={handleChange}
               className={styles.input}
               readOnly // Assuming email is not editable
@@ -264,25 +316,25 @@ const CompanyProfile = () => {
           </label>
           {/* Phone */}
           <label className={styles.label}>
-            Phone:
-            <input
-              type="tel"
-              name="phone"
+            Phone Number:
+            <PhoneInput
+              country={'sa'}
               value={company.phone}
-              onChange={handleChange}
-              className={styles.input}
-              required
+              onChange={handlePhoneChange}
+              inputClass={styles.input}
+              specialLabel=""
             />
           </label>
-          <label className={styles.label}>
+          {/* <label className={styles.label}>
             Compnay Logo:
             <input
               type="file"
-              id="companyLogo"
+              id="company_logo"
               className={styles.input}
-              onChange={handlecompanyLogoChange}
+              onChange={handlecompany_logoChange}
+              accept="image/*"
             />
-          </label>
+          </label> */}
 
           {/* Address */}
           <label className={styles.label}>
@@ -291,6 +343,7 @@ const CompanyProfile = () => {
               type="text"
               name="address"
               value={company.address}
+              placeholder='1234 Main St, City, Country'
               onChange={handleChange}
               className={styles.input}
               required
@@ -304,6 +357,7 @@ const CompanyProfile = () => {
               value={company.company_description}
               onChange={handleChange}
               className={styles.textarea}
+              placeholder='Tell us about your company...'
               required
             ></textarea>
           </label>
@@ -314,6 +368,7 @@ const CompanyProfile = () => {
               type="url"
               name="website"
               value={company.website}
+              placeholder='https://example.com'
               onChange={handleChange}
               className={styles.input}
             />
@@ -324,6 +379,7 @@ const CompanyProfile = () => {
               type="url"
               name="linkedin"
               value={company.linkedin}
+              placeholder='https://linkedin.com/company'
               onChange={handleChange}
               className={styles.input}
             />

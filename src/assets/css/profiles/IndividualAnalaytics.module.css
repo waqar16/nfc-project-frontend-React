@@ -236,16 +236,25 @@
   .analyticsContainer {
     padding: 0px;
   }
+
+  .analyticTitle {
+    text-align: center;
+    margin-top: 100px;
+    padding: 15px;
+  }
   
   .card {
     width: 100%;
-    background-color: #ffffff;
-    border-radius: 8px;
+    /* background-color: #ffffff; */
+    /* border-radius: 8px; */
     padding: 0px;
     /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
   }
   
-  
+  .chartHeader{
+    padding: 20px;
+    font-size: small;
+  }
 }
 
 

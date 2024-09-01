@@ -20,7 +20,7 @@ body{
   --first-color: hsl(230, 75%, 56%);
   --title-color: hsl(230, 75%, 15%);
   --text-color: hsl(230, 12%, 40%);
-  --body-color: hsl(230, 100%, 98%);
+  --body-color: hsl(0, 0%, 100%);
   --container-color: hsl(230, 100%, 97%);
   --border-color: hsl(230, 25%, 80%);
 

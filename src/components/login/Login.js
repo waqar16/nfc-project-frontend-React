@@ -6,6 +6,7 @@ import logo from '../../assets/img/logo.png';
 // import google from '../../assets/img/socials/google.png';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginPage = () => {
   const [isPersonalLogin, setIsPersonalLogin] = useState(true); // State to toggle between personal and company login
@@ -61,7 +62,7 @@ const LoginPage = () => {
     } catch (error) {
       console.error('Google login error:', error);
       if (error.response && error.response.data && error.response.data.error) {
-        alert(`${error.response.data.error}`);
+        toast.error(`${error.response.data.error}`);
     } else {
         // alert('An unexpected error occurred. Please try again.');
         toast.error("An unexpected error occurred. Please try again.")

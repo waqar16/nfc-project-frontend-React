@@ -6,6 +6,8 @@ import axios from 'axios';
 import logo from '../../assets/img/logo.png';
 // import google from '../../assets/img/socials/google.png';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignupPage = () => {
   const [isPersonalSignup, setIsPersonalSignup] = useState(true); // State to toggle between personal and company signup
@@ -49,6 +51,12 @@ const SignupPage = () => {
 
     } catch (error) {
       console.error('Google login error:', error);
+      if (error.response && error.response.data && error.response.data.error) {
+        toast.error(`${error.response.data.error}`);
+      } else {
+        // alert('An unexpected error occurred. Please try again.');
+        toast.error("An unexpected error occurred. Please try again.")
+    }
     }
   };
 
@@ -108,6 +116,7 @@ const SignupPage = () => {
           </p>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

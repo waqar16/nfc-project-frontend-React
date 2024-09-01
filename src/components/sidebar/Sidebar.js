@@ -2,10 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../../assets/css/index/Sidebar.module.css';
 import axios from 'axios';
+import logo from '../../assets/img/logo.png';
+import { useNavigate } from 'react-router-dom';
+
 
 const Sidebar = ({ profileType }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [userData, setUserData] = useState({});
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    navigate('/login');
+    window.location.reload();
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -16,7 +26,7 @@ const Sidebar = ({ profileType }) => {
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('  https://api.onesec.shop/auth/users/me/', {
+      const response = await axios.get('https://api.onesec.shop/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -35,6 +45,9 @@ const Sidebar = ({ profileType }) => {
   return (
     <div>
       <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
+        <div className={styles.sidebarLogo}>
+          <img src={logo} alt="logo" className={styles.sidebar__logo} />
+        </div>
         <div className={styles.sidebar__header}></div>
         <ul className={styles.sidebar__list}>
           {profileType === 'individual' && (
@@ -45,6 +58,7 @@ const Sidebar = ({ profileType }) => {
                   Profile Summary
                 </Link>
               </li> */}
+
               <div className={styles.sidebar__toggle} onClick={toggleSidebar}>
                 <i className="ri-menu-line"></i>
               </div>
@@ -84,6 +98,10 @@ const Sidebar = ({ profileType }) => {
                   Account Deletion
                 </Link>
               </li>
+              <li className={styles.sidebar__item} onClick={handleLogout}>
+                  <i className="ri-logout-box-line"></i>
+                  Logout
+                </li>
             </>
           )}
           {profileType === 'company' && (
@@ -115,8 +133,8 @@ const Sidebar = ({ profileType }) => {
               </li>
               <li className={styles.sidebar__item}>
                 <Link to={`/company-card/${userData.id}/${userData.username}`}>
-                <i className="ri-file-text-line"></i>
-                Company Card
+                  <i className="ri-file-text-line"></i>
+                  Company Card
                 </Link>
               </li>
               <li className={styles.sidebar__item}>
@@ -125,6 +143,10 @@ const Sidebar = ({ profileType }) => {
                   Account Deletion
                 </Link>
               </li>
+              <li className={styles.sidebar__item} onClick={handleLogout}>
+                  <i className="ri-logout-box-line"></i>
+                  Logout
+                </li>
             </>
           )}
           {profileType === 'employee' && (
@@ -159,9 +181,16 @@ const Sidebar = ({ profileType }) => {
                   Analytics
                 </Link>
               </li>
+              <li className={styles.sidebar__item} onClick={handleLogout}>
+                  <i className="ri-logout-box-line"></i>
+                  Logout
+                </li>
             </>
           )}
         </ul>
+        <div className={styles.sidebar__footer}>
+          <p>© 2024 by One Sec. All rights reserved.</p>
+        </div>
       </div>
       <div className={styles.sidebar__toggle} onClick={toggleSidebar}>
         <i className="ri-menu-line"></i>

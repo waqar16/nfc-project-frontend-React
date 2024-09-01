@@ -27,7 +27,7 @@ const ReceivedCompany = () => {
     admin_name: '',
     email: '',
     phone: '',
-    companyLogo: '',
+    company_logo: '',
     address: '',
     company_description: '',
     website: '',
@@ -79,7 +79,7 @@ const ReceivedCompany = () => {
         admin_name: response.data.admin_name || '',
         email: response.data.email || '',
         phone: response.data.phone || '',
-        companyLogo: response.data.companyLogo || '',
+        company_logo: response.data.company_logo || '',
         address: response.data.address || '',
         company_description: response.data.company_description || '',
         website: response.data.website || '',
@@ -237,7 +237,7 @@ const shareProfile = async () => {
         <div className={styles.profileCard}>
           <div className={styles.profileHeaderCompany}>
             <div className={styles.profileinfo}>
-              <img src={company.companyLogo || logo} alt="Company Logo" width={150} className={styles.logo} />
+              <img src={company.company_logo || logo} alt="Company Logo" width={150} className={styles.logo} />
               <div className={styles.name}>{company.company_name}</div>
               <div className={styles.position}>{company.admin_name}</div>
             </div>
@@ -265,10 +265,10 @@ const shareProfile = async () => {
           </div>
           <div className={styles.cardActions}>
           <button onClick={shareProfileBack} className={styles.actionButton}>
-            <i className="ri-share-forward-line"></i> <span>Share Your Profile Back</span>
+            <i className="ri-share-forward-line"></i> <span>Share Back</span>
           </button>
           <button onClick={addToContacts} className={styles.actionButton}>
-            <i className="ri-user-add-line"></i> <span>Add to Contacts</span>
+            <i className="ri-user-add-line"></i> <span>Add Contact</span>
           </button>
           {isGoogleLoginVisible && (
             <GoogleLogin

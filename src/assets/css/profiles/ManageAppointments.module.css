@@ -9,6 +9,10 @@
   margin: 0 auto;
 }
 
+.viewCardButton{
+  cursor: pointer;
+}
+
 .appointmentItem {
   background: linear-gradient(135deg, #ffffff, #f7f9fc);
   padding: 20px;

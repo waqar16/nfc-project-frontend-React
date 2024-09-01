@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 import { useEffect,useState } from 'react';
 import NotFoundPage from './components/404Page/404Page';
 import NotAuthorizedPage from './components/404Page/notAuthorized';
@@ -41,6 +42,7 @@ function App() {
     
   }, []);
   return (
+    <AuthProvider>
     <Router>
       <div className="App">
         <Navbar />
@@ -81,6 +83,8 @@ function App() {
         </Routes>
       </div>
     </Router>
+    </AuthProvider>
+
   );
 }
 
