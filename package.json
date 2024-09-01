@@ -39,6 +39,7 @@
     "remixicon-react": "^1.0.0",
     "topojson": "^3.0.2",
     "vcard-creator": "^0.7.1",
+    "vcard-js": "^1.2.2",
     "vcards-js": "^2.10.0",
     "web-vitals": "^2.1.4"
   },

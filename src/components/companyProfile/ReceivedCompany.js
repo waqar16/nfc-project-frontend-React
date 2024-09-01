@@ -238,15 +238,15 @@ const shareProfile = async () => {
 
 const addToContacts = () => {
   // Construct vCard data
-  const contactData = `
-    BEGIN:VCARD
-    VERSION:3.0
-    FN:${company.admin_name}
-    EMAIL:${company.email}
-    TEL:${company.phone}
-    ADR:${company.address}
-    END:VCARD
-  `;
+      const contactData = `
+        BEGIN:VCARD
+        VERSION:3.0
+        FN:${company.admin_name}
+        EMAIL:${company.email}
+        TEL:${company.phone}
+        ADR:${company.address}
+        END:VCARD
+      `;
 
   // Create a Blob object
   const blob = new Blob([contactData], { type: 'text/vcard' });

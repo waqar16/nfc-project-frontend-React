@@ -239,8 +239,8 @@ const ReceivedProfile = () => {
       VERSION:3.0
       FN:${user.firstName} ${user.lastName}
       EMAIL:${user.email}
-      TEL:${user.phone}
-      ADR:${user.address}
+      TEL;TYPE=mobile:${user.phone}
+      ADR;TYPE=home:;;${user.address};;;;
       END:VCARD
     `;
   
