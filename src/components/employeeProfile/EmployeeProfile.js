@@ -63,11 +63,14 @@ const EmployeeProfile = () => {
           return;
         }
 
-        // setUser({
-        //   first_name: first_name,
-        //   last_name: last_name,
-        //   email: email
-        // })
+        setUser(prevUser => ({
+          ...prevUser,
+          user: id,
+          first_name,
+          last_name,
+          email,
+        }));
+
 
         try {
           const profileResponse = await axios.get(`https://api.onesec.shop/api/employees/${email}/`, {
@@ -76,11 +79,8 @@ const EmployeeProfile = () => {
             },
           });
 
-          setUser({
-            user: id,
-            first_name: first_name,
-            last_name: last_name,
-            email: email,
+        setUser(prevUser => ({
+          ...prevUser,
             phone: profileResponse.data.phone || '',
             address: profileResponse.data.address || '',
             bio: profileResponse.data.bio || '',
@@ -94,7 +94,7 @@ const EmployeeProfile = () => {
             profile_pic: profileResponse.data.profile_pic || 'https://placehold.co/150x150',
             receive_marketing_emails: profileResponse.data.receive_marketing_emails || false,
 
-          });
+          }));
           setProfileExists(true);
           setLoading(false);
         } catch (error) {

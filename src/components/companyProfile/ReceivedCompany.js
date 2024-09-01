@@ -5,13 +5,15 @@ import { useParams } from 'react-router-dom';
 import facebook from '../../assets/img/socials/facebook.png';
 import instagram from '../../assets/img/socials/instagram.png';
 import linkedin from '../../assets/img/socials/linkedin.png';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+// import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import logo from '../../assets/img/logo.png';
 import ScheduleMeeting from '../../components/scheduleMeetings/ScheduleMeetings';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
 import {useNavigate } from 'react-router-dom';
+import { useGoogleLogin } from '@react-oauth/google';
+
 
 
 
@@ -35,43 +37,60 @@ const ReceivedCompany = () => {
     employees: [],
   });
 
-  const [isGoogleLoginVisible, setGoogleLoginVisible] = useState(false);
+  // const [isGoogleLoginVisible, setGoogleLoginVisible] = useState(false);
 
   const handleGoogleSuccess = async (response) => {
-    const tokenId = response.credential;
+    // const tokenId = response.credential;
+    const access_token = response.access_token;
 
     try {
-      setLoading(true);
       console.log('Google login response:', response);
-      const res = await axios.post('  https://api.onesec.shop/auth/custom-google-login/', {
-        access_token: tokenId,
-        profile_type: 'company',
+      console.log('Google login response:', access_token);
+      const res = await axios.post('https://api.onesec.shop/api/share-back-profile/', {
+        access_token: access_token,
+        profile_type: 'individual',
       });
 
-      localStorage.setItem('authToken', res.data.auth_token);
+      if (res.status === 200) {
+        localStorage.setItem('userId', res.data.user_id);
+        localStorage.setItem('authToken', res.data.auth_token);
+        localStorage.setItem('profile_type', res.data.profile_type);
+        localStorage.setItem('username', res.data.username);
+        localStorage.setItem('first_name', res.data.first_name);
+        localStorage.setItem('last_name', res.data.last_name);
+        localStorage.setItem('email', res.data.email);
+        localStorage.setItem('authentication_type', 'google');
+        localStorage.setItem('profile_pic', res.data.profile_pic);
+        // window.location.reload();
+      }
+
+      else if (res.status === 400) {
+        console.error('Google login error:', res.error);
+        toast.error(res.error);
+      }
       await shareProfile();
-      setGoogleLoginVisible(false);
-      setLoading(false);
     } catch (error) {
-      setLoading(false);
       console.error('Google login error:', error);
-      toast.error('Failed to login with Google.');
+      if (error.response && error.response.data && error.response.data.error) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error('Failed to login with Google.');
+      }
     }
   };
 
   const handleGoogleFailure = (error) => {
-    setLoading(false);
     console.error('Google login failure:', error);
-    toast.error('Failed to login with Google.');
+    // alert('Failed to login with Google.');
   };
 
   const fetchCompanyData = useCallback(async () => {
     const token = localStorage.getItem('authToken');
     try {
       const response = await axios.get(`https://api.onesec.shop/api/companies/${userId}/`, {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Token ${token}`,
+        // },
       });
 
       setCompany({
@@ -92,7 +111,8 @@ const ReceivedCompany = () => {
       await createInteraction(userId);
     } catch (error) {
       console.error('Error fetching company data:', error);
-      navigate('*');
+      toast.error('Failed to fetch company data.');
+      // navigate('*');
     }
     finally {
       setLoading(false);
@@ -109,9 +129,9 @@ const ReceivedCompany = () => {
           interaction_type: 'view_profile',
         },
         {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
+          // headers: {
+          //   Authorization: `Token ${token}`,
+          // },
         }
       );
       console.log('Interaction created successfully');
@@ -125,10 +145,17 @@ const ReceivedCompany = () => {
     fetchCompanyData();
   }, [fetchCompanyData]);
 
+  const googleLogin = useGoogleLogin({
+    onSuccess: handleGoogleSuccess,
+    onError: handleGoogleFailure,
+    scope: 'openid profile email',
+  });
+
+
   const shareProfileBack = async () => {
     const token = localStorage.getItem('authToken');
     if (!token) {
-      setGoogleLoginVisible(true);
+      googleLogin();
     } else {
       await shareProfile();
     }
@@ -138,14 +165,14 @@ const shareProfile = async () => {
   const token = localStorage.getItem('authToken');
   try {
     setLoading(true);
-    const userResponse = await axios.get('  https://api.onesec.shop/auth/users/me/', {
+    const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
       headers: {
         Authorization: `Token ${token}`,
       },
     });
     const { id, email, profile_type } = userResponse.data;
 
-    const endpoint = profile_type === 'employee' ? `  https://api.onesec.shop/api/employees/${email}/` : `  https://api.onesec.shop/api/profiles/${userId}/`;
+    const endpoint = profile_type === 'employee' ? `https://api.onesec.shop/api/employees/${email}/` : `  https://api.onesec.shop/api/profiles/${userId}/`;
 
 
     // Check if profile exists before creating
@@ -178,7 +205,7 @@ const shareProfile = async () => {
           setLoading(false);
           if (createError.response && createError.response.status === 400) {
             console.error('Profile already exists:', createError.response.data);
-            toast.warn('Profile already exists.');
+            // toast.warn('Profile already exists.');
           } else {
             throw createError;
           }
@@ -194,8 +221,8 @@ const shareProfile = async () => {
           Authorization: `Token ${token}`,
         },
       });
-      toast.success('Profile shared back successfully!');
       setLoading(false);
+      toast.success('Profile shared back successfully!');
     } catch (error) {
       setLoading(false);
       console.error('Error sharing profile back:', error);
@@ -209,31 +236,49 @@ const shareProfile = async () => {
 };
 
 
-  const addToContacts = () => {
-    const contactData = `
-      BEGIN:VCARD
-      VERSION:3.0
-      FN:${company.admin_name}
-      EMAIL:${company.email}
-      TEL:${company.phone}
-      ADR:${company.address}
-      END:VCARD
-    `;
-    const blob = new Blob([contactData], { type: 'text/vcard' });
+const addToContacts = () => {
+  // Construct vCard data
+  const contactData = `
+    BEGIN:VCARD
+    VERSION:3.0
+    FN:${company.admin_name}
+    EMAIL:${company.email}
+    TEL:${company.phone}
+    ADR:${company.address}
+    END:VCARD
+  `;
+
+  // Create a Blob object
+  const blob = new Blob([contactData], { type: 'text/vcard' });
+
+  // Create a link element and trigger download
+  if (window.navigator.msSaveBlob) {
+    // For IE/Edge
+    window.navigator.msSaveBlob(blob, `${company.admin_name}.vcf`);
+  } else {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = `${company.admin_name}.vcf`;
+
+    // Append the link to the body to ensure it works across all browsers
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
+    
+    // Clean up the URL object
     URL.revokeObjectURL(url);
-    toast.success('Contact added successfully! Check Downloads for the contact file.');
-  };
+  }
+
+  // Provide feedback to the user
+  toast.success('Contact added successfully! Check Downloads for the contact file.');
+};
+
 
   return (
-    <GoogleOAuthProvider clientId={clientId}>
+      <div className={styles.digitalProfileContainer}>
       {loading && <Loader />}
       <ToastContainer />
-      <div className={styles.digitalProfileContainer}>
         <div className={styles.profileCard}>
           <div className={styles.profileHeaderCompany}>
             <div className={styles.profileinfo}>
@@ -264,19 +309,19 @@ const shareProfile = async () => {
             </div>
           </div>
           <div className={styles.cardActions}>
+          <div className={styles.cardActionscontent}>
           <button onClick={shareProfileBack} className={styles.actionButton}>
-            <i className="ri-share-forward-line"></i> <span>Share Back</span>
+            <i className="ri-share-forward-line"></i>
           </button>
+          <span>Share Back</span>
+          </div>
+          <div className={styles.cardActionscontent}>
+
           <button onClick={addToContacts} className={styles.actionButton}>
-            <i className="ri-user-add-line"></i> <span>Add Contact</span>
+            <i className="ri-user-add-line"></i> 
           </button>
-          {isGoogleLoginVisible && (
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onFailure={handleGoogleFailure}
-              cookiePolicy={'single_host_origin'}
-            />
-          )}
+          <span>Add Contact</span>
+          </div>
         </div>
         </div>
         <ScheduleMeeting
@@ -284,7 +329,6 @@ const shareProfile = async () => {
            userId={userId}
            />
       </div>
-    </GoogleOAuthProvider>
   );
 };
 

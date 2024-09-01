@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import { useEffect,useState } from 'react';
+import { useEffect } from 'react';
 import NotFoundPage from './components/404Page/404Page';
 import NotAuthorizedPage from './components/404Page/notAuthorized';
 import HomeLayout from './layout/home/HomeLayout'
@@ -36,6 +36,7 @@ import ListReceivedCards from './layout/userProfile/ListReceivedCardsLayout';
 import ListCompanyProfile from './layout/companyProfile/ListCompanyCardLayout';
 
 function App() {
+  
   
   useEffect(() => {
     window.scrollTo(0, 0);
