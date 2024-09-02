@@ -17,7 +17,7 @@
 //     window.scrollTo(0, 0);
 //     try {
 //       setLoading(true);
-//       const response = axios.post('https://api.onesec.shop/auth/users/activation/', {
+//       const response = axios.post('http://localhost:8000/auth/users/activation/', {
 //         uid,
 //         token,
 //       });
@@ -84,7 +84,7 @@ const Activation = () => {
     const activateAccount = async () => {
       try {
         setLoading(true);
-        const response = await axios.post('https://api.onesec.shop/auth/users/activation/', {
+        const response = await axios.post('http://localhost:8000/auth/users/activation/', {
           uid,
           token,
         });

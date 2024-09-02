@@ -43,7 +43,7 @@ const ReceivedProfile = () => {
     try {
       console.log('Google login response:', response);
       console.log('Google login response:', access_token);
-      const res = await axios.post('https://api.onesec.shop/api/share-back-profile/', {
+      const res = await axios.post('http://localhost:8000/api/share-back-profile/', {
         access_token: access_token,
         profile_type: 'individual',
       });
@@ -85,8 +85,8 @@ const ReceivedProfile = () => {
       
       // Construct endpoint URL based on profile type
       const endpoint = profileType === 'employee'
-        ? `https://api.onesec.shop/api/employees/${identifier}/` // Use identifier for email
-        : `https://api.onesec.shop/api/profiles/${identifier}/`;
+        ? `http://localhost:8000/api/employees/${identifier}/` // Use identifier for email
+        : `http://localhost:8000/api/profiles/${identifier}/`;
 
       const profileResponse = await axios.get(endpoint);
 
@@ -130,7 +130,7 @@ const ReceivedProfile = () => {
     try {
       // const token = localStorage.getItem('authToken');
       await axios.post(
-        '  https://api.onesec.shop/api/create_interaction/',
+        '  http://localhost:8000/api/create_interaction/',
         {
           user: user_id,
           interaction_type: 'view_profile',
@@ -183,7 +183,7 @@ const ReceivedProfile = () => {
     setloading(true)
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
+      const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -191,7 +191,7 @@ const ReceivedProfile = () => {
       const { id, first_name, last_name, email, profile_type } = userResponse.data;
 
       try {
-        const endpoint = profile_type === 'employee' ? `https://api.onesec.shop/api/employees/${identifier}/` : `  https://api.onesec.shop/api/profiles/${identifier}/`;
+        const endpoint = profile_type === 'employee' ? `http://localhost:8000/api/employees/${identifier}/` : `  http://localhost:8000/api/profiles/${identifier}/`;
         await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`,
@@ -200,7 +200,7 @@ const ReceivedProfile = () => {
       } catch (error) {
         // Profile does not exist, create it
         if (error.response && error.response.status === 404) {
-          await axios.post('https://api.onesec.shop/api/profiles/', {
+          await axios.post('http://localhost:8000/api/profiles/', {
             user: id,
             first_name: first_name,
             last_name: last_name,
@@ -218,7 +218,7 @@ const ReceivedProfile = () => {
       }
 
       const recipient = user.email;
-      await axios.post('https://api.onesec.shop/api/share-profile/', { shared_to: recipient }, {
+      await axios.post('http://localhost:8000/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -233,43 +233,10 @@ const ReceivedProfile = () => {
   };
 
   const addToContacts = () => {
-    // Construct vCard data
-    const contactData = `
-      BEGIN:VCARD
-      VERSION:3.0
-      FN:${user.firstName} ${user.lastName}
-      EMAIL:${user.email}
-      TEL;TYPE=mobile:${user.phone}
-      ADR;TYPE=home:;;${user.address};;;;
-      END:VCARD
-    `;
-  
-    // Create a Blob object
-    const blob = new Blob([contactData], { type: 'text/vcard' });
-  
-    // Create a link element and trigger download
-    if (window.navigator.msSaveBlob) {
-      // For IE/Edge
-      window.navigator.msSaveBlob(blob, `${user.firstName}_${user.lastName}.vcf`);
-    } else {
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${user.firstName}_${user.lastName}.vcf`;
-  
-      // Append the link to the body to ensure it works across all browsers
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Clean up the URL object
-      URL.revokeObjectURL(url);
-    }
-  
-    // Provide feedback to the user
-    toast.success("Contact added.");
+    const url = `/download_vcard/${user.user}`;
+    window.location.href = url;
   };
-
+  
 
   return (
     // <GoogleOAuthProvider clientId={clientId}>

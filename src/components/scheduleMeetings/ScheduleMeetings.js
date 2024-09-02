@@ -73,7 +73,7 @@ const ScheduleMeeting = ({ attendeeEmail, userId }) => {
       const dateString = date.toISOString().split('T')[0];
       const combinedDateTime = `${dateString}T${meetingDetails.time}:00.000Z`;
 
-      const authUrl = `https://api.onesec.shop/google/auth-request/?title=${encodeURIComponent(meetingDetails.title)}&description=${encodeURIComponent(meetingDetails.description)}&start_datetime=${combinedDateTime}&attendee_email=${encodeURIComponent(attendeeEmail)}&user_id=${encodeURIComponent(userId)}`;
+      const authUrl = `http://localhost:8000/google/auth-request/?title=${encodeURIComponent(meetingDetails.title)}&description=${encodeURIComponent(meetingDetails.description)}&start_datetime=${combinedDateTime}&attendee_email=${encodeURIComponent(attendeeEmail)}&user_id=${encodeURIComponent(userId)}`;
       
       window.location.href = authUrl;
     } catch (error) {

@@ -50,7 +50,7 @@ const Analytics = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
+        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -73,7 +73,7 @@ const Analytics = () => {
   const fetchInteractionFrequency = async (frequency) => {
     try {
       setLoading(true);
-      const response = await axios.get(`https://api.onesec.shop/api/interaction-frequency/${frequency.toLowerCase()}`, {
+      const response = await axios.get(`http://localhost:8000/api/interaction-frequency/${frequency.toLowerCase()}`, {
         headers: {
           Authorization: `Token ${localStorage.getItem('authToken')}`,
         },
@@ -94,7 +94,7 @@ const Analytics = () => {
     try {
       setLoading(true);
       const formattedFrequency = frequency.toLowerCase().replace(/ /g, '_');
-      const response = await axios.get(`  https://api.onesec.shop/api/peak-interaction-time/${formattedFrequency}`, {        headers: {
+      const response = await axios.get(`  http://localhost:8000/api/peak-interaction-time/${formattedFrequency}`, {        headers: {
           Authorization: `Token ${localStorage.getItem('authToken')}`,
         },
       });
