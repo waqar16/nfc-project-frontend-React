@@ -19,7 +19,7 @@ const ScheduleMeeting = ({ attendeeEmail, userId }) => {
       return new URLSearchParams(search);
     };
 
-    const queryParams = getQueryParams(window.location.search);
+    const queryParams = getQueryParams(window.location.search); 
     const status = queryParams.get('status');
 
     if (status === 'success') {
@@ -27,6 +27,8 @@ const ScheduleMeeting = ({ attendeeEmail, userId }) => {
     } else if (status === 'failure') {
       setMessage({ type: 'error', text: 'Error scheduling meeting.' });
     }
+    const newUrl = window.location.origin + window.location.pathname;
+    window.history.replaceState({}, document.title, newUrl);
   }, []); 
 
   const handleDateChange = (date) => {

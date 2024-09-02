@@ -9,7 +9,7 @@ const ManageAppointments = () => {
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
     const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
+    const [hasMore, setHasMore] = useState(true); 
     const [loadingNextPage, setLoadingNextPage] = useState(false);
 
     const fetchAppointments = useCallback(async () => {
@@ -18,7 +18,12 @@ const ManageAppointments = () => {
                 headers: { Authorization: `Token ${localStorage.getItem('authToken')}` }
             });
 
-            const newAppointments = Array.isArray(response.data.results) ? response.data.results : [];
+            console.log(response.data)
+
+            let newAppointments = Array.isArray(response.data.results) ? response.data.results : [];
+
+            newAppointments.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+
             setAppointments(prev => [...prev, ...newAppointments]);
             setHasMore(response.data.next !== null);
 
@@ -31,7 +36,7 @@ const ManageAppointments = () => {
             console.error('Error fetching appointments:', error);
         }
     }, [page]);
-
+    
     useEffect(() => {
         fetchAppointments();
     }, [fetchAppointments]);
