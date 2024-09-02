@@ -330,10 +330,13 @@ const ReceivedProfile = () => {
           </div>
         </div>
         </div>
+        {user.user && (
         <ScheduleMeeting
-          attendeeEmail = {user.email}
-          userId={userId}
+          attendeeEmail={user.email}
+          userId={user.user}
         />
+      )}
+
       </div>
     // </GoogleOAuthProvider>
   );  
