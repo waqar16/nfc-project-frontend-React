@@ -30,12 +30,12 @@ const PersonalLogin = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('  http://localhost:8000/auth/token/login/', {
+      const response = await axios.post('  https://api.onesec.shop/auth/token/login/', {
         email,
         password,
       });
 
-      // const response2 = await axios.get('  http://localhost:8000/api/profile_type/', {
+      // const response2 = await axios.get('  https://api.onesec.shop/api/profile_type/', {
       // });
 
       // console.log(response2.data.profile_type);
@@ -51,7 +51,7 @@ const PersonalLogin = () => {
         window.dispatchEvent(event);
 
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('  http://localhost:8000/auth/users/me/', {
+        const userResponse = await axios.get('  https://api.onesec.shop/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
