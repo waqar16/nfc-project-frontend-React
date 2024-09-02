@@ -9,13 +9,13 @@
   
   .formContainer {
     margin: 6px auto 20px;
-    background: #fff;
+    /* background: #fff; */
     flex: 1;
     max-width: 600px;
-    padding: 2rem;
-    border: 1px solid #ddd;
+    /* padding: 2rem; */
+    /* border: 1px solid #ddd; */
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
   }
   
   .profilePicContainer {

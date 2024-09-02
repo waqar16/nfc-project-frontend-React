@@ -19,12 +19,13 @@ import { useGoogleLogin } from '@react-oauth/google';
 
 const ReceivedCompany = () => {
   const { userId } = useParams();
-  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  // const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const [loading, setLoading] = useState(true);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [company, setCompany] = useState({
+    user:'',
     company_name: '',
     admin_name: '',
     email: '',
@@ -236,7 +237,7 @@ const shareProfile = async () => {
 };
 
 const addToContacts = () => {
-  const url = `https://api.onesec.shop/download_vcard/${company.user}`;
+  const url = `https://api.onesec.shop/download_vcard/${userId}`;
   window.location.href = url;
 };
 
