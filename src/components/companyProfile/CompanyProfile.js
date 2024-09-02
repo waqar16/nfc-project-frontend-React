@@ -239,7 +239,8 @@ const CompanyProfile = () => {
   };
 
   return (
-    <div className={styles.companyProfileContainer}>
+    <div style={{width:'100%',display:'flex',flexDirection:'column',alignItems:'center'}}>
+      <div className={styles.companyProfileContainer}>
       <Sidebar profileType={localStorage.getItem('profile_type')} />
       {/* Preview Card */}
       <div className={styles.previewCard}>
@@ -403,6 +404,7 @@ const CompanyProfile = () => {
       </div>
       <ToastContainer/>
       {loading && <Loader/>}
+    </div>
     </div>
   );
 };
