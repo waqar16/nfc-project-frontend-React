@@ -233,7 +233,7 @@ const ReceivedProfile = () => {
   };
 
   const addToContacts = () => {
-    const url = `/download_vcard/${user.user}`;
+    const url = `https://api.onesec.shop/download_vcard/${user.user}`;
     window.location.href = url;
   };
   

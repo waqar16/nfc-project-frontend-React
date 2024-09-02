@@ -236,7 +236,7 @@ const shareProfile = async () => {
 };
 
 const addToContacts = () => {
-  const url = `/download_vcard/${company.user}`;
+  const url = `https://api.onesec.shop/download_vcard/${company.user}`;
   window.location.href = url;
 };
 
