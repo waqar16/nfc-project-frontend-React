@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import facebook from '../../assets/img/socials/facebook.png';
 import instagram from '../../assets/img/socials/instagram.png';
 import linkedin from '../../assets/img/socials/linkedin.png';
+import whatsapp from '../../assets/img/socials/whatsapp.png';
 // import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import ScheduleMeeting from '../../components/scheduleMeetings/ScheduleMeetings';
 import { ToastContainer, toast } from 'react-toastify';
@@ -27,6 +28,7 @@ const ReceivedProfile = () => {
     bio: '',
     facebook: '',
     instagram: '',
+    whatsapp: '',
     linkedin: '',
     profilePic: 'https://via.placeholder.com/150',
   });
@@ -106,6 +108,7 @@ const ReceivedProfile = () => {
         bio: profileData.bio || '',
         facebook: profileData.facebook || '',
         instagram: profileData.instagram || '',
+        whatsapp: profileData.whatsapp || '',
         linkedin: profileData.linkedin || '',
         profilePic: profileData.profile_pic || 'https://via.placeholder.com/150',
       });
@@ -277,6 +280,11 @@ const ReceivedProfile = () => {
               {user.linkedin && (
                 <a href={user.linkedin} target="_blank" rel="noopener noreferrer">
                   <img className={styles.icon} src={linkedin} alt="LinkedIn" />
+                </a>
+              )}
+              {user.whatsapp && (
+                <a href={`https://wa.me/${user.whatsapp}`} target="_blank" rel="noopener noreferrer">
+                  <img className={styles.icon} src={whatsapp} alt="WhatsApp" />
                 </a>
               )}
             </div>
