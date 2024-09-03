@@ -30,6 +30,7 @@ const ReceivedProfile = () => {
     facebook: '',
     instagram: '',
     whatsapp: '',
+    website: '',
     linkedin: '',
     profilePic: 'https://via.placeholder.com/150',
   });
@@ -110,6 +111,7 @@ const ReceivedProfile = () => {
         facebook: profileData.facebook || '',
         instagram: profileData.instagram || '',
         whatsapp: profileData.whatsapp || '',
+        website: profileData.website || '',
         linkedin: profileData.linkedin || '',
         profilePic: profileData.profile_pic || 'https://via.placeholder.com/150',
       });
