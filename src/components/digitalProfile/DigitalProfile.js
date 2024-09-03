@@ -8,6 +8,7 @@ import facebook from '../../assets/img/socials/facebook.png';
 import instagram from '../../assets/img/socials/instagram.png';
 import linkedin from '../../assets/img/socials/linkedin.png';
 import whatsapp from '../../assets/img/socials/whatsapp.png';
+import website from '../../assets/img/socials/connection.png';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
@@ -246,7 +247,7 @@ const DigitalProfile = () => {
               <p><i className="ri-mail-fill"></i> {user.email}</p>
               <p><i className="ri-phone-fill"></i> {user.phone}</p>
               <p><i className="ri-map-pin-fill"></i> {user.address}</p>
-              <p><i className="ri-global-fill"></i> <a href={user.website} target="_blank" rel="noopener noreferrer">{user.website}</a></p>
+              {/* <p><i className="ri-global-fill"></i> <a href={user.website} target="_blank" rel="noopener noreferrer">{user.website}</a></p> */}
 
             </div>
             <div className={styles.socialIcons}>
@@ -273,6 +274,11 @@ const DigitalProfile = () => {
               >
                 <img className={styles.icon} src={whatsapp} alt="WhatsApp" />
               </a>
+              )}
+              {user.website && (
+                <a href={user.website} target="_blank" rel="noopener noreferrer">
+                  <img className={styles.icon} src={website} alt="Website" />
+                </a>
               )}
             </div>
           </div>

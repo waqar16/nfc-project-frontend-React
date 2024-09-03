@@ -6,6 +6,7 @@ import facebook from '../../assets/img/socials/facebook.png';
 import instagram from '../../assets/img/socials/instagram.png';
 import linkedin from '../../assets/img/socials/linkedin.png';
 import whatsapp from '../../assets/img/socials/whatsapp.png';
+import website from '../../assets/img/socials/connection.png';
 // import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import ScheduleMeeting from '../../components/scheduleMeetings/ScheduleMeetings';
 import { ToastContainer, toast } from 'react-toastify';
@@ -285,6 +286,11 @@ const ReceivedProfile = () => {
               {user.whatsapp && (
                 <a href={`https://wa.me/${user.whatsapp}`} target="_blank" rel="noopener noreferrer">
                   <img className={styles.icon} src={whatsapp} alt="WhatsApp" />
+                </a>
+              )}
+              {user.website && (
+                <a href={user.website} target="_blank" rel="noopener noreferrer">
+                  <img className={styles.icon} src={website} alt="Website" />
                 </a>
               )}
             </div>

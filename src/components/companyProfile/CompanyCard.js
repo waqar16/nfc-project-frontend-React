@@ -6,6 +6,7 @@ import ShareProfileModal from '../shareProfileModal/ShareProfileModal';
 import { useParams, useNavigate } from 'react-router-dom';
 import logo from '../../assets/img/logo.png';  // Logo image for the company
 import linkedin from '../../assets/img/socials/linkedin.png';  // LinkedIn icon image
+import website from '../../assets/img/socials/connection.png';  // Website icon image
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
@@ -231,12 +232,17 @@ const CompanyCard = () => {
               <p><i className="ri-mail-fill"></i> {company.email}</p>
               <p><i className="ri-phone-fill"></i> {company.phone}</p>
               <p><i className="ri-map-pin-fill"></i> {company.address}</p>
-              <p><i className="ri-global-fill"></i> <a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p>
+              {/* <p><i className="ri-global-fill"></i> <a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p> */}
             </div>
             <div className={styles.socialIcons}>
               {company.linkedin && (
                 <a href={company.linkedin} target="_blank" rel="noopener noreferrer">
                   <img className={styles.icon} src={linkedin} alt="LinkedIn" />
+                </a>
+              )}
+              {company.website && (
+                <a href={company.website} target="_blank" rel="noopener noreferrer">
+                  <img className={styles.icon} src={website} alt="Website" />
                 </a>
               )}
             </div>

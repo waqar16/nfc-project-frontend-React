@@ -4,6 +4,7 @@ import styles from '../../assets/css/profiles/DigitalProfile.module.css';
 import { useParams } from 'react-router-dom';
 import facebook from '../../assets/img/socials/facebook.png';
 import instagram from '../../assets/img/socials/instagram.png';
+import website from '../../assets/img/socials/connection.png';
 import linkedin from '../../assets/img/socials/linkedin.png';
 // import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import logo from '../../assets/img/logo.png';
@@ -265,12 +266,17 @@ const addToContacts = () => {
               <p><i className="ri-mail-fill"></i> {company.email}</p>
               <p><i className="ri-phone-fill"></i> {company.phone}</p>
               <p><i className="ri-map-pin-fill"></i> {company.address}</p>
-              <p><i className="ri-global-fill"></i> <a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p>
+              {/* <p><i className="ri-global-fill"></i> <a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p> */}
             </div>
             <div className={styles.socialIcons}>
               {company.linkedin && (
                 <a href={company.linkedin} target="_blank" rel="noopener noreferrer">
                   <img className={styles.icon} src={linkedin} alt="LinkedIn" />
+                </a>
+              )}
+              {company.website && (
+                <a href={company.website} target="_blank" rel="noopener noreferrer">
+                  <img className={styles.icon} src={website} alt="Website" />
                 </a>
               )}
             </div>
