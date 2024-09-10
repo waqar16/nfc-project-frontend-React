@@ -12,35 +12,20 @@ const AboutUs = () => {
       duration: 1200,
     });
   }, []);
+
   return (
     <div data-aos="fade-left" className={styles.aboutUs}>
-      <h2 className={styles.aboutUs__title}>About Us</h2>
+      <h2 className={styles.aboutUs__title}>About Onesec</h2>
       <p className={styles.aboutUs__intro}>
-        Welcome to our platform! We provide an innovative solution for managing profiles, writing information to NFC cards, and scheduling appointments seamlessly. Our platform is designed to support multiple organizations under a white-label model.
-      </p> 
-      
+        At Onesec, we are passionate about revolutionizing the way you connect, share, and manage information with cutting-edge digital NFC (Near Field Communication) technology. Our mission is to provide instant and innovative solutions through digital NFC cards that enhance your personal and professional interactions.
+      </p>
+
       <div className={styles.aboutUs__section}>
-        <h3 className={styles.aboutUs__subtitle}>Our Mission</h3>
-        <p>
-          Our mission is to empower businesses and individuals by providing them with cutting-edge tools to manage their profiles and appointments efficiently. We aim to streamline processes and enhance productivity through our user-friendly platform.
-        </p>
-      </div>
-      
-      <div className={styles.aboutUs__section}>
-        <h3 className={styles.aboutUs__subtitle}>Our Vision</h3>
-        <p>
-          We envision a world where technology seamlessly integrates into everyday business operations, simplifying tasks and creating new opportunities for growth. Our goal is to be a leading provider of NFC technology solutions globally.
-        </p>
-      </div>
-      
-      <div className={styles.aboutUs__section}>
-        <h3 className={styles.aboutUs__subtitle}>Our Values</h3>
+        <h3 className={styles.aboutUs__subtitle}>Our Solution Provides:</h3>
         <ul className={styles.aboutUs__list}>
-          <li>Innovation: We are committed to continuous innovation and improvement.</li>
-          <li>Customer Focus: Our customers are at the heart of everything we do.</li>
-          <li>Integrity: We conduct our business with integrity and transparency.</li>
-          <li>Collaboration: We believe in the power of collaboration and teamwork.</li>
-          <li>Excellence: We strive for excellence in all our endeavors.</li>
+          <li>Instant Contact Sharing: Transmits contact information directly to smartphones with a simple tap, ensuring immediate and accurate transfer.</li>
+          <li>Environmentally Friendly: Reduces the need for paper, making it a sustainable alternative to traditional business cards.</li>
+          <li>Enhanced Interaction: Can include links to social profiles, portfolios, websites, and more, providing a richer networking experience.</li>
         </ul>
       </div>
     </div>

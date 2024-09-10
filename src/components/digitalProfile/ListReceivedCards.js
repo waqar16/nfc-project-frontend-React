@@ -46,17 +46,17 @@ const ListReceivedCards = () => {
         }
     };
 
-    const handleViewDetails = (profileId, sharedProfileType, profileEmail) => {
+    const handleViewDetails = (profileId, sharedProfileType, profileEmail, profileUsername) => {
         if (sharedProfileType === 'company') {
           navigate(`/company/${profileId}`);
         }
 
         else if (sharedProfileType === 'employee') {
-          navigate(`/profile/${profileEmail}`);
+          navigate(`/profile/${profileUsername}`);
         }
 
         else {
-          navigate(`/profile/${profileId}`);
+          navigate(`/profile/${profileUsername}`);
         }
       };
 
@@ -87,7 +87,7 @@ const ListReceivedCards = () => {
                                     <p><i className="ri-user-line"></i> Shared from: {card.shared_from_email}</p>
                                     {/* <p><i className="ri-user-line"></i> Shared With: {card.user}</p> */}
                                     <p><i className="ri-profile-line"></i> Profile Type: {card.profile_type_who_shared}</p>
-                                    <button onClick={() => handleViewDetails(card.shared_from, card.profile_type_who_shared, card.shared_from_email)} className={styles.viewCardButton}>
+                                    <button onClick={() => handleViewDetails(card.shared_from, card.profile_type_who_shared, card.shared_from_email, card.shared_from_username)} className={styles.viewCardButton}>
                                         <i className="ri-eye-line"></i> View Details
                                     </button>
                                 </div>

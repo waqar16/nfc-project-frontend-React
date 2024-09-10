@@ -9,6 +9,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { uploadFileToS3 } from '../../s3Service';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
+
 
 const UserProfile = () => {
   const { userId, username } = useParams();
@@ -18,6 +23,8 @@ const UserProfile = () => {
     first_name: null,
     last_name: null,
     email: null,
+    display_email: null,
+    username: null,
     phone: null,
     address: null,
     bio: null,
@@ -66,7 +73,7 @@ const UserProfile = () => {
 
         // Fetch the profile data from the API
         try {
-          const profileResponse = await axios.get(`https://api.onesec.shop/api/profiles/${id}/`, {
+          const profileResponse = await axios.get(`https://api.onesec.shop/api/profiles/${authenticatedUsername}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -90,10 +97,10 @@ const UserProfile = () => {
               first_name,
               last_name,
               email,
+              username: authenticatedUsername,
               profile_pic: localStorage.getItem('profile_pic') || 'https://placehold.co/150x150',
             }));
-            setProfileExists(false); // Mark profile as not existing
-            // setreceive_marketing_emails(false);
+            setProfileExists(false); 
           } else {
             console.error('Error fetching profile:', error);
             toast.error('Failed to fetch profile data.');
@@ -144,13 +151,14 @@ const UserProfile = () => {
     if (file) {
       setLoading(true);
       try {
-        const uploadResponse = await uploadFileToS3(file);
+        const uploadResponse = await uploadFileToS3(file, user.user);
         const profilePicUrl = uploadResponse.Location; // URL of the uploaded file
 
         setUser(prevUser => ({
           ...prevUser,
           profile_pic: profilePicUrl,
         }));
+        
       } catch (error) {
         console.error('Error uploading file:', error);
         toast.error('Failed to upload profile picture.');
@@ -168,7 +176,7 @@ const UserProfile = () => {
 
     try {
       const authToken = localStorage.getItem('authToken');
-      const url = `https://api.onesec.shop/api/profiles/${user.user}/`;
+      const url = `https://api.onesec.shop/api/profiles/${user.username}/`;
 
       if (!profileExists) {
         // If profile does not exist, create it using POST
@@ -205,7 +213,7 @@ const UserProfile = () => {
         <div className={styles.profileSummaryContainer}>
           <Sidebar profileType={localStorage.getItem('profile_type')} />
           <div className={styles.profilePicContainer}>
-            <img src={user.profile_pic} alt="Profile" className={styles.profilePic} />
+            <img src={user.profile_pic} alt="" className={styles.profilePic} />
             <label htmlFor="profilePicInput" className={styles.editIcon}>
               <i className="ri-edit-2-line"></i>
             </label>
@@ -229,9 +237,10 @@ const UserProfile = () => {
             { label: 'First Name', name: 'first_name', type: 'text' },
             { label: 'Last Name', name: 'last_name', type: 'text' },
             { label: 'Email', name: 'email', type: 'text', readOnly: true },
+            { label: 'Display Email', name: 'display_email', type: 'text' },
             { label: 'Position', name: 'position', type: 'text' },
             { label: 'Phone', name: 'phone', type: 'phone' },
-            { label: 'Address', name: 'address', type: 'text', },
+            // { label: 'Address', name: 'address', type: 'text', },
             { label: 'Bio', name: 'bio', type: 'textarea' },
             { label: 'Website (Optional)', name: 'website', type: 'url' },
             { label: 'Facebook (Optional)', name: 'facebook', type: 'url' },
@@ -273,13 +282,59 @@ const UserProfile = () => {
                     name === 'instagram' ? 'https://instagram.com/username' :
                     name === 'linkedin' ? 'https://linkedin.com/in/username' :
                     name === 'position' ? 'e.g Software Engineer' : 
-                    name === 'address' ? 'e.g Riyadh, Saudi Arabia' : ''
+                    name === 'address' ? 'e.g Riyadh, Saudi Arabia' :
+                    name === 'display_email' ? 'This email will be displayed on your digital card' : ''
 
                   }             
                   />
               )}
             </label>
           ))}
+
+          <label className={styles.label}>
+            Address:
+            <PlacesAutocomplete
+              value={user.address || ''}
+              onChange={(address) => setUser({ ...user, address })}
+              onSelect={(address) => {
+                geocodeByAddress(address)
+                  .then((results) => getLatLng(results[0]))
+                  .then((latLng) => {
+                    console.log('Success:', latLng);
+                    setUser({ ...user, address }); // Set selected address
+                  })
+                  .catch((error) => console.error('Error:', error));
+              }}
+            >
+              {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                <div>
+                  <input
+                    {...getInputProps({
+                      placeholder: 'Enter your address',
+                      className: styles.input,
+                    })}
+                  />
+                  <div className={styles.autocompleteDropdownContainer}>
+                    {loading && <div>Loading...</div>}
+                    {suggestions.map((suggestion) => {
+                      const className = suggestion.active
+                        ? styles.suggestionItemActive
+                        : styles.suggestionItem;
+                      return (
+                        <div
+                          {...getSuggestionItemProps(suggestion, { className })}
+                          key={suggestion.placeId}
+                        >
+                          <span>{suggestion.description}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </PlacesAutocomplete>
+          </label>
+
 
           <label className={styles.label}>
             <input

@@ -23,13 +23,16 @@ const Footer = () => {
             <li><Link className={styles.link} to="/about-us">
               About us
             </Link></li>
+            <li><Link className={styles.link} to="/faqs">
+              FAQs
+            </Link></li>
           </ul>
         </div>
         <div className={styles.offices}>
-          <h3>Quick Actions</h3>
+          <h3>Quick Links</h3>
           <ul>
-          <li><Link className={styles.link} to="/faqs">
-              FAQs
+          <li><Link className={styles.link} to="/privacy-policy">
+              Privacy Policy
             </Link></li>
             <li><Link className={styles.link} to="/terms-and-conditions">
               Terms and Conditions
@@ -49,9 +52,9 @@ const Footer = () => {
         <div className={styles.followOneclick}>
           <h3>Follow One Sec</h3>
           <ul>
-            <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><i className="ri-facebook-line"></i></a></li>
-            <li><a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><i className="ri-instagram-line"></i></a></li>
-            <li><a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer"><i className="ri-linkedin-line"></i></a></li>
+            {/* <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><i className="ri-facebook-line"></i></a></li> */}
+            <li><a href="https://www.instagram.com/Onesectap/" target="_blank" rel="noopener noreferrer"><i className="ri-instagram-line"></i></a></li>
+            {/* <li><a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer"><i className="ri-linkedin-line"></i></a></li> */}
           </ul>
         </div>
       </div>

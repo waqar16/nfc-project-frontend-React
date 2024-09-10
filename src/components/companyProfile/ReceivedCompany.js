@@ -2,26 +2,24 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import styles from '../../assets/css/profiles/DigitalProfile.module.css';
 import { useParams } from 'react-router-dom';
-import facebook from '../../assets/img/socials/facebook.png';
-import instagram from '../../assets/img/socials/instagram.png';
 import website from '../../assets/img/socials/connection.png';
 import linkedin from '../../assets/img/socials/linkedin.png';
-// import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import logo from '../../assets/img/logo.png';
 import ScheduleMeeting from '../../components/scheduleMeetings/ScheduleMeetings';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
 import {useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
-
-
+import QrCodeModal from '../modal/QrCodeModal';
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 
 
 const ReceivedCompany = () => {
-  const { userId } = useParams();
-  // const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const { identifier } = useParams();
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [shareLink, setShareLink] = useState('');
 
   // const navigate = useNavigate();
 
@@ -31,7 +29,8 @@ const ReceivedCompany = () => {
     admin_name: '',
     email: '',
     phone: '',
-    company_logo: '',
+    companyLogo: '',
+    display_email: '',
     address: '',
     company_description: '',
     website: '',
@@ -39,10 +38,8 @@ const ReceivedCompany = () => {
     employees: [],
   });
 
-  // const [isGoogleLoginVisible, setGoogleLoginVisible] = useState(false);
 
   const handleGoogleSuccess = async (response) => {
-    // const tokenId = response.credential;
     const access_token = response.access_token;
 
     try {
@@ -63,7 +60,6 @@ const ReceivedCompany = () => {
         localStorage.setItem('email', res.data.email);
         localStorage.setItem('authentication_type', 'google');
         localStorage.setItem('profile_pic', res.data.profile_pic);
-        // window.location.reload();
       }
 
       else if (res.status === 400) {
@@ -83,24 +79,25 @@ const ReceivedCompany = () => {
 
   const handleGoogleFailure = (error) => {
     console.error('Google login failure:', error);
-    // alert('Failed to login with Google.');
   };
 
   const fetchCompanyData = useCallback(async () => {
-    const token = localStorage.getItem('authToken');
+    // const token = localStorage.getItem('authToken');
     try {
-      const response = await axios.get(`https://api.onesec.shop/api/companies/${userId}/`, {
+      const response = await axios.get(`https://api.onesec.shop/api/companies/${identifier}/`, {
         // headers: {
         //   Authorization: `Token ${token}`,
         // },
       });
 
       setCompany({
+        user: response.data.user || '',
         company_name: response.data.company_name || '',
         admin_name: response.data.admin_name || '',
         email: response.data.email || '',
+        display_email: response.data.display_email || '',
         phone: response.data.phone || '',
-        company_logo: response.data.company_logo || '',
+        companyLogo: response.data.company_logo || '',
         address: response.data.address || '',
         company_description: response.data.company_description || '',
         website: response.data.website || '',
@@ -110,8 +107,10 @@ const ReceivedCompany = () => {
       setLoading(false);
 
       // Create interaction when profile is viewed
-      await createInteraction(userId);
-    } catch (error) {
+      if (company.user) {
+        await createInteraction(company.user);
+      }
+        } catch (error) {
       console.error('Error fetching company data:', error);
       toast.error('Failed to fetch company data.');
       // navigate('*');
@@ -119,7 +118,7 @@ const ReceivedCompany = () => {
     finally {
       setLoading(false);
     }
-  }, [userId]);
+  }, [company.user, identifier]);
 
   const createInteraction = async (companyId) => {
     const token = localStorage.getItem('authToken');
@@ -172,9 +171,9 @@ const shareProfile = async () => {
         Authorization: `Token ${token}`,
       },
     });
-    const { id, email, profile_type } = userResponse.data;
+    const { id, email, profile_type, username } = userResponse.data;
 
-    const endpoint = profile_type === 'employee' ? `https://api.onesec.shop/api/employees/${email}/` : `  https://api.onesec.shop/api/profiles/${userId}/`;
+    const endpoint = profile_type === 'employee' ? `https://api.onesec.shop/api/employees/${username}/` : `  https://api.onesec.shop/api/profiles/${username}/`;
 
 
     // Check if profile exists before creating
@@ -238,8 +237,14 @@ const shareProfile = async () => {
 };
 
 const addToContacts = () => {
-  const url = `https://api.onesec.shop/download_vcard/${userId}`;
+  const url = `https://api.onesec.shop/download_vcard/${company.user}/`;
   window.location.href = url;
+};
+
+const handleShareQrCode = () => {
+  const shareLink = `http://letsconnect.onesec.shop/company/${identifier}`;
+  setShareLink(shareLink);
+  setIsModalOpen(true);
 };
 
 
@@ -250,7 +255,9 @@ const addToContacts = () => {
         <div className={styles.profileCard}>
           <div className={styles.profileHeaderCompany}>
             <div className={styles.profileinfo}>
-              <img src={company.company_logo || logo} alt="Company Logo" width={150} className={styles.logo} />
+              { company.companyLogo && (
+                <img src={company.companyLogo} alt="Company Logo"  className={styles.logo} />
+              )}
               <div className={styles.name}>{company.company_name}</div>
               <div className={styles.position}>{company.admin_name}</div>
             </div>
@@ -263,9 +270,25 @@ const addToContacts = () => {
             </div>
             <p className={styles.titleText}>Contact Us</p>
             <div className={styles.contactInfo}>
-              <p><i className="ri-mail-fill"></i> {company.email}</p>
-              <p><i className="ri-phone-fill"></i> {company.phone}</p>
-              <p><i className="ri-map-pin-fill"></i> {company.address}</p>
+            {company.display_email && (
+            <p>
+            <a href={`mailto:${company.display_email}`}>
+              <i className="ri-mail-fill"></i> {company.display_email}
+            </a>
+          </p>              )}
+            {company.phone && (
+              <p>
+                <a href={`tel:${company.phone}`}>
+                  <i className="ri-phone-fill"></i> {company.phone}
+                </a>
+              </p>
+            )}
+              {company.address && (
+            <p>
+            <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(company.address)}`} target="_blank" rel="noopener noreferrer" className="contact-link">
+              <i className="ri-map-pin-fill contact-icon"></i> {company.address}
+            </a>
+          </p>              )}
               {/* <p><i className="ri-global-fill"></i> <a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p> */}
             </div>
             <div className={styles.socialIcons}>
@@ -283,25 +306,45 @@ const addToContacts = () => {
           </div>
           <div className={styles.cardActions}>
           <div className={styles.cardActionscontent}>
-          <button onClick={shareProfileBack} className={styles.actionButton}>
+          <button data-tooltip-id="website-shareBack" data-tooltip-content="Share Your Profile Back" onClick={shareProfileBack} className={styles.actionButton}>
             <i className="ri-share-forward-line"></i>
           </button>
-          <span>Share Back</span>
+          {/* <span>Share Back</span> */}
           </div>
           <div className={styles.cardActionscontent}>
 
-          <button onClick={addToContacts} className={styles.actionButton}>
+          <button data-tooltip-id="website-addContact" data-tooltip-content="Add to Your Contact"  onClick={addToContacts} className={styles.actionButton}>
             <i className="ri-user-add-line"></i> 
+            {/* <span>Add Contact</span> */}
           </button>
-          <span>Add Contact</span>
+
+
+          <button  data-tooltip-id="website-QrCode" data-tooltip-content="Scan or Download QrCode" onClick={handleShareQrCode} className={styles.actionButton}>
+          <i className="ri-qr-code-line"></i>
+        </button>
+
           </div>
         </div>
         </div>
         <ScheduleMeeting
            attendeeEmail={company.email}
-           userId={userId}
+           userId={company.user}
            />
+
+        <QrCodeModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          shareLink={shareLink}
+          name={`${company.company_name}`}
+          // position={company.position}
+          logo={company.companyLogo} 
+        />
+
+        <Tooltip id="website-shareBack" />
+        <Tooltip id="website-addContact" />
+        <Tooltip id="website-QrCode" />
       </div>
+
   );
 };
 

@@ -7,6 +7,7 @@ import logo from '../../assets/img/logo.png';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 
 const LoginPage = () => {
   const [isPersonalLogin, setIsPersonalLogin] = useState(true); // State to toggle between personal and company login
@@ -133,6 +134,7 @@ const LoginPage = () => {
 const PersonalLogin = ({ navigate }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   // const navigate = useNavigate();
@@ -215,6 +217,10 @@ const PersonalLogin = ({ navigate }) => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <div className={styles.login__group}>
@@ -224,14 +230,32 @@ const PersonalLogin = ({ navigate }) => {
         </div>
         <div>
           <label htmlFor="password" className={styles.login__label}>Password</label>
-          <input required type="password" placeholder="Enter your password" id="password" className={styles.login__input} value={password} onChange={handlePasswordChange} />
+          <div className={styles.passwordContainer}>
+                <input
+                  required
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Enter your password"
+                  id="password"
+                  className={styles.login__input}
+                  value={password}
+                  onChange={handlePasswordChange}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className={styles.eyeButton}
+                >
+                  {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+                </button>
+              </div>
         </div>
         {error && (
           <p className={styles.error}>
             <i className="fas fa-exclamation-circle" style={{ marginRight: '8px', borderRadius: '50%' }}></i>
             {error}
           </p>
-        )}      </div>
+        )}    
+      </div>
       <Link className={styles.login__forgot} to={"/reset-password"}>Forgot Password?</Link>
 
       <button type="submit" className={styles.login__button} disabled={loading}>
@@ -244,6 +268,7 @@ const PersonalLogin = ({ navigate }) => {
 const CompanyLogin = ({ navigate }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   // const navigate = useNavigate();
@@ -323,6 +348,9 @@ const CompanyLogin = ({ navigate }) => {
       }
     }
   };
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <form onSubmit={handleSubmit}>
       <div className={styles.login__group}>
@@ -331,8 +359,25 @@ const CompanyLogin = ({ navigate }) => {
           <input required type="email" placeholder="Write your email" id="email" className={styles.login__input} value={email} onChange={handleEmailChange} />
         </div>
         <div>
-          <label htmlFor="password" className={styles.login__label}>Password</label>
-          <input required type="password" placeholder="Enter your password" id="password" className={styles.login__input} value={password} onChange={handlePasswordChange} />
+        <label htmlFor="password" className={styles.login__label}>Password</label>
+        <div className={styles.passwordContainer}>
+                <input
+                  required
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Enter your password"
+                  id="password"
+                  className={styles.login__input}
+                  value={password}
+                  onChange={handlePasswordChange}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className={styles.eyeButton}
+                >
+                  {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+                </button>
+              </div>
         </div>
         {error && (
           <p className={styles.error}>

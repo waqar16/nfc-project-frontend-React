@@ -15,10 +15,12 @@ import Loader from '../loader/Loader';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
 import { Link } from 'react-router-dom';
+import QrCodeModal from '../modal/QrCodeModal';
+
 
 
 const DigitalProfile = () => {
-  const { userId, username } = useParams();
+  const { userId, userName } = useParams();
   const navigate = useNavigate();
   const [profileTypeWhoShared, setProfileTypeWhoShared] = useState('');
   const [loading, setLoading] = useState(true);
@@ -28,6 +30,8 @@ const DigitalProfile = () => {
     lastName: '',
     email: '',
     phone: '',
+    username:'',
+    display_email: '',
     position: '',
     address: '',
     website: '',
@@ -36,17 +40,18 @@ const DigitalProfile = () => {
     instagram: '',
     linkedin: '',
     whatsapp: '',
-    profilePic: 'https://via.placeholder.com/150',
+    profilePic: '',
   });
 
   const [receivedCards, setReceivedCards] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [shareLink, setShareLink] = useState('');
 
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('  https://api.onesec.shop/auth/users/me/', {
+      const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -55,10 +60,10 @@ const DigitalProfile = () => {
       const { id, first_name, last_name, email, username: authenticatedUsername, profile_type } = userResponse.data;
 
       // Check if the user ID or username from URL parameters does not match the authenticated user's details
-      if (profile_type !== profile_type || userId !== id.toString() || username !== authenticatedUsername) {
+      if (profile_type !== profile_type || userId !== id.toString() || userName !== authenticatedUsername) {
         navigate('/not-authorized'); // Redirect to not authorized page
       } else {
-        const endpoint = profile_type === 'employee' ? `https://api.onesec.shop/api/employees/${email}/` : `  https://api.onesec.shop/api/profiles/${id}/`;
+        const endpoint = profile_type === 'employee' ? `https://api.onesec.shop/api/employees/${email}/` : `  https://api.onesec.shop/api/profiles/${userName}/`;
         const profileResponse = await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`
@@ -71,6 +76,8 @@ const DigitalProfile = () => {
           firstName: first_name,
           lastName: last_name,
           email: email,
+          display_email: profileData.display_email || '',
+          username: profileData.username || '',
           phone: profileData.phone || '',
           position: profileData.position || '',
           address: profileData.address || '',
@@ -80,7 +87,7 @@ const DigitalProfile = () => {
           instagram: profileData.instagram || '',
           linkedin: profileData.linkedin || '',
           whatsapp: profileData.whatsapp || '',
-          profilePic: profileData.profile_pic || 'https://via.placeholder.com/150',
+          profilePic: profileData.profile_pic || '',
         });
         setLoading(false);
       }
@@ -89,7 +96,7 @@ const DigitalProfile = () => {
       setLoading(false);
       toast.warn('Make sure create profile first to display data.');
     }
-  }, [navigate, userId, username]);
+  }, [navigate, userId, userName]);
 
   const fetchReceivedCards = useCallback(async () => {
     try {
@@ -102,7 +109,7 @@ const DigitalProfile = () => {
       });
       const cards = await Promise.all(response.data.results.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
-        const userResponse = await axios.get(`https://api.onesec.shop/api/profiles/${card.shared_from}/`, {
+        const userResponse = await axios.get(`https://api.onesec.shop/api/profiles/${card.shared_from_username}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -136,17 +143,18 @@ const DigitalProfile = () => {
 
   const handleShareToCard = async () => {
     try {
-      setLoading(true);
-      const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://api.onesec.shop/api/share-profile-url/', {}, {
-        headers: {
-          Authorization: `Token ${token}`
-        }
-      });
+      // setLoading(true);
+      // const token = localStorage.getItem('authToken');
+      // const response = await axios.post('https://api.onesec.shop/api/share-profile-url/', {}, {
+      //   headers: {
+      //     Authorization: `Token ${token}`
+      //   }
+      // });
 
-      setShareLink(response.data.profile_url);
-      setIsModalOpen(true);
-      setLoading(false);
+      // setShareLink(response.data.profile_url);
+      setShareLink(`https://letsconnect.onesec.shop/profile/${user.username}`)
+      setIsShareModalOpen(true);
+      // setLoading(false);
     } catch (error) {
       console.error('Error generating share link:', error);
       toast.error('Failed to generate share link.');
@@ -154,21 +162,6 @@ const DigitalProfile = () => {
     }
   };
 
-  const handleWriteToNFC = async () => {
-    try {
-      const token = localStorage.getItem('authToken');
-      axios.post('https://api.onesec.shop/api/nfc-write/', user, {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      });
-      toast.success('Profile written to NFC successfully!');
-    } catch (error) {
-      console.error('Error writing to NFC:', error);
-      toast.error('Failed to write profile to NFC.');
-    }
-
-  };
 
   const handleShareProfile = async (recipient) => {
     try {
@@ -180,7 +173,7 @@ const DigitalProfile = () => {
         },
       });
       toast.success('Profile shared successfully!', response.data);
-      setIsModalOpen(false);
+      setIsShareModalOpen(false);
       setLoading(false);
     } catch (error) {
       console.error('Error sharing profile:', error);
@@ -198,6 +191,13 @@ const DigitalProfile = () => {
       navigate(`/profile/${profileId}`);
     }
   };
+
+  const handleShareQrCode = () => {
+    const shareLink = `http://letsconnect.onesec.shop/profile/${user.username}`;
+    setShareLink(shareLink);
+    setIsModalOpen(true);
+  };
+  
 
   function timeAgo(date) {
     const now = new Date();
@@ -220,9 +220,7 @@ const DigitalProfile = () => {
     }
     return `${Math.floor(secondsPast / 31536000)} years ago`;
   }
-
-
-  
+ 
 
   return (
     <>
@@ -231,9 +229,26 @@ const DigitalProfile = () => {
         <div data-aos="flip-right" className={styles.profileCard}>
           <div className={styles.profileHeader}>
             <div className={styles.profileinfo}>
-              <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
-              <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
-              <div className={styles.position}>{user.position}</div>
+              {user.profilePic ? (
+                <>
+                <img src={user.profilePic} alt="Profile" className={styles.profilePic} /> 
+                <div className={styles.relative}>
+                <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
+                <div className={styles.position}>{user.position}</div>
+               
+                  </div>
+                  </>
+              ) : (
+                <>
+                <div className={styles.profilePicPlaceholder}>
+                  
+                </div>
+                <div className={styles.profileTitle}>
+                <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
+                <div className={styles.position}>{user.position}</div>
+                </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -244,9 +259,30 @@ const DigitalProfile = () => {
             </div>
             <p className={styles.titleText}>Contact me</p>
             <div className={styles.contactInfo}>
-              <p><i className="ri-mail-fill"></i> {user.email}</p>
+            {user.display_email && (
+            <p>
+              <a href={`mailto:${user.display_email}`}>
+                <i className="ri-mail-fill"></i> {user.display_email}
+              </a>
+            </p>
+          )}
+          {user.phone && (
+            <p>
+              <a href={`tel:${user.phone}`}>
+                <i className="ri-phone-fill"></i> {user.phone}
+              </a>
+            </p>
+          )}
+          {user.address && (
+            <p>
+              <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(user.address)}`} target="_blank" rel="noopener noreferrer" className="contact-link">
+                <i className="ri-map-pin-fill contact-icon"></i> {user.address}
+              </a>
+            </p>
+          )}
+              {/* <p><i className="ri-mail-fill"></i> {user.email}</p>
               <p><i className="ri-phone-fill"></i> {user.phone}</p>
-              <p><i className="ri-map-pin-fill"></i> {user.address}</p>
+              <p><i className="ri-map-pin-fill"></i> {user.address}</p> */}
               {/* <p><i className="ri-global-fill"></i> <a href={user.website} target="_blank" rel="noopener noreferrer">{user.website}</a></p> */}
 
             </div>
@@ -288,19 +324,29 @@ const DigitalProfile = () => {
         <button onClick={handleShareToCard} className={styles.actionButton}>
           <i className="ri-share-forward-line"></i> 
         </button>
-        <span>Share Profile</span>
-        {/* <button onClick={handleWriteToNFC} className={styles.actionButton}>
-          <i className="ri-wifi-line"></i> <span>Write to NFC</span>
-        </button> */}
+        <button onClick={handleShareQrCode} className={styles.actionButton}>
+          <i className="ri-qr-code-line"></i>
+        </button>
       </div>
       </div>
         </div>
 
         <ShareProfileModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
           onShare={handleShareProfile}
           shareLink={shareLink}  // Pass the share link to the modal
+          name={`${user.firstName} ${user.lastName}`}
+          position={user.position}
+          profilePic={user.profilePic} 
+        />
+        <QrCodeModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          shareLink={shareLink}
+          name={`${user.firstName} ${user.lastName}`}
+          position={user.position}
+          profilePic={user.profilePic} 
         />
         <div data-aos="flip-right" className={styles.receivedCardsSection}>
           <div className={styles.receivedCardsList}>
@@ -318,7 +364,7 @@ const DigitalProfile = () => {
                       </div>
                       <div className={styles.receivedCardDate}>Received on: {timeAgo(new Date(card.shared_at))}</div>
                       <span
-                        onClick={() => handleShowDetails(card.shared_from_user.user, card.profile_type_who_shared)}
+                        onClick={() => handleShowDetails(card.shared_from_user.username, card.profile_type_who_shared)}
                         className={styles.showDetailsButton}
                       >
                         View Card

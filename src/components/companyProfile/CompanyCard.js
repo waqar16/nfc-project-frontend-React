@@ -4,13 +4,15 @@ import styles from '../../assets/css/profiles/DigitalProfile.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import ShareProfileModal from '../shareProfileModal/ShareProfileModal';
 import { useParams, useNavigate } from 'react-router-dom';
-import logo from '../../assets/img/logo.png';  // Logo image for the company
+// import logo from '../../assets/img/logo.png';  // Logo image for the company
 import linkedin from '../../assets/img/socials/linkedin.png';  // LinkedIn icon image
 import website from '../../assets/img/socials/connection.png';  // Website icon image
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
 import { Link } from 'react-router-dom';
+import QrCodeModal from '../modal/QrCodeModal';
+
 
 const CompanyCard = () => {
   const { userId, username } = useParams();
@@ -19,12 +21,15 @@ const CompanyCard = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shareLink, setShareLink] = useState('');
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [profileTypeWhoShared , setProfileTypeWhoShared] = useState('');
   const [company, setCompany] = useState({
     company_name: '',
     admin_name: '',
     email: '',
+    display_email: '',  
     phone: '',
+    username: '',
     companyLogo: '',
     address: '',
     company_description: '',
@@ -53,7 +58,7 @@ const CompanyCard = () => {
       }
 
       try {
-        const companyResponse = await axios.get(`https://api.onesec.shop/api/companies/${userId}/`, {
+        const companyResponse = await axios.get(`https://api.onesec.shop/api/companies/${username}/`, {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -63,8 +68,10 @@ const CompanyCard = () => {
           company_name: companyResponse.data.company_name || '',
           admin_name: companyResponse.data.admin_name || '',
           email: email || '',
+          display_email: companyResponse.data.display_email || '',
           phone: companyResponse.data.phone || '',
-          companyLogo: companyResponse.data.company_logo || logo,
+          username: companyResponse.data.usernmae || '',
+          companyLogo: companyResponse.data.company_logo ,
           address: companyResponse.data.address || '',
           company_description: companyResponse.data.company_description || '',
           website: companyResponse.data.website || '',
@@ -78,7 +85,9 @@ const CompanyCard = () => {
             company_name: company_name || '',
             admin_name: admin_name || '',
             email: email || '',
-            companyLogo: logo,
+            display_email: '',
+            companyLogo:'',
+            username: '',
             phone: '',
             address: '',
             company_description: '',
@@ -112,7 +121,7 @@ const CompanyCard = () => {
       //   setProfileTypeWhoShared(response.data.profile_type_who_shared);
       const cards = await Promise.all(response.data.results.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
-        const userResponse = await axios.get(`https://api.onesec.shop/api/profiles/${card.shared_from}/`, {
+        const userResponse = await axios.get(`https://api.onesec.shop/api/profiles/${card.shared_from_username}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -139,16 +148,18 @@ const CompanyCard = () => {
   // Handle share profile to card
   const handleShareToCard = async () => {
     try {
-      setLoading(true);
-      const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://api.onesec.shop/api/share-profile-url/', {}, {
-        headers: {
-          Authorization: `Token ${token}`
-        }
-      });
+
+      // setLoading(true);
+      // const token = localStorage.getItem('authToken');
+      // const response = await axios.post('https://api.onesec.shop/api/share-profile-url/', {}, {
+      //   headers: {
+      //     Authorization: `Token ${token}`
+      //   }
+      // });
+      setShareLink(`https://letsconnect.onesec.shop/company/${username}`)
   
-      setShareLink(response.data.profile_url);
-      setIsModalOpen(true);
+      // setShareLink(response.data.profile_url);
+      setIsShareModalOpen(true);
     } catch (error) {
       console.error('Error generating share link:', error);
       toast.error('Failed to generate share link.');
@@ -176,14 +187,20 @@ const CompanyCard = () => {
     }
   };
 
-  const handleShowDetails = (profileId, sharedProfileType) => {
+  const handleShowDetails = (profileId, sharedProfileType, profileUsername) => {
     console.log('Profile Type:', profileTypeWhoShared);
     if (sharedProfileType === 'company') {
-      navigate(`/company/${profileId}`);
+      navigate(`/company/${profileUsername}`);
     }
     else {
-      navigate(`/profile/${profileId}`);
+      navigate(`/profile/${profileUsername}`);
     }
+  };
+
+  const handleShareQrCode = () => {
+    const shareLink = `http://letsconnect.onesec.shop/profile/${username}`;
+    setShareLink(shareLink);
+    setIsModalOpen(true);
   };
 
   function timeAgo(date) {
@@ -216,7 +233,13 @@ const CompanyCard = () => {
         <div className={styles.profileCard}>
           <div className={styles.profileHeaderCompany}>
             <div className={styles.profileinfo}>
-              <img src={company.companyLogo} alt="Company Logo" width={150} className={styles.logo} />
+            {company.companyLogo ? (
+          <img src={company.companyLogo} alt="Profile" className={styles.logo} />
+        ) : (
+          <>
+          <span style={{"padding":"30px"}}>Your Logo Here</span>
+          </>
+        )} 
               <div className={styles.name}>{company.company_name}</div>
               <div className={styles.position}>{company.admin_name}</div>
             </div>
@@ -229,9 +252,21 @@ const CompanyCard = () => {
             </div>
             <p className={styles.titleText}>Contact Us</p>
             <div className={styles.contactInfo}>
-              <p><i className="ri-mail-fill"></i> {company.email}</p>
-              <p><i className="ri-phone-fill"></i> {company.phone}</p>
-              <p><i className="ri-map-pin-fill"></i> {company.address}</p>
+              {company.display_email && (
+                <p>
+                  <i className="ri-mail-fill"></i> {company.display_email}
+                </p>
+              )}
+              {company.phone && (
+                <p>
+                  <i className="ri-phone-fill"></i> {company.phone}
+                </p>
+              )}
+              {company.address && (
+                <p>
+                  <i className="ri-map-pin-fill"></i> {company.address}
+                </p>
+              )}
               {/* <p><i className="ri-global-fill"></i> <a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p> */}
             </div>
             <div className={styles.socialIcons}>
@@ -248,21 +283,24 @@ const CompanyCard = () => {
             </div>
           </div>
           <div className={styles.cardActions}>
-            <div className={styles.cardActionscontent}>
+          <div className={styles.cardActionscontent}>
+
         <button onClick={handleShareToCard} className={styles.actionButton}>
           <i className="ri-share-forward-line"></i> 
         </button>
-        <span>Share Profile</span>
+        <button onClick={handleShareQrCode} className={styles.actionButton}>
+          <i className="ri-qr-code-line"></i>
+        </button>
+      </div>
       </div>
         </div>
-        </div>
-
+{/* 
         <ShareProfileModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onShare={handleShareProfile}
           shareLink={shareLink}  // Pass the share link to the modal
-        />
+        /> */}
 
 <div className={styles.receivedCardsSection}>
     <div className={styles.receivedCardsList}>
@@ -279,7 +317,7 @@ const CompanyCard = () => {
                                 {` From: ${card.shared_from_user.email}`}
                             </div>
                             <div className={styles.receivedCardDate}>Received on: {timeAgo(new Date(card.shared_at))}</div>
-                            <span onClick={() => handleShowDetails(card.shared_from_user.user, card.profile_type_who_shared)} className={styles.showDetailsButton}>
+                            <span onClick={() => handleShowDetails(card.shared_from_user.user, card.profile_type_who_shared, card.shared_from_username)} className={styles.showDetailsButton}>
                                 View Card
                             </span>
                         </div>
@@ -293,6 +331,24 @@ const CompanyCard = () => {
 
         </div>
       </div>
+
+      <ShareProfileModal
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
+          onShare={handleShareProfile}
+          shareLink={shareLink}  
+          name={`${company.company_name}`}
+          // position={company.position}
+          logo={company.companyLogo} 
+        />
+        <QrCodeModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          shareLink={shareLink}
+          name={`${company.company_name}`}
+          // position={company.position}
+          logo={company.companyLogo} 
+        />
 
       {loading && <Loader />}
       <ToastContainer />

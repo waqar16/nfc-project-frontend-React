@@ -5,11 +5,50 @@
     top: 86px;
     width: 250px;
     height: 100vh;
-    background-color: #fbfefe;
+    background-color: #ffffff;
     transition: left 0.3s;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    z-index: 10;
     padding: 1rem;
+  }
+
+  .profileSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    /* margin-bottom: 1rem; */
+    /* margin-top: 15px; */
+  }
+
+  .profileUsername {
+    font-size: 0.8rem;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    /* color: #333; */
+  }
+  
+  .profilePic {
+    width: 90px;
+    height:90px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .logo{
+    height: 60px;
+    object-fit: cover;
+  }
+
+  .profileInfo {
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .profileName {
+    font-size: 1rem;
+    font-weight: bold;
+    /* color: #333; */
   }
   
   .open {
@@ -25,7 +64,7 @@
   
   .sidebar__header h3 {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1rem;
     color: #343a40;
   }
 
@@ -70,7 +109,7 @@
     color: #343a40;
     display: flex;
     align-items: center;
-    font-size: 1rem;
+    font-size: 0.84rem;
   }
   
   .sidebar__item a i {
@@ -116,10 +155,48 @@
     }
 
     .sidebar__toggle i {
-      /* display: flex; */
-      /* align-items: center; */
       margin-top: 3px;
       font-size: 1.25rem;
       }
+
+      .profileSection {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        /* margin-bottom: 1rem; */
+        /* margin-top: 15px; */
+      }
+      
+      .profilePic {
+        width: 80px;
+        height:80px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .profileUsername {
+        font-size: 0.8rem;
+        margin-bottom: 0px;
+        margin-top: 0px;
+        /* color: #333; */
+      }
+    
+      .logo{
+        height: 60px;
+        object-fit: cover;
+      }
+    
+      .profileInfo {
+        margin-top: 10px;
+        text-align: center;
+      }
+      
+      .profileName {
+        font-size: 1rem;
+        font-weight: bold;
+        /* color: #333; */
+      }
+      
   }
 

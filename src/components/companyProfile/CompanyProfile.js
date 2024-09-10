@@ -9,6 +9,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
 import { uploadFileToS3 } from '../../s3Service';
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
 
 
 const CompanyProfile = () => {
@@ -22,6 +26,8 @@ const CompanyProfile = () => {
     company_name: '',
     admin_name: '',
     email: '',
+    username: '',
+    display_email: '',
     phone: '',
     company_logo: null,
     address: '',
@@ -58,6 +64,7 @@ const CompanyProfile = () => {
           user: id,
           company_name,
           admin_name,
+          username: authenticatedUsername,
           email,
         };
 
@@ -66,7 +73,7 @@ const CompanyProfile = () => {
 
         try {
           setLoading(true)
-          const companyResponse = await axios.get(`https://api.onesec.shop/api/companies/${userId}/`, {
+          const companyResponse = await axios.get(`https://api.onesec.shop/api/companies/${username}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -77,6 +84,8 @@ const CompanyProfile = () => {
             company_name: companyResponse.data.company_name || '',
             admin_name: companyResponse.data.admin_name || '',
             email: email || '',
+            display_email: companyResponse.data.display_email || '',
+            username: companyResponse.data.username || '',
             phone: companyResponse.data.phone || '',
             company_logo: companyResponse.data.company_logo || '',
             address: companyResponse.data.address || '',
@@ -97,6 +106,8 @@ const CompanyProfile = () => {
               company_name: company_name || '',
               admin_name: admin_name || '',
               email: email || '',
+              display_email: '',
+              username: username || '',
               company_logo: '',
               phone: '',
               address: '',
@@ -175,7 +186,7 @@ const CompanyProfile = () => {
     if (file) {
       setLoading(true);
       try {
-        const uploadResponse = await uploadFileToS3(file);
+        const uploadResponse = await uploadFileToS3(file, company.user);
         const profileLogoUrl = uploadResponse.Location; 
         console.log('Profile Logo URL:', profileLogoUrl);
   
@@ -199,11 +210,12 @@ const CompanyProfile = () => {
   const handleSubmit = async (e) => {
     setLoading(true)
     e.preventDefault();
+
     try {
       const authToken = localStorage.getItem('authToken');
 
       if (profileExists) {
-        await axios.put(`https://api.onesec.shop/api/companies/${userId}/`, company, {
+        await axios.put(`https://api.onesec.shop/api/companies/${username}/`, company, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -243,7 +255,7 @@ const CompanyProfile = () => {
       <div className={styles.companyProfileContainer}>
       <Sidebar profileType={localStorage.getItem('profile_type')} />
       {/* Preview Card */}
-      <div className={styles.previewCard}>
+      {/* <div className={styles.previewCard}>
         <h2>{company.company_name}</h2>
         <p>{company.company_description}</p>
         <div className={styles.contactInfo}>
@@ -252,13 +264,19 @@ const CompanyProfile = () => {
           <p><i className="ri-map-pin-fill"></i> {company.address}</p>
           <p><i className="ri-global-fill"></i> <a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p>
         </div>
-      </div>
+      </div> */}
       <div className={styles.formContainer}>
         <h2>Company Profile Management</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.profilePicContainer}>
-            <img src={company.company_logo} alt="Profile" className={styles.profilePic} />
-            <label htmlFor="profilePicInput" className={styles.editIcon}>
+        {company.company_logo ? (
+          <img src={company.company_logo} alt="Profile" className={styles.logo} />
+        ) : (
+          <>
+          <span style={{"padding":"30px"}}>Your Logo Here</span>
+          </>
+        )}        
+     <label htmlFor="profilePicInput" className={styles.editIcon}>
               <i className="ri-edit-2-line"></i>
             </label>
             <input
@@ -315,6 +333,17 @@ const CompanyProfile = () => {
               required
             />
           </label>
+          <label className={styles.label}>
+            Display Email:
+            <input
+              type="email"
+              name="display_email"
+              value={company.display_email}
+              placeholder='email@example.com'
+              onChange={handleChange}
+              className={styles.input}
+            />
+          </label>
           {/* Phone */}
           <label className={styles.label}>
             Phone Number:
@@ -324,6 +353,7 @@ const CompanyProfile = () => {
               onChange={handlePhoneChange}
               inputClass={styles.input}
               specialLabel=""
+              required
             />
           </label>
           {/* <label className={styles.label}>
@@ -340,15 +370,47 @@ const CompanyProfile = () => {
           {/* Address */}
           <label className={styles.label}>
             Address:
-            <input
-              type="text"
-              name="address"
-              value={company.address}
-              placeholder='1234 Main St, City, Country'
-              onChange={handleChange}
-              className={styles.input}
+            <PlacesAutocomplete
               required
-            />
+              value={company.address || ''}
+              onChange={(address) => setCompany({ ...company, address })}
+              onSelect={(address) => {
+                geocodeByAddress(address)
+                  .then((results) => getLatLng(results[0]))
+                  .then((latLng) => {
+                    console.log('Success:', latLng);
+                    setCompany({ ...company, address }); // Set selected address
+                  })
+                  .catch((error) => console.error('Error:', error));
+              }}
+            >
+              {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                <div>
+                  <input
+                    {...getInputProps({
+                      placeholder: 'Enter your address',
+                      className: styles.input,
+                    })}
+                  />
+                  <div className={styles.autocompleteDropdownContainer}>
+                    {loading && <div>Loading...</div>}
+                    {suggestions.map((suggestion) => {
+                      const className = suggestion.active
+                        ? styles.suggestionItemActive
+                        : styles.suggestionItem;
+                      return (
+                        <div
+                          {...getSuggestionItemProps(suggestion, { className })}
+                          key={suggestion.placeId}
+                        >
+                          <span>{suggestion.description}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </PlacesAutocomplete>
           </label>
           {/* Company Description */}
           <label className={styles.label}>

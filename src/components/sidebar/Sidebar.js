@@ -2,14 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../../assets/css/index/Sidebar.module.css';
 import axios from 'axios';
-import logo from '../../assets/img/logo.png';
 import { useNavigate } from 'react-router-dom';
 
 
 const Sidebar = ({ profileType }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [userData, setUserData] = useState({});
+  const [profilePic, setProfilePic] = useState('');
+  const [logo, setLogo] = useState('');
+
   const navigate = useNavigate();
+
+
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -17,26 +21,65 @@ const Sidebar = ({ profileType }) => {
     window.location.reload();
   };
 
+
+  // Fetch user data
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        const response = await axios.get('https://api.onesec.shop/auth/users/me/', {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        });
+        setUserData(response.data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        // Handle errors, e.g., redirect to login page or show error message
+      }
+    };
 
     fetchUserData();
   }, []);
 
-  const fetchUserData = async () => {
-    try {
-      const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://api.onesec.shop/auth/users/me/', {
-        headers: {
-          Authorization: `Token ${token}`
+  // Fetch profile picture based on profileType and userData
+  useEffect(() => {
+    const fetchProfilePic = async () => {
+      if (!userData.username) return;
+
+      try {
+        const token = localStorage.getItem('authToken');
+        if (profileType === 'company') {
+          const response = await axios.get(`https://api.onesec.shop/api/companies/${userData.username}/`, {
+            headers: {
+              Authorization: `Token ${token}`
+            }
+          });
+          setLogo(response.data.logo);
+        } else if (profileType === 'individual') {
+          const response = await axios.get(`https://api.onesec.shop/api/profiles/${userData.username}/`, {
+            headers: {
+              Authorization: `Token ${token}`
+            }
+          });
+          setProfilePic(response.data.profile_pic);
+        } else if (profileType === 'employee' ) {
+          const response = await axios.get(`https://api.onesec.shop/api/employees/${userData.username}/`, {
+            headers: {
+              Authorization: `Token ${token}`
+            }
+          });
+          setProfilePic(response.data.profile_pic);
         }
-      });
-      setUserData(response.data);
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-      // Handle errors, e.g., redirect to login page or show error message
-    }
-  };
+      } catch (error) {
+        console.error('Error fetching profile pic:', error);
+      }
+    };
+
+    fetchProfilePic();
+  }, [userData, profileType]);
+
+
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -45,8 +88,19 @@ const Sidebar = ({ profileType }) => {
   return (
     <div>
       <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
-        <div className={styles.sidebarLogo}>
-          <img src={logo} alt="logo" className={styles.sidebar__logo} />
+        {/* Profile Section */}
+        <div className={styles.profileSection}>
+          {profilePic ? (
+              <img className={styles.profilePic} src={profilePic} alt="Profile" />
+            ) : (
+              logo && <img className={styles.logo} src={logo} alt="Logo" />
+            )}
+          {isOpen && (
+            <div className={styles.profileInfo}>
+              <p className={styles.profileUsername}>@{userData.username}</p>
+              <p className={styles.profileName}>{userData.first_name} {userData.last_name}</p>
+            </div>
+          )}
         </div>
         <div className={styles.sidebar__header}></div>
         <ul className={styles.sidebar__list}>
@@ -99,8 +153,10 @@ const Sidebar = ({ profileType }) => {
                 </Link>
               </li>
               <li className={styles.sidebar__item} onClick={handleLogout}>
+              <Link to={`/`}>
                   <i className="ri-logout-box-line"></i>
                   Logout
+                </Link>
                 </li>
             </>
           )}
@@ -144,8 +200,10 @@ const Sidebar = ({ profileType }) => {
                 </Link>
               </li>
               <li className={styles.sidebar__item} onClick={handleLogout}>
+              <Link to={`/`}>
                   <i className="ri-logout-box-line"></i>
                   Logout
+                </Link>
                 </li>
             </>
           )}
@@ -182,15 +240,17 @@ const Sidebar = ({ profileType }) => {
                 </Link>
               </li>
               <li className={styles.sidebar__item} onClick={handleLogout}>
+                <Link to={`/`}>
                   <i className="ri-logout-box-line"></i>
                   Logout
+                </Link>
                 </li>
             </>
           )}
         </ul>
-        <div className={styles.sidebar__footer}>
+        {/* <div className={styles.sidebar__footer}>
           <p>© 2024 by One Sec. All rights reserved.</p>
-        </div>
+        </div> */}
       </div>
       <div className={styles.sidebar__toggle} onClick={toggleSidebar}>
         <i className="ri-menu-line"></i>

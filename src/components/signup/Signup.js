@@ -1,5 +1,5 @@
 // SignupPage.js
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import styles from '../../assets/css/authentication/Authentication.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -340,6 +340,10 @@ const CompanySignup = ({ navigate }) => {
         localStorage.setItem('username', companyInfo.username);
         localStorage.setItem('profile_type', companyInfo.profile_type);
         navigate('/activation-sent');
+      }
+
+      else {
+        toast.error("An unexpected error occured")
       }
     } catch (error) {
       if (error.response && error.response.data) {

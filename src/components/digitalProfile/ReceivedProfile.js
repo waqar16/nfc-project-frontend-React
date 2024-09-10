@@ -12,7 +12,9 @@ import ScheduleMeeting from '../../components/scheduleMeetings/ScheduleMeetings'
 import { ToastContainer, toast } from 'react-toastify';
 import Loader from '../loader/Loader';
 import { useGoogleLogin } from '@react-oauth/google';
-
+import QrCodeModal from '../modal/QrCodeModal';
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 
 const ReceivedProfile = () => {
   const { identifier } = useParams();
@@ -24,6 +26,8 @@ const ReceivedProfile = () => {
     firstName: '',
     lastName: '',
     email: '',
+    username: '',
+    display_email: '',
     phone: '',
     address: '',
     bio: '',
@@ -32,13 +36,15 @@ const ReceivedProfile = () => {
     whatsapp: '',
     website: '',
     linkedin: '',
-    profilePic: 'https://via.placeholder.com/150',
+    profilePic: '',
   });
 
   // const [isGoogleLoginVisible, setGoogleLoginVisible] = useState(false);
   const [profileType, setProfileType] = useState();
   const [userId, setUserId] = useState();
   const [email, serUrlEmail] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [shareLink, setShareLink] = useState('');
 
   const handleGoogleSuccess = async (response) => {
     // const tokenId = response.credential;
@@ -82,61 +88,94 @@ const ReceivedProfile = () => {
 
 
 
+
   const fetchUserData = useCallback(async () => {
     try {
-      const isEmail = identifier.includes('@');
-      const profileType = isEmail ? 'employee' : 'profile'; // Ensure profileType is correctly set
+      const profileEndpoint = `https://api.onesec.shop/api/profiles/${identifier}/`;
       
-      // Construct endpoint URL based on profile type
-      const endpoint = profileType === 'employee'
-        ? `https://api.onesec.shop/api/employees/${identifier}/` // Use identifier for email
-        : `https://api.onesec.shop/api/profiles/${identifier}/`;
-
-      const profileResponse = await axios.get(endpoint);
-
-      console.log('Profile response:', profileResponse.status);
-
-
-      const profileData = profileResponse.data;
-      console.log('Profile data:', profileData);
-      setUser({
-        user: profileData.user,
-        firstName: profileData.first_name || '',
-        lastName: profileData.last_name || '',
-        email: profileData.email || '',
-        phone: profileData.phone || '',
-        position: profileData.position || '',
-        address: profileData.address || '',
-        bio: profileData.bio || '',
-        facebook: profileData.facebook || '',
-        instagram: profileData.instagram || '',
-        whatsapp: profileData.whatsapp || '',
-        website: profileData.website || '',
-        linkedin: profileData.linkedin || '',
-        profilePic: profileData.profile_pic || 'https://via.placeholder.com/150',
-      });
-      setloading(false)
-
-      // Create interaction when profile is viewed
-      await createInteraction(profileData.user);
-    } catch (error) {
-      if (error.response.status === 404) {
-        toast.error('Profile not found.');
-        setloading(false)
-        return;
+      // Try fetching profile data first
+      let profileResponse;
+      try {
+        profileResponse = await axios.get(profileEndpoint);
+        console.log('Profile response:', profileResponse.status);
+  
+        const profileData = profileResponse.data;
+        console.log('Profile data:', profileData);
+        setUser({
+          user: profileData.user,
+          firstName: profileData.first_name || '',
+          lastName: profileData.last_name || '',
+          email: profileData.email || '',
+          display_email: profileData.display_email || '',
+          phone: profileData.phone || '',
+          username: profileData.username || '',
+          position: profileData.position || '',
+          address: profileData.address || '',
+          bio: profileData.bio || '',
+          facebook: profileData.facebook || '',
+          instagram: profileData.instagram || '',
+          whatsapp: profileData.whatsapp || '',
+          website: profileData.website || '',
+          linkedin: profileData.linkedin || '',
+          profilePic: profileData.profile_pic || '',
+        });
+        setloading(false);
+  
+        // Create interaction when profile is viewed
+        await createInteraction(profileData.user);
+      } catch (error) {
+        if (error.response?.status === 404) {
+          console.log('Profile not found, trying employee endpoint...');
+  
+          // Fetch employee data if profile is not found
+          const employeeEndpoint = `https://api.onesec.shop/api/employees/${identifier}/`;
+          const employeeResponse = await axios.get(employeeEndpoint);
+          
+          console.log('Employee response:', employeeResponse.status);
+  
+          const employeeData = employeeResponse.data;
+          console.log('Employee data:', employeeData);
+          setUser({
+            user: employeeData.user,
+            firstName: employeeData.first_name || '',
+            lastName: employeeData.last_name || '',
+            email: employeeData.email || '',
+            display_email: employeeData.display_email || '',
+            phone: employeeData.phone || '',
+            username: employeeData.username || '',
+            position: employeeData.position || '',
+            address: employeeData.address || '',
+            bio: employeeData.bio || '',
+            facebook: employeeData.facebook || '',
+            instagram: employeeData.instagram || '',
+            whatsapp: employeeData.whatsapp || '',
+            website: employeeData.website || '',
+            linkedin: employeeData.linkedin || '',
+            profilePic: employeeData.profile_pic || '',
+          });
+          setloading(false);
+  
+          // Create interaction when employee profile is viewed
+          await createInteraction(employeeData.user);
+        } else {
+          throw error;
+        }
       }
-      setloading(false)
+    } catch (error) {
       console.error('Error fetching user data:', error);
-      console.log('Error fetching user data:', error.response.status)
-      toast.error("Error fetching user data")
+      if (error.response?.status === 404) {
+        toast.error('Profile Card Not Found');
+      } else {
+        toast.error('Error fetching user data');
+      }
+      setloading(false);
     }
-  }, [userId, profileType, email]);
+  }, [identifier]);
 
   const createInteraction = async (user_id) => {
     try {
-      // const token = localStorage.getItem('authToken');
       await axios.post(
-        '  https://api.onesec.shop/api/create_interaction/',
+        'https://api.onesec.shop/api/create_interaction/',
         {
           user: user_id,
           interaction_type: 'view_profile',
@@ -242,6 +281,12 @@ const ReceivedProfile = () => {
     const url = `https://api.onesec.shop/download_vcard/${user.user}`;
     window.location.href = url;
   };
+
+  const handleShareQrCode = () => {
+    const shareLink = `http://letsconnect.onesec.shop/profile/${identifier}`;
+    setShareLink(shareLink);
+    setIsModalOpen(true);
+  };
   
 
   return (
@@ -250,11 +295,28 @@ const ReceivedProfile = () => {
         <ToastContainer/>
         {loading && <Loader/>}
         <div className={styles.profileCard}>
-          <div className={styles.profileHeader}>
+        <div className={styles.profileHeader}>
             <div className={styles.profileinfo}>
-              <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
-              <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
-              <div className={styles.position}>{user.position}</div>
+              {user.profilePic ? (
+                <>
+                <img src={user.profilePic} alt="Profile" className={styles.profilePic} /> 
+                <div className={styles.relative}>
+                <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
+                <div className={styles.position}>{user.position}</div>
+               
+                  </div>
+                  </>
+              ) : (
+                <>
+                <div className={styles.profilePicPlaceholder}>
+                  
+                </div>
+                <div className={styles.profileTitle}>
+                <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
+                <div className={styles.position}>{user.position}</div>
+                </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -265,9 +327,15 @@ const ReceivedProfile = () => {
             </div>
             <p className={styles.titleText}>Contact me</p>
             <div className={styles.contactInfo}>
-              <p><i className="ri-mail-fill"></i> {user.email}</p>
-              <p><i className="ri-phone-fill"></i> {user.phone}</p>
-              <p><i className="ri-map-pin-fill"></i> {user.address}</p>
+            {user.email && (
+               <p><i className="ri-mail-fill"></i> {user.display_email}</p>
+              )}
+              {user.phone && (
+                <p><i className="ri-phone-fill"></i> {user.phone}</p>
+              )}
+              {user.address && (
+                <p><i className="ri-map-pin-fill"></i> {user.address}</p>
+              )}
             </div>
             <div className={styles.socialIcons}>
               {user.facebook && (
@@ -299,17 +367,23 @@ const ReceivedProfile = () => {
           </div>
           <div className={styles.cardActions}>
           <div className={styles.cardActionscontent}>
-          <button onClick={shareProfileBack} className={styles.actionButton}>
+          <button data-tooltip-id="website-shareBack" data-tooltip-content="Share Your Profile Back" onClick={shareProfileBack} className={styles.actionButton}>
             <i className="ri-share-forward-line"></i>
           </button>
-          <span>Share Back</span>
+          {/* <span>Share Back</span> */}
           </div>
           <div className={styles.cardActionscontent}>
 
-          <button onClick={addToContacts} className={styles.actionButton}>
+          <button data-tooltip-id="website-addContact" data-tooltip-content="Add to Your Contact"  onClick={addToContacts} className={styles.actionButton}>
             <i className="ri-user-add-line"></i> 
+            {/* <span>Add Contact</span> */}
           </button>
-          <span>Add Contact</span>
+
+
+          <button  data-tooltip-id="website-QrCode" data-tooltip-content="Scan or Download QrCode" onClick={handleShareQrCode} className={styles.actionButton}>
+          <i className="ri-qr-code-line"></i>
+        </button>
+
           </div>
         </div>
         </div>
@@ -319,6 +393,19 @@ const ReceivedProfile = () => {
           userId={user.user}
         />
       )}
+
+      <QrCodeModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          // onShare={handleShareProfile}
+          shareLink={shareLink}
+          name={`${user.firstName} ${user.lastName}`}
+          position={user.position}
+          profilePic={user.profilePic} 
+        />
+        <Tooltip id="website-shareBack" />
+        <Tooltip id="website-addContact" />
+        <Tooltip id="website-QrCode" />
 
       </div>
     // </GoogleOAuthProvider>

@@ -1,23 +1,23 @@
 .companyProfileContainer {
   display: flex;
-  align-items: center;
-  flex-direction: column;
   justify-content: center;
-  /* padding: 2rem; */ 
+  padding: 2rem;
   margin-top: 75px;
-  width: 95%;
 
   }
   
+  .logo{
+    height: 140px;
+    padding: 30px;
+  }
+  
   .formContainer {
-    margin: 6px auto 20px;
-    /* background: #fff; */
-    flex: 1;
-    max-width: 600px;
-    /* padding: 2rem; */
-    /* border: 1px solid #ddd; */
-    border-radius: 10px;
-    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+  /* background: #fff; */
+  flex: 1;
+  max-width: 700px;
+  /* border: 1px solid #ddd; */
+  border-radius: 10px;
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
   }
   
   .profilePicContainer {

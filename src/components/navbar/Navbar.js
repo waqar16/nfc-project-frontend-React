@@ -252,13 +252,15 @@ const Navbar = () => {
 
           <div className="nav__actions">
             {/* Search button */}
-            <i className="ri-search-line nav__search" id="search-btn"></i>
+            {/* <i className="ri-search-line nav__search" id="search-btn"></i> */}
 
             {/* Notification button */}
             {/*<i className="ri-notification-line nav__search" id="notifications-btn"></i> */}
 
             {/* Profile button */}
-            <i className="ri-user-line nav__login" id="profile-btn"></i>
+            {!isAuthenticated && (
+              <i className="ri-user-line nav__login" id="profile-btn"></i>
+            )}
 
             {/* Toggle button */}
             <div className="nav__toggle" id="nav-toggle">
@@ -268,7 +270,7 @@ const Navbar = () => {
         </nav>
       </header>
 
-      {/*==================== SEARCH ====================*/}
+      {/* ==================== SEARCH ==================== */}
       <div className="search" id="search">
         <form action="" className="search__form">
           <i className="ri-search-line search__icon"></i>
@@ -284,30 +286,17 @@ const Navbar = () => {
             <span >
               <li onClick={manageProfile} className="profile__item">Manage Profile</li>
             </span>
-            {/* <Link to={'manage-card'}>
-              <li className="profile__item">NFC Card</li>
-            </Link>
-            <Link to={'digital-profile'}>
-              <li className="profile__item">Digital Profile</li>
-            </Link> */}
             <Link to={'/'}>
               <li onClick={handleLogout} className="profile__item">
                 Logout
               </li>
             </Link>
 
-
           </ul>
         ) : (
           <div className="nonAuthbtns">
             <Link to={'/login'}><i className='ri-user-line'></i> Login / Signup?
             </Link>
-            {/* <Link to={'/company-signup'}>
-              <button className="login__btn">Company Signup</button>
-            </Link>
-            <Link to={'/personal-signup'}>
-              <button className="login__btn">Personal Signup</button>
-            </Link> */}
           </div>
         )}
         <i className="ri-close-line profile__close" id="profile-close"></i>

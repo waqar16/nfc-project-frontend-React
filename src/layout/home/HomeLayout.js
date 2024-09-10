@@ -71,7 +71,7 @@ import OurApp from '../../components/OurApp/OurApp';
 import ScheduleMeetingSection from '../../components/scheduleMeetings/ScheduleMeetingSection';
 import FeaturesSection from '../../components/featureSection/FeatureSection';
 import HowItWorksSection from '../../components/howItWorkSection/HowItWorkSection';
-import TestimonialsSection from '../../components/testimonialSection/TestimonialSection';
+// import TestimonialsSection from '../../components/testimonialSection/TestimonialSection';
 import Footer from '../../components/footer/Footer';
 
 function HomeLayout() {

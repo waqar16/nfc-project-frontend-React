@@ -15,7 +15,7 @@ const NfcCard = () => {
   });
 
   // State to manage the feature status
-  const [featureUnderDevelopment, setFeatureUnderDevelopment] = useState(true);
+  const [featureUnderDevelopment] = useState(true);
 
   const fetchUserData = useCallback(async () => {
     try {

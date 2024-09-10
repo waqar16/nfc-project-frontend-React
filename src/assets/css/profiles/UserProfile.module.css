@@ -5,6 +5,23 @@
   margin-top: 75px;
 }
 
+.autocompleteDropdownContainer {
+  border: 1px solid #ddd;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+}
+
+.suggestionItem {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestionItemActive {
+  background-color: #f0f0f0;
+}
+
+
 .formContainer {
   /* background: #fff; */
   flex: 1;

@@ -20,6 +20,7 @@ const EmployeeProfile = () => {
     last_name: '',
     email: '',
     phone: '',
+    username: '',
     address: '',
     position: '',
     bio: '',
@@ -29,7 +30,7 @@ const EmployeeProfile = () => {
     linkedin: '',
     whatsapp: '',
     github: '', 
-    profile_pic: 'https://placehold.co/150x150',
+    profile_pic: '',
     receive_marketing_emails: false,
 
   });
@@ -85,13 +86,14 @@ const EmployeeProfile = () => {
             address: profileResponse.data.address || '',
             bio: profileResponse.data.bio || '',
             position: profileResponse.data.position || '',
+            username: profileResponse.data.username || '',
             website: profileResponse.data.website || '',
             facebook: profileResponse.data.facebook || '',
             instagram: profileResponse.data.instagram || '',
             linkedin: profileResponse.data.linkedin || '',
             whatsapp: profileResponse.data.whatsapp || '',
             github: profileResponse.data.github || '',
-            profile_pic: profileResponse.data.profile_pic || 'https://placehold.co/150x150',
+            profile_pic: profileResponse.data.profile_pic || '',
             receive_marketing_emails: profileResponse.data.receive_marketing_emails || false,
 
           }));
@@ -107,6 +109,7 @@ const EmployeeProfile = () => {
               email: email,
               phone: '',
               address: '',
+              username: '',
               bio: '',
               position: '',
               website: '',
@@ -115,7 +118,7 @@ const EmployeeProfile = () => {
               linkedin: '',
               whatsapp: '',
               github: '', 
-              profile_pic: 'https://placehold.co/150x150',
+              profile_pic: '',
               receive_marketing_emails: false,
             });
             setProfileExists(false);
@@ -164,7 +167,7 @@ const EmployeeProfile = () => {
     if (file) {
       setLoading(true);
       try {
-        const uploadResponse = await uploadFileToS3(file);
+        const uploadResponse = await uploadFileToS3(file, user.user);
         const profilePicUrl = uploadResponse.Location; // URL of the uploaded file
 
         setUser(prevUser => ({

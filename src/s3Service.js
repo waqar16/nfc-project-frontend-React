@@ -6,14 +6,13 @@ const s3 = new AWS.S3({
   region: process.env.REACT_APP_AWS_REGION,
 });
 
-export const uploadFileToS3 = async (file) => {
+export const uploadFileToS3 = async (file, userId) => {
   const params = {
     Bucket: 'onesecbucket',
-    Key: `images/${file.name}`,
+    Key: `images/${userId}/profile-pic.jpg`, // Use userId to ensure uniqueness
     Body: file,
     ContentType: file.type,
-    // ACL: 'public-read',
-    CacheControl: 'no-cache' 
+    CacheControl: 'no-cache',
   };
 
   try {

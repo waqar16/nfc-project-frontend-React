@@ -34,6 +34,8 @@ import ReceivedCompanyLayout from './layout/companyProfile/ReceivedCompantLayout
 import ManageAppointmentsLayout from './layout/scheduleMeetings/ManageAppointmentsLayout';
 import ListReceivedCards from './layout/userProfile/ListReceivedCardsLayout';  
 import ListCompanyProfile from './layout/companyProfile/ListCompanyCardLayout';
+import Terms from './components/Terms/Terms';
+import PrivacyPolicy from './components/privacyPolicy/PrivacyPolicy';
 
 function App() {
   
@@ -67,19 +69,21 @@ function App() {
           <Route path="/password/reset/confirm/:uid/:token" element={<ConfirmResetPasswordLayout />} />
           <Route path="/activate/:uid/:token" element={<Activation />} />
           <Route path="/activation-sent" element={<ActivationSentTemplate />} />
-          <Route path="/digital-profile/:userId/:username" element={<DigitalProfileLayout />} />
+          <Route path="/digital-profile/:userId/:userName" element={<DigitalProfileLayout />} />
           <Route path="/digital-profile/:userId/:username/received-cards" element={<ListReceivedCards />} />
           <Route path="/manage-appointments/:userId/:username" element={<ManageAppointmentsLayout />} />
           <Route path="/company-card/:userId/:username" element={<CompanyCardLayout />} />
           <Route path="/company-card/:userId/:username/received-cards" element={<ListCompanyProfile />} />
           <Route path="/profile/:identifier/" element={<ReceivedProfileLayout />} />
-          <Route path="/company/:userId/" element={<ReceivedCompanyLayout />} />
+          <Route path="/company/:identifier/" element={<ReceivedCompanyLayout />} />
           <Route path="/user-analytics/:userId/:username" element={<AnalyticsLayout/>}/>
           <Route path="/employee-profile/:userId/:username" element={<EmployeeProfileLayout/>}/>
           <Route path="/profile-summary/:userId/:username" element={<ProfileSummaryLayout/>}/>
           <Route path="/nfc-management/:userId/:username" element={<NfcCardLayout/>}/>
           <Route path="/team-management/:userId/:username" element={<TeamManagementLayout/>}/>
           <Route path="/company-analytics/:userId/:username" element={<CompanyAnalyticsLayout/>}/>
+          <Route path="/terms-and-conditions" element={<Terms/>}/>
+          <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
 
         </Routes>
       </div>

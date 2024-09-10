@@ -22,30 +22,31 @@ const Faq = () => {
 
   const faqData = [
     {
-      question: 'What is this platform about?',
-      answer: 'This platform allows customers to manage their profiles, write information to NFC cards, and schedule appointments. It supports multiple organizations under a white-label model.',
+      question: 'What is Onesec?',
+      answer: 'Onesec is an online platform offering NFC (Near Field Communication) solutions and products. Our services include NFC cards designed for instant contact sharing, environmentally friendly usage, and enhanced interaction.',
     },
     {
-      question: 'How can I sign up as a company?',
-      answer: 'To sign up as a company, you need to provide detailed company information, administrator information, login credentials, business details, and additional information. You can sign up using the Company Signup form.',
+      question: 'How do I use my digital NFC card?',
+      answer: 'Ensure that NFC is enabled on your device. Tap the digital Onesec card against the Onesec app to transmit the stored information.',
     },
     {
-      question: 'How do I update my profile information?',
-      answer: 'You can update your profile information by navigating to the profile management section. Here, you can edit your details and save the changes.',
+      question: 'Can I customize my Onesec digital card?',
+      answer: 'Yes, you can customize your Onesec digital card with various information or content, such as personal contact details, links to websites or social media profiles, and schedule meetings.',
     },
     {
-      question: 'Can I manage multiple organizations with one account?',
-      answer: 'Yes, our platform supports multiple organizations under a single account through a white-label model. You can manage different organizations seamlessly.',
+      question: 'What should I do if I encounter issues with my Onesec digital card?',
+      answer: 'If you experience issues with your Onesec digital card, ensure NFC is enabled on your device and functioning correctly. Confirm that you are using the card with the Onesec app. Contact our customer support team for assistance if the issue persists.',
     },
     {
-      question: 'What are NFC cards and how do I use them?',
-      answer: 'NFC (Near Field Communication) cards are used to store and share information wirelessly. You can write your profile information to NFC cards using our platform, which can then be used for various purposes such as contact sharing, access control, etc.',
+      question: 'How can I update or modify the information on my Onesec digital card?',
+      answer: 'To update or modify the information on your digital NFC card, log in to your account on Letsconnect.onesec.shop or the Onesec app. Navigate to your profile and save the updated information. The changes will be reflected the next time the card is tapped.',
     },
     {
-      question: 'How do I schedule appointments?',
-      answer: 'To schedule appointments, use the appointment scheduling feature available in your profile. You can set your preferences and manage your appointments through this interface.',
+      question: 'How do I track my purchase or access my Onesec digital card?',
+      answer: 'After purchasing, you will receive an email with a link to sign up for your Onesec digital card. You can also sign up for your account on Letsconnect.onesec.shop or download our Onesec app from the Play Store and App Store to view and manage your digital NFC cards.',
     },
   ];
+  
 
   return (
     <div data-aos="fade-left" className={styles.faq}>
