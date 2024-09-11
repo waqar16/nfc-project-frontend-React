@@ -329,6 +329,7 @@ const handleShareQrCode = () => {
         <ScheduleMeeting
            attendeeEmail={company.email}
            userId={company.user}
+           username={company.username}
            />
 
         <QrCodeModal

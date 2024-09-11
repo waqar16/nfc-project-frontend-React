@@ -130,6 +130,7 @@ const CompanyProfile = () => {
         console.error('Error fetching user data:', error);
         toast.error('Error fetching company data')
         navigate('/login')
+        localStorage.clear()
       }
     };
 
@@ -253,7 +254,7 @@ const CompanyProfile = () => {
   return (
     <div style={{width:'100%',display:'flex',flexDirection:'column',alignItems:'center'}}>
       <div className={styles.companyProfileContainer}>
-      <Sidebar profileType={localStorage.getItem('profile_type')} />
+      <Sidebar profileType={localStorage.getItem('profile_type')} logo={company.logo}/>
       {/* Preview Card */}
       {/* <div className={styles.previewCard}>
         <h2>{company.company_name}</h2>

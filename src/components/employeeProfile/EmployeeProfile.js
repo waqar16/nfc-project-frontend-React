@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { uploadFileToS3 } from '../../s3Service';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import defaultProfilePic from '../../assets/img/userPlaceholder.jpg';
+
 
 
 
@@ -30,7 +32,7 @@ const EmployeeProfile = () => {
     linkedin: '',
     whatsapp: '',
     github: '', 
-    profile_pic: '',
+    profile_pic: defaultProfilePic,
     receive_marketing_emails: false,
 
   });
@@ -93,7 +95,7 @@ const EmployeeProfile = () => {
             linkedin: profileResponse.data.linkedin || '',
             whatsapp: profileResponse.data.whatsapp || '',
             github: profileResponse.data.github || '',
-            profile_pic: profileResponse.data.profile_pic || '',
+            profile_pic: profileResponse.data.profile_pic || defaultProfilePic,
             receive_marketing_emails: profileResponse.data.receive_marketing_emails || false,
 
           }));
@@ -118,7 +120,7 @@ const EmployeeProfile = () => {
               linkedin: '',
               whatsapp: '',
               github: '', 
-              profile_pic: '',
+              profile_pic: defaultProfilePic,
               receive_marketing_emails: false,
             });
             setProfileExists(false);
@@ -168,7 +170,7 @@ const EmployeeProfile = () => {
       setLoading(true);
       try {
         const uploadResponse = await uploadFileToS3(file, user.user);
-        const profilePicUrl = uploadResponse.Location; // URL of the uploaded file
+        const profilePicUrl = `${uploadResponse.Location}?t=${new Date().getTime()}`;   
 
         setUser(prevUser => ({
           ...prevUser,
@@ -221,14 +223,13 @@ const EmployeeProfile = () => {
     } catch (error) {
       setLoading(false);
       console.error('Error updating/creating profile:', error);
-      // alert('Failed to update/create profile.');
       toast.error('Failed to update/create profile.');
     }
   };
 
   return (
     <div className={styles.userProfileContainer}>
-      <Sidebar profileType={localStorage.getItem('profile_type')} />
+      <Sidebar profileType={localStorage.getItem('profile_type')} profilePic={user.profile_pic}/>
       <div className={styles.formContainer}>
         {/* <h2>User Profile Management</h2> */}
         <div className={styles.profileSummaryContainer}>

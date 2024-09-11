@@ -43,6 +43,7 @@ const Navbar = () => {
         }
       } else {
         setLoading(false); // No token found, data fetching complete
+        setIsAuthenticated(false);
       }
     };
 

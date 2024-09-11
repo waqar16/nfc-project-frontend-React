@@ -396,11 +396,17 @@ const TeamManagement = () => {
       }
       fetchEmployees(token);
       resetForm();
+
+
     } catch (error) {
-      console.error('Error submitting employee:', error);
-      toast.error('Failed to submit employee.');
-    } finally {
-      setLoading(false);
+      if (error.response && error.response.data && error.response.data.error) {
+        toast.error(`${error.response.data.error}`);
+        setLoading(false);
+      } else {
+        // alert('An unexpected error occurred. Please try again.');
+        toast.error("An unexpected error occurred. Please try again.")
+        setLoading(false);
+    }
     }
   };
 

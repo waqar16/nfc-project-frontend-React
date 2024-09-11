@@ -4,7 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 // import axios from 'axios';
 import styles from '../../assets/css/profiles/ScheduleMeeting.module.css';
 
-const ScheduleMeeting = ({ attendeeEmail, userId }) => {
+const ScheduleMeeting = ({ attendeeEmail, userId, username }) => {
   const [date, setDate] = useState(new Date());
   const [meetingDetails, setMeetingDetails] = useState({
     attendee_email: '',
@@ -73,7 +73,7 @@ const ScheduleMeeting = ({ attendeeEmail, userId }) => {
       const dateString = date.toISOString().split('T')[0];
       const combinedDateTime = `${dateString}T${meetingDetails.time}:00.000Z`;
 
-      const authUrl = `https://api.onesec.shop/google/auth-request/?title=${encodeURIComponent(meetingDetails.title)}&description=${encodeURIComponent(meetingDetails.description)}&start_datetime=${combinedDateTime}&attendee_email=${encodeURIComponent(attendeeEmail)}&user_id=${encodeURIComponent(userId)}`;
+      const authUrl = `https://api.onesec.shop/google/auth-request/?title=${encodeURIComponent(meetingDetails.title)}&description=${encodeURIComponent(meetingDetails.description)}&start_datetime=${combinedDateTime}&attendee_email=${encodeURIComponent(attendeeEmail)}&user_id=${encodeURIComponent(userId)}&username=${encodeURIComponent(username)}`;
       
       window.location.href = authUrl;
     } catch (error) {

@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import styles from '../../assets/css/index/Sidebar.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import defaultProfilePic from '../../assets/img/userPlaceholder.jpg';
+import defaultLogo from '../../assets/img/logoPlaceholder.png';
 
 
-const Sidebar = ({ profileType }) => {
+const Sidebar = ({ profileType,profilePic,logo }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [userData, setUserData] = useState({});
-  const [profilePic, setProfilePic] = useState('');
-  const [logo, setLogo] = useState('');
+
 
   const navigate = useNavigate();
 
@@ -43,41 +44,57 @@ const Sidebar = ({ profileType }) => {
   }, []);
 
   // Fetch profile picture based on profileType and userData
-  useEffect(() => {
-    const fetchProfilePic = async () => {
-      if (!userData.username) return;
+  // useEffect(() => {
+  //   const fetchProfilePic = async () => {
+  //     if (!userData.username) return;
 
-      try {
-        const token = localStorage.getItem('authToken');
-        if (profileType === 'company') {
-          const response = await axios.get(`https://api.onesec.shop/api/companies/${userData.username}/`, {
-            headers: {
-              Authorization: `Token ${token}`
-            }
-          });
-          setLogo(response.data.logo);
-        } else if (profileType === 'individual') {
-          const response = await axios.get(`https://api.onesec.shop/api/profiles/${userData.username}/`, {
-            headers: {
-              Authorization: `Token ${token}`
-            }
-          });
-          setProfilePic(response.data.profile_pic);
-        } else if (profileType === 'employee' ) {
-          const response = await axios.get(`https://api.onesec.shop/api/employees/${userData.username}/`, {
-            headers: {
-              Authorization: `Token ${token}`
-            }
-          });
-          setProfilePic(response.data.profile_pic);
-        }
-      } catch (error) {
-        console.error('Error fetching profile pic:', error);
-      }
-    };
+  //     try {
+  //       const token = localStorage.getItem('authToken');
+  //       if (profileType === 'company') {
+  //         const response = await axios.get(`https://api.onesec.shop/api/companies/${userData.username}/`, {
+  //           headers: {
+  //             Authorization: `Token ${token}`
+  //           }
+  //         });
+  //         if (response.data.logo) {
+  //           setLogo(response.data.logo);
+  //         } else {
+  //           setLogo(response.data.logo);
+  //         }
+          
+  //       } else if (profileType === 'individual') {
+  //         const response = await axios.get(`https://api.onesec.shop/api/profiles/${userData.username}/`, {
+  //           headers: {
+  //             Authorization: `Token ${token}`
+  //           }
+  //         });
 
-    fetchProfilePic();
-  }, [userData, profileType]);
+  //         if (response.data.profile_pic) {
+  //           setProfilePic(response.data.profile_pic);
+  //         } else {
+  //           setProfilePic(defaultProfilePic); 
+  //         }
+
+  //       } else if (profileType === 'employee' ) {
+  //         const response = await axios.get(`https://api.onesec.shop/api/employees/${userData.username}/`, {
+  //           headers: {
+  //             Authorization: `Token ${token}`
+  //           }
+  //         });
+
+  //         if (response.data.profile_pic) {
+  //           setProfilePic(response.data.profile_pic);
+  //         } else {
+  //           setProfilePic(defaultProfilePic); 
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching profile pic:', error);
+  //     }
+  //   };
+
+  //   fetchProfilePic();
+  // }, [userData, profileType]);
 
 
 
@@ -90,11 +107,11 @@ const Sidebar = ({ profileType }) => {
       <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
         {/* Profile Section */}
         <div className={styles.profileSection}>
-          {profilePic ? (
-              <img className={styles.profilePic} src={profilePic} alt="Profile" />
-            ) : (
-              logo && <img className={styles.logo} src={logo} alt="Logo" />
-            )}
+        {profileType === 'company' && logo ? (
+            <img className={styles.logo} src={logo || defaultLogo} alt="Logo" />
+          ) : (
+            <img className={styles.profilePic} src={profilePic || defaultProfilePic} alt="Profile" />
+          )}
           {isOpen && (
             <div className={styles.profileInfo}>
               <p className={styles.profileUsername}>@{userData.username}</p>
@@ -253,7 +270,11 @@ const Sidebar = ({ profileType }) => {
         </div> */}
       </div>
       <div className={styles.sidebar__toggle} onClick={toggleSidebar}>
-        <i className="ri-menu-line"></i>
+      {isOpen ? (
+          <i className="ri-close-line"></i> // Close icon when sidebar is open
+        ) : (
+          <i className="ri-menu-line"></i> // Menu icon when sidebar is closed
+        )}
       </div>
     </div>
   );

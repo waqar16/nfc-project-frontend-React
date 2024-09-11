@@ -1,5 +1,5 @@
 // SignupPage.js
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import styles from '../../assets/css/authentication/Authentication.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -9,22 +9,32 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const SignupPage = () => {
-  const [isPersonalSignup, setIsPersonalSignup] = useState(true); // State to toggle between personal and company signup
-  const toggleSignupMode = () => setIsPersonalSignup(!isPersonalSignup); // Function to toggle signup mode
+const SignupPage = () => { 
   const navigate = useNavigate();
-
+  const queryParams = new URLSearchParams(window.location.search);
+  const [profileType, setProfileType] = useState(queryParams.get('company')? 'company' : 'individual');
+  const toggleSignupMode = (profile) => {
+    setProfileType(profile)};
   const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
+  // useEffect(() => {
+  //   if (queryParams.get('company')) {
+  //     setProfileType('company');
+  //   } else {
+  //     setProfileType('individual');
+  //   }
+  //    console.log('Profile type:', queryParams.get('company'));
+  // }, [window.location.search]);
 
   const handleGoogleSuccess = async (response) => {
     const tokenId = response.credential;
 
     try {
       console.log('Google login response:', response);
-      const profileType = isPersonalSignup ? "individual" : "company";
+      const profile = profileType ? "individual" : "company";
       const res = await axios.post('https://api.onesec.shop/auth/custom-google-login/', {
         access_token: tokenId,
-        profile_type: profileType,
+        profile_type: profile,
         authentication_type: 'google'
       });
 
@@ -76,14 +86,14 @@ const SignupPage = () => {
 
           <div className={styles.toggle__container}>
             <button
-              className={`${styles.toggle__button} ${isPersonalSignup ? styles.active : ''}`}
-              onClick={() => toggleSignupMode()}
+              className={`${styles.toggle__button} ${profileType==='individual' ? styles.active : ''}`}
+              onClick={() => toggleSignupMode('individual')}
             >
               Individual
             </button>
             <button
-              className={`${styles.toggle__button} ${!isPersonalSignup ? styles.active : ''}`}
-              onClick={() => toggleSignupMode()}
+              className={`${styles.toggle__button} ${profileType==='company' ? styles.active : ''}`}
+              onClick={() => toggleSignupMode('company')}
             >
               Company
             </button>
@@ -105,7 +115,7 @@ const SignupPage = () => {
       
           <p className={styles.login__or}>or</p>
 
-          {isPersonalSignup ? (
+          {profileType =='individual' ? (
             <PersonalSignup navigate={navigate} />
           ) : (
             <CompanySignup navigate={navigate} />

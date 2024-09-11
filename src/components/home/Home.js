@@ -47,7 +47,7 @@ const Home = () => {
     if (isAuthenticated & profileType === 'company') {
       navigate(`/company-profile/${userId}/${username}`);
     } else {
-      navigate('/signup');
+      navigate('/signup?company=true');
     }
   };
 
@@ -55,7 +55,7 @@ const Home = () => {
     if (isAuthenticated & profileType === 'individual') {
       navigate(`/user-profile/${userId}/${username}`);
     } else {
-      navigate('/signup');
+      navigate('/signup?individual=true');
     }
   };
 
