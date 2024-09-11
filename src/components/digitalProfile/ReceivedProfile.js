@@ -391,7 +391,7 @@ const ReceivedProfile = () => {
         <ScheduleMeeting
           attendeeEmail={user.email}
           userId={user.user}
-          username={user.username}
+          username={identifier}
         />
       )}
 
