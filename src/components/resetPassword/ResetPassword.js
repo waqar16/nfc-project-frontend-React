@@ -47,7 +47,7 @@ const ResetPassword = () => {
     setResendDisabled(true);
     setResendTimeLeft(60); // 60 seconds for testing, change to 3600 for 60 minutes
     try {
-      await axios.post('  http://localhost:8000/auth/users/resend_activation/', { email });
+      await axios.post('  https://api.onesec.shop/auth/users/resend_activation/', { email });
       setMessage('Password reset link sent to your email again.');
     } catch (error) {
       if (error.response && error.response.data && error.response.data.email) {
@@ -64,7 +64,7 @@ const ResetPassword = () => {
     setIsSubmitting(true);
     setResendDisabled(false); // Enable resend activation button on submit
     try {
-      await axios.post('  http://localhost:8000/auth/users/reset_password/', { email });
+      await axios.post('  https://api.onesec.shop/auth/users/reset_password/', { email });
       setMessage('Password reset link sent to your email.');
     } catch (error) {
       setIsSubmitting(false);

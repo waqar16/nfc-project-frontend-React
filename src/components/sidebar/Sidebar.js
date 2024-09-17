@@ -28,7 +28,7 @@ const Sidebar = ({ profileType,profilePic,logo }) => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await axios.get('http://localhost:8000/auth/users/me/', {
+        const response = await axios.get('https://api.onesec.shop/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -51,7 +51,7 @@ const Sidebar = ({ profileType,profilePic,logo }) => {
   //     try {
   //       const token = localStorage.getItem('authToken');
   //       if (profileType === 'company') {
-  //         const response = await axios.get(`http://localhost:8000/api/companies/${userData.username}/`, {
+  //         const response = await axios.get(`https://api.onesec.shop/api/companies/${userData.username}/`, {
   //           headers: {
   //             Authorization: `Token ${token}`
   //           }
@@ -63,7 +63,7 @@ const Sidebar = ({ profileType,profilePic,logo }) => {
   //         }
           
   //       } else if (profileType === 'individual') {
-  //         const response = await axios.get(`http://localhost:8000/api/profiles/${userData.username}/`, {
+  //         const response = await axios.get(`https://api.onesec.shop/api/profiles/${userData.username}/`, {
   //           headers: {
   //             Authorization: `Token ${token}`
   //           }
@@ -76,7 +76,7 @@ const Sidebar = ({ profileType,profilePic,logo }) => {
   //         }
 
   //       } else if (profileType === 'employee' ) {
-  //         const response = await axios.get(`http://localhost:8000/api/employees/${userData.username}/`, {
+  //         const response = await axios.get(`https://api.onesec.shop/api/employees/${userData.username}/`, {
   //           headers: {
   //             Authorization: `Token ${token}`
   //           }

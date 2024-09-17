@@ -50,7 +50,7 @@ const UserProfile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
+        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -73,7 +73,7 @@ const UserProfile = () => {
 
         // Fetch the profile data from the API
         try {
-          const profileResponse = await axios.get(`http://localhost:8000/api/profiles/${authenticatedUsername}/`, {
+          const profileResponse = await axios.get(`https://api.onesec.shop/api/profiles/${authenticatedUsername}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -176,11 +176,11 @@ const UserProfile = () => {
 
     try {
       const authToken = localStorage.getItem('authToken');
-      const url = `http://localhost:8000/api/profiles/${user.username}/`;
+      const url = `https://api.onesec.shop/api/profiles/${user.username}/`;
 
       if (!profileExists) {
         // If profile does not exist, create it using POST
-        await axios.post('http://localhost:8000/api/profiles/', user, {
+        await axios.post('https://api.onesec.shop/api/profiles/', user, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -421,7 +421,7 @@ export default UserProfile;
 //     const fetchUserData = async () => {
 //       try {
 //         const token = localStorage.getItem('authToken');
-//         const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
+//         const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
 //           headers: {
 //             Authorization: `Token ${token}`,
 //           },
@@ -444,7 +444,7 @@ export default UserProfile;
 
 //         // Fetch the profile data from the API
 //         try {
-//           const profileResponse = await axios.get(`http://localhost:8000/api/profiles/${authenticatedUsername}/`, {
+//           const profileResponse = await axios.get(`https://api.onesec.shop/api/profiles/${authenticatedUsername}/`, {
 //             headers: {
 //               Authorization: `Token ${token}`,
 //             },
@@ -558,11 +558,11 @@ export default UserProfile;
 
 //     try {
 //       const authToken = localStorage.getItem('authToken');
-//       const url = `http://localhost:8000/api/profiles/${user.username}/`;
+//       const url = `https://api.onesec.shop/api/profiles/${user.username}/`;
 
 //       if (!profileExists) {
 //         // If profile does not exist, create it using POST
-//         await axios.post('http://localhost:8000/api/profiles/', user, {
+//         await axios.post('https://api.onesec.shop/api/profiles/', user, {
 //           headers: {
 //             Authorization: `Token ${authToken}`,
 //           },
