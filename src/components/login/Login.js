@@ -153,7 +153,7 @@ const PersonalLogin = ({ navigate }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://api.onesec.shop/auth/token/login/', {
+      const response = await axios.post('https://api.onesec.shop/auth/custom/token/login/', {
         email,
         password,
       });
@@ -205,11 +205,11 @@ const PersonalLogin = ({ navigate }) => {
       setLoading(false);
       if (error.response && error.response.data) {
         const data = error.response.data;
-        if (data.non_field_errors) {
-          setError(data.non_field_errors[0]);
+        if (data.detail) {
+          setError(data.detail);
         }
         if (data.error) {
-          setError(data.error[0]);
+          setError(data.error);
         }
       } else {
         console.error('Error logging in user:', error.message);
@@ -287,7 +287,7 @@ const CompanyLogin = ({ navigate }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://api.onesec.shop/auth/token/login/', {
+      const response = await axios.post('https://api.onesec.shop/auth/custom/token/login/', {
         email,
         password,
       });
@@ -296,7 +296,7 @@ const CompanyLogin = ({ navigate }) => {
       // });
 
       // console.log(response2.data.profile_type);
-
+     
       if (response.status === 200) {
         const authToken = response.data;
         localStorage.setItem('authToken', authToken.auth_token);
@@ -337,11 +337,11 @@ const CompanyLogin = ({ navigate }) => {
       setLoading(false);
       if (error.response && error.response.data) {
         const data = error.response.data;
-        if (data.non_field_errors) {
-          setError(data.non_field_errors[0]);
+        if (data.detail) {
+          setError(data.detail);
         }
         if (data.error) {
-          setError(data.error[0]);
+          setError(data.error);
         }
       } else {
         console.error('Error logging in user:', error.message);
