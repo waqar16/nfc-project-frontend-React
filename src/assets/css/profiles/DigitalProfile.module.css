@@ -133,6 +133,7 @@ padding: 20px;
 }
 
 .position{
+  word-wrap: break-word;
   text-align: center; 
   display: flex;
   justify-content: center;
@@ -157,10 +158,11 @@ padding: 20px;
 
 
 .bio {
+  word-wrap: break-word;
   font-size: 0.9em;
   line-height: 1.5;
   margin: 20px;
-  color: #333;
+  color: #0f0b0b;
 }
 
 .socialIcons {
@@ -534,9 +536,8 @@ padding: 20px;
   }
 
   .bio{
-    /* text-align: center; */
+    word-wrap: break-word;
     text-align: justify;
-
   }
 
 }

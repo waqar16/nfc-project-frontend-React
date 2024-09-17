@@ -51,7 +51,7 @@ const DigitalProfile = () => {
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
+      const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -63,7 +63,7 @@ const DigitalProfile = () => {
       if (profile_type !== profile_type || userId !== id.toString() || userName !== authenticatedUsername) {
         navigate('/not-authorized'); // Redirect to not authorized page
       } else {
-        const endpoint = profile_type === 'employee' ? `https://api.onesec.shop/api/employees/${email}/` : `  https://api.onesec.shop/api/profiles/${userName}/`;
+        const endpoint = profile_type === 'employee' ? `http://localhost:8000/api/employees/${email}/` : `  http://localhost:8000/api/profiles/${userName}/`;
         const profileResponse = await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`
@@ -102,14 +102,14 @@ const DigitalProfile = () => {
     try {
       // setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://api.onesec.shop/api/received-cards/', {
+      const response = await axios.get('http://localhost:8000/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
       });
       const cards = await Promise.all(response.data.results.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
-        const userResponse = await axios.get(`https://api.onesec.shop/api/profiles/${card.shared_from_username}/`, {
+        const userResponse = await axios.get(`http://localhost:8000/api/profiles/${card.shared_from_username}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -145,7 +145,7 @@ const DigitalProfile = () => {
     try {
       // setLoading(true);
       // const token = localStorage.getItem('authToken');
-      // const response = await axios.post('https://api.onesec.shop/api/share-profile-url/', {}, {
+      // const response = await axios.post('http://localhost:8000/api/share-profile-url/', {}, {
       //   headers: {
       //     Authorization: `Token ${token}`
       //   }
@@ -167,7 +167,7 @@ const DigitalProfile = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://api.onesec.shop/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('http://localhost:8000/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },

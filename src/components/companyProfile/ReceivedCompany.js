@@ -45,7 +45,7 @@ const ReceivedCompany = () => {
     try {
       console.log('Google login response:', response);
       console.log('Google login response:', access_token);
-      const res = await axios.post('https://api.onesec.shop/api/share-back-profile/', {
+      const res = await axios.post('http://localhost:8000/api/share-back-profile/', {
         access_token: access_token,
         profile_type: 'individual',
       });
@@ -84,7 +84,7 @@ const ReceivedCompany = () => {
   const fetchCompanyData = useCallback(async () => {
     // const token = localStorage.getItem('authToken');
     try {
-      const response = await axios.get(`https://api.onesec.shop/api/companies/${identifier}/`, {
+      const response = await axios.get(`http://localhost:8000/api/companies/${identifier}/`, {
         // headers: {
         //   Authorization: `Token ${token}`,
         // },
@@ -124,7 +124,7 @@ const ReceivedCompany = () => {
     const token = localStorage.getItem('authToken');
     try {
       await axios.post(
-        '  https://api.onesec.shop/api/create_interaction/',
+        '  http://localhost:8000/api/create_interaction/',
         {
           user: companyId,
           interaction_type: 'view_profile',
@@ -166,14 +166,14 @@ const shareProfile = async () => {
   const token = localStorage.getItem('authToken');
   try {
     setLoading(true);
-    const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
+    const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
       headers: {
         Authorization: `Token ${token}`,
       },
     });
     const { id, email, profile_type, username } = userResponse.data;
 
-    const endpoint = profile_type === 'employee' ? `https://api.onesec.shop/api/employees/${username}/` : `  https://api.onesec.shop/api/profiles/${username}/`;
+    const endpoint = profile_type === 'employee' ? `http://localhost:8000/api/employees/${username}/` : `  http://localhost:8000/api/profiles/${username}/`;
 
 
     // Check if profile exists before creating
@@ -188,7 +188,7 @@ const shareProfile = async () => {
         // Profile does not exist, create it
         try {
           await axios.post(
-            '  https://api.onesec.shop/api/profiles/',
+            '  http://localhost:8000/api/profiles/',
             {
               user: id,
               first_name: userResponse.data.first_name,
@@ -217,7 +217,7 @@ const shareProfile = async () => {
     }
 
     try {
-      await axios.post('https://api.onesec.shop/api/share-profile/', { shared_to: company.email }, {
+      await axios.post('http://localhost:8000/api/share-profile/', { shared_to: company.email }, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -237,7 +237,7 @@ const shareProfile = async () => {
 };
 
 const addToContacts = () => {
-  const url = `https://api.onesec.shop/download_vcard/${company.user}/`;
+  const url = `http://localhost:8000/download_vcard/${company.user}/`;
   window.location.href = url;
 };
 

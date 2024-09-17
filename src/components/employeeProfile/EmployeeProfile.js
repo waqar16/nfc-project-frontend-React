@@ -32,7 +32,7 @@ const EmployeeProfile = () => {
     linkedin: '',
     whatsapp: '',
     github: '', 
-    profile_pic: defaultProfilePic,
+    profile_pic: 'https://th.bing.com/th/id/OIP.apbH6Ab6rTVtvyIlbsyQFAHaGv?w=699&h=636&rs=1&pid=ImgDetMain',
     receive_marketing_emails: false,
 
   });
@@ -46,7 +46,7 @@ const EmployeeProfile = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
+        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -76,7 +76,7 @@ const EmployeeProfile = () => {
 
 
         try {
-          const profileResponse = await axios.get(`https://api.onesec.shop/api/employees/${email}/`, {
+          const profileResponse = await axios.get(`http://localhost:8000/api/employees/${email}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -95,7 +95,7 @@ const EmployeeProfile = () => {
             linkedin: profileResponse.data.linkedin || '',
             whatsapp: profileResponse.data.whatsapp || '',
             github: profileResponse.data.github || '',
-            profile_pic: profileResponse.data.profile_pic || defaultProfilePic,
+            profile_pic: profileResponse.data.profile_pic || 'https://th.bing.com/th/id/OIP.apbH6Ab6rTVtvyIlbsyQFAHaGv?w=699&h=636&rs=1&pid=ImgDetMain',
             receive_marketing_emails: profileResponse.data.receive_marketing_emails || false,
 
           }));
@@ -120,7 +120,7 @@ const EmployeeProfile = () => {
               linkedin: '',
               whatsapp: '',
               github: '', 
-              profile_pic: defaultProfilePic,
+              profile_pic: 'https://th.bing.com/th/id/OIP.apbH6Ab6rTVtvyIlbsyQFAHaGv?w=699&h=636&rs=1&pid=ImgDetMain',
               receive_marketing_emails: false,
             });
             setProfileExists(false);
@@ -192,7 +192,7 @@ const EmployeeProfile = () => {
     try {
       const authToken = localStorage.getItem('authToken');
       if (profileExists) {
-        await axios.put(`https://api.onesec.shop/api/employees/${user.email}/`, user, {
+        await axios.put(`http://localhost:8000/api/employees/${user.email}/`, user, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -201,7 +201,7 @@ const EmployeeProfile = () => {
         toast.success('Profile updated successfully!');
         setLoading(false);
       } else {
-        await axios.post('  https://api.onesec.shop/api/employees/', user, {
+        await axios.post('  http://localhost:8000/api/employees/', user, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -212,7 +212,7 @@ const EmployeeProfile = () => {
       }
       
       // Fetch updated profile data
-      const profileResponse = await axios.get(`https://api.onesec.shop/api/employees/${user.email}/`, {
+      const profileResponse = await axios.get(`http://localhost:8000/api/employees/${user.email}/`, {
         headers: {
           Authorization: `Token ${authToken}`,
         },

@@ -35,7 +35,7 @@ const UserProfile = () => {
     linkedin: null,
     whatsapp: null,
     github: null,
-    profile_pic: defaultProfilePic,
+    profile_pic: 'https://th.bing.com/th/id/OIP.apbH6Ab6rTVtvyIlbsyQFAHaGv?w=699&h=636&rs=1&pid=ImgDetMain',
     receive_marketing_emails: false,
   });
 
@@ -50,7 +50,7 @@ const UserProfile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
+        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -73,7 +73,7 @@ const UserProfile = () => {
 
         // Fetch the profile data from the API
         try {
-          const profileResponse = await axios.get(`https://api.onesec.shop/api/profiles/${authenticatedUsername}/`, {
+          const profileResponse = await axios.get(`http://localhost:8000/api/profiles/${authenticatedUsername}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -83,7 +83,7 @@ const UserProfile = () => {
           setUser(prevUser => ({
             ...prevUser,
             ...profileResponse.data,
-            profile_pic: profileResponse.data.profile_pic || localStorage.getItem('profile_pic') || defaultProfilePic,
+            profile_pic: profileResponse.data.profile_pic || localStorage.getItem('profile_pic') || 'https://th.bing.com/th/id/OIP.apbH6Ab6rTVtvyIlbsyQFAHaGv?w=699&h=636&rs=1&pid=ImgDetMain',
             receive_marketing_emails: profileResponse.data.receive_marketing_emails || false,
           }));
           setProfileExists(true); // Mark profile as existing
@@ -98,7 +98,7 @@ const UserProfile = () => {
               last_name,
               email,
               username: authenticatedUsername,
-              profile_pic: localStorage.getItem('profile_pic') || defaultProfilePic,
+              profile_pic: localStorage.getItem('profile_pic') || 'https://th.bing.com/th/id/OIP.apbH6Ab6rTVtvyIlbsyQFAHaGv?w=699&h=636&rs=1&pid=ImgDetMain',
             }));
             setProfileExists(false); 
           } else {
@@ -176,11 +176,11 @@ const UserProfile = () => {
 
     try {
       const authToken = localStorage.getItem('authToken');
-      const url = `https://api.onesec.shop/api/profiles/${user.username}/`;
+      const url = `http://localhost:8000/api/profiles/${user.username}/`;
 
       if (!profileExists) {
         // If profile does not exist, create it using POST
-        await axios.post('https://api.onesec.shop/api/profiles/', user, {
+        await axios.post('http://localhost:8000/api/profiles/', user, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -421,7 +421,7 @@ export default UserProfile;
 //     const fetchUserData = async () => {
 //       try {
 //         const token = localStorage.getItem('authToken');
-//         const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
+//         const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
 //           headers: {
 //             Authorization: `Token ${token}`,
 //           },
@@ -444,7 +444,7 @@ export default UserProfile;
 
 //         // Fetch the profile data from the API
 //         try {
-//           const profileResponse = await axios.get(`https://api.onesec.shop/api/profiles/${authenticatedUsername}/`, {
+//           const profileResponse = await axios.get(`http://localhost:8000/api/profiles/${authenticatedUsername}/`, {
 //             headers: {
 //               Authorization: `Token ${token}`,
 //             },
@@ -558,11 +558,11 @@ export default UserProfile;
 
 //     try {
 //       const authToken = localStorage.getItem('authToken');
-//       const url = `https://api.onesec.shop/api/profiles/${user.username}/`;
+//       const url = `http://localhost:8000/api/profiles/${user.username}/`;
 
 //       if (!profileExists) {
 //         // If profile does not exist, create it using POST
-//         await axios.post('https://api.onesec.shop/api/profiles/', user, {
+//         await axios.post('http://localhost:8000/api/profiles/', user, {
 //           headers: {
 //             Authorization: `Token ${authToken}`,
 //           },
