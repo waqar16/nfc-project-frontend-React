@@ -125,7 +125,7 @@
     padding: 0.5rem;
     border-radius: 50%;
     cursor: pointer;
-    z-index: 1001;
+    z-index: 49;
     display: flex;
     justify-content: center;
     align-items: center;

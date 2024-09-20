@@ -1,13 +1,13 @@
-import React, { useState,useCallback } from 'react';
-import styles from '../../assets/css/authentication/Authentication.module.css';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import logo from '../../assets/img/logo.png';
+import React, { useState, useCallback } from "react";
+import styles from "../../assets/css/authentication/Authentication.module.css";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import logo from "../../assets/img/logo.png";
 // import google from '../../assets/img/socials/google.png';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 
 const LoginPage = () => {
   const [isPersonalLogin, setIsPersonalLogin] = useState(true); // State to toggle between personal and company login
@@ -15,66 +15,65 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const closeProfile = useCallback(() => {
-    const profile = document.getElementById('profile');
+    const profile = document.getElementById("profile");
     if (profile) {
-      profile.classList.remove('show-profile');
+      profile.classList.remove("show-profile");
     }
   }, []);
   closeProfile();
-  React.useEffect(()=>{
-
+  React.useEffect(() => {
     closeProfile();
-  },[])
-  
+  }, []);
+
   const handleGoogleSuccess = async (response) => {
     const tokenId = response.credential;
     try {
-      console.log('Google login response:', response);
+      console.log("Google login response:", response);
       const profileType = isPersonalLogin ? "individual" : "company";
-      const res = await axios.post(`https://api.onesec.shop/auth/custom-google-login/`, {
-        access_token: tokenId,
-        profile_type: profileType
-      });
+      const res = await axios.post(
+        `https://api.onesec.shop/auth/custom-google-login/`,
+        {
+          access_token: tokenId,
+          profile_type: profileType,
+        }
+      );
 
       // Store the authentication token in localStorage
-      localStorage.setItem('userId', res.data.user_id);
-      localStorage.setItem('authToken', res.data.auth_token);
-      localStorage.setItem('profile_type', res.data.profile_type);
-      localStorage.setItem('username', res.data.username);
-      localStorage.setItem('first_name', res.data.first_name);
-      localStorage.setItem('last_name', res.data.last_name);
-      localStorage.setItem('email', res.data.email);
-      localStorage.setItem('authentication_type', 'google');
-      localStorage.setItem('profile_pic', res.data.profile_pic);
+      localStorage.setItem("userId", res.data.user_id);
+      localStorage.setItem("authToken", res.data.auth_token);
+      localStorage.setItem("profile_type", res.data.profile_type);
+      localStorage.setItem("username", res.data.username);
+      localStorage.setItem("first_name", res.data.first_name);
+      localStorage.setItem("last_name", res.data.last_name);
+      localStorage.setItem("email", res.data.email);
+      localStorage.setItem("authentication_type", "google");
+      localStorage.setItem("profile_pic", res.data.profile_pic);
 
       // Redirect or perform additional actions
-      if (res.data.profile_type === 'company') {
+      if (res.data.profile_type === "company") {
         navigate(`/company-profile/${res.data.user_id}/${res.data.username}`);
-      }
-      else if (res.data.profile_type === 'individual') {
+      } else if (res.data.profile_type === "individual") {
         navigate(`/user-profile/${res.data.user_id}/${res.data.username}`);
-      }
-      else if (res.data.profile_type === 'employee') {
+      } else if (res.data.profile_type === "employee") {
         navigate(`/employee-profile/${res.data.user_id}/${res.data.username}`);
       }
-      
+
       // navigate('/');
       window.location.reload();
     } catch (error) {
-      console.error('Google login error:', error);
+      console.error("Google login error:", error);
       if (error.response && error.response.data && error.response.data.error) {
         toast.error(`${error.response.data.error}`);
-    } else {
+      } else {
         // alert('An unexpected error occurred. Please try again.');
-        toast.error("An unexpected error occurred. Please try again.")
-    }
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     }
   };
 
   const handleGoogleFailure = (error) => {
-    console.error('Google login failure:', error);
+    console.error("Google login failure:", error);
   };
-
 
   return (
     <div className={`${styles.login} ${styles.marginCustom}`}>
@@ -83,18 +82,23 @@ const LoginPage = () => {
           <img src={logo} alt="Logo" className={styles.auth__logo} />
           <h2 className={styles.login__title}>Welcome Back!</h2>
           <p className={styles.login__subtitle}>
-            Please choose your account type and enter your credentials to log in.
+            Please choose your account type and enter your credentials to log
+            in.
           </p>
 
           <div className={styles.toggle__container}>
             <button
-              className={`${styles.toggle__button} ${isPersonalLogin ? styles.active : ''}`}
+              className={`${styles.toggle__button} ${
+                isPersonalLogin ? styles.active : ""
+              }`}
               onClick={() => toggleLoginMode()}
             >
               Individual/Employee
             </button>
             <button
-              className={`${styles.toggle__button} ${!isPersonalLogin ? styles.active : ''}`}
+              className={`${styles.toggle__button} ${
+                !isPersonalLogin ? styles.active : ""
+              }`}
               onClick={() => toggleLoginMode()}
             >
               Company
@@ -106,11 +110,11 @@ const LoginPage = () => {
           </div> */}
           <GoogleOAuthProvider clientId={clientId}>
             <div className={styles.login__google}>
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleFailure}
-              useOneTap
-            />
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleFailure}
+                useOneTap
+              />
             </div>
           </GoogleOAuthProvider>
           <p className={styles.login__or}>or</p>
@@ -132,10 +136,10 @@ const LoginPage = () => {
 };
 
 const PersonalLogin = ({ navigate }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   // const navigate = useNavigate();
 
@@ -153,10 +157,13 @@ const PersonalLogin = ({ navigate }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://api.onesec.shop/auth/custom/token/login/', {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://api.onesec.shop/auth/custom/token/login/",
+        {
+          email,
+          password,
+        }
+      );
 
       // const response2 = await axios.get('https://api.onesec.shop/api/profile_type/', {
       // });
@@ -165,44 +172,47 @@ const PersonalLogin = ({ navigate }) => {
 
       if (response.status === 200) {
         const authToken = response.data;
-        localStorage.setItem('authToken', authToken.auth_token);
-        console.log('User logged in successfully:', response.data);
-        console.log('Token:', authToken.auth_token);
+        localStorage.setItem("authToken", authToken.auth_token);
+        console.log("User logged in successfully:", response.data);
+        console.log("Token:", authToken.auth_token);
 
         // Dispatch custom event to update Navbar state
-        const event = new Event('authStatusChanged');
+        const event = new Event("authStatusChanged");
         window.dispatchEvent(event);
 
-        const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
-          headers: {
-            Authorization: `Token ${token}`
+        const token = localStorage.getItem("authToken");
+        const userResponse = await axios.get(
+          "https://api.onesec.shop/auth/users/me/",
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
           }
-        });
+        );
 
         const { id, username, profile_type } = userResponse.data;
-        localStorage.setItem('userId', id);
-        localStorage.setItem('profile_type', profile_type);
-        localStorage.setItem('username', username);
-        localStorage.setItem('authentication_type', 'manual');
+        localStorage.setItem("userId", id);
+        localStorage.setItem("profile_type", profile_type);
+        localStorage.setItem("username", username);
+        localStorage.setItem("authentication_type", "manual");
 
-
-        if (profile_type === 'company') {
+        if (profile_type === "company") {
           navigate(`/company-profile/${id}/${username}`);
-        }
-        else if (profile_type === 'individual') {
+        } else if (profile_type === "individual") {
           navigate(`/user-profile/${id}/${username}`);
-        }
-        else if (profile_type === 'employee') {
+        } else if (profile_type === "employee") {
           navigate(`/employee-profile/${id}/${username}`);
         }
 
         // Hard refresh the page
         window.location.reload();
-
+      } else {
+        alert("Network error from response");
       }
     } catch (error) {
       setLoading(false);
+      alert(error);
+
       if (error.response && error.response.data) {
         const data = error.response.data;
         if (data.detail) {
@@ -212,7 +222,7 @@ const PersonalLogin = ({ navigate }) => {
           setError(data.error);
         }
       } else {
-        console.error('Error logging in user:', error.message);
+        console.error("Error logging in user:", error.message);
       }
     }
   };
@@ -225,51 +235,68 @@ const PersonalLogin = ({ navigate }) => {
     <form onSubmit={handleSubmit}>
       <div className={styles.login__group}>
         <div>
-          <label htmlFor="email" className={styles.login__label}>Email</label>
-          <input required type="email" placeholder="Write your email" id="email" className={styles.login__input} value={email} onChange={handleEmailChange} />
+          <label htmlFor="email" className={styles.login__label}>
+            Email
+          </label>
+          <input
+            required
+            type="email"
+            placeholder="Write your email"
+            id="email"
+            className={styles.login__input}
+            value={email}
+            onChange={handleEmailChange}
+          />
         </div>
         <div>
-          <label htmlFor="password" className={styles.login__label}>Password</label>
+          <label htmlFor="password" className={styles.login__label}>
+            Password
+          </label>
           <div className={styles.passwordContainer}>
-                <input
-                  required
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
-                  id="password"
-                  className={styles.login__input}
-                  value={password}
-                  onChange={handlePasswordChange}
-                />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className={styles.eyeButton}
-                >
-                  {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
-                </button>
-              </div>
+            <input
+              required
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              id="password"
+              className={styles.login__input}
+              value={password}
+              onChange={handlePasswordChange}
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className={styles.eyeButton}
+            >
+              {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+            </button>
+          </div>
         </div>
         {error && (
           <p className={styles.error}>
-            <i className="fas fa-exclamation-circle" style={{ marginRight: '8px', borderRadius: '50%' }}></i>
+            <i
+              className="fas fa-exclamation-circle"
+              style={{ marginRight: "8px", borderRadius: "50%" }}
+            ></i>
             {error}
           </p>
-        )}    
+        )}
       </div>
-      <Link className={styles.login__forgot} to={"/reset-password"}>Forgot Password?</Link>
+      <Link className={styles.login__forgot} to={"/reset-password"}>
+        Forgot Password?
+      </Link>
 
       <button type="submit" className={styles.login__button} disabled={loading}>
-        {loading ? 'Logging In...' : 'Log In as Individual/Employee'}
+        {loading ? "Logging In..." : "Log In as Individual/Employee"}
       </button>
     </form>
   );
 };
 
 const CompanyLogin = ({ navigate }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   // const navigate = useNavigate();
 
@@ -287,51 +314,54 @@ const CompanyLogin = ({ navigate }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://api.onesec.shop/auth/custom/token/login/', {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://api.onesec.shop/auth/custom/token/login/",
+        {
+          email,
+          password,
+        }
+      );
 
       // const response2 = await axios.get('  https://api.onesec.shop/api/profile_type/', {
-      // }); 
+      // });
 
       // console.log(response2.data.profile_type);
-     
+
       if (response.status === 200) {
         const authToken = response.data;
-        localStorage.setItem('authToken', authToken.auth_token);
-        console.log('User logged in successfully:', response.data);
-        console.log('Token:', authToken.auth_token);
+        localStorage.setItem("authToken", authToken.auth_token);
+        console.log("User logged in successfully:", response.data);
+        console.log("Token:", authToken.auth_token);
 
         // Dispatch custom event to update Navbar state
-        const event = new Event('authStatusChanged');
+        const event = new Event("authStatusChanged");
         window.dispatchEvent(event);
 
-        const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
-          headers: {
-            Authorization: `Token ${token}`
+        const token = localStorage.getItem("authToken");
+        const userResponse = await axios.get(
+          "https://api.onesec.shop/auth/users/me/",
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
           }
-        });
+        );
 
         const { id, username, profile_type } = userResponse.data;
-        localStorage.setItem('userId', id);
-        localStorage.setItem('profile_type', profile_type);
-        localStorage.setItem('username', username);
-        localStorage.setItem('authentication_type', 'manual');
+        localStorage.setItem("userId", id);
+        localStorage.setItem("profile_type", profile_type);
+        localStorage.setItem("username", username);
+        localStorage.setItem("authentication_type", "manual");
 
-        if (profile_type === 'company') {
+        if (profile_type === "company") {
           navigate(`/company-analytics/${id}/${username}`);
-        }
-        else if (profile_type === 'individual') {
+        } else if (profile_type === "individual") {
           navigate(`/user-analytics/${id}/${username}`);
-        } 
-        else if (profile_type === 'employee') {
+        } else if (profile_type === "employee") {
           navigate(`/employee-profile/${id}/${username}`);
         }
         // Hard refresh the page
         window.location.reload();
-
       }
     } catch (error) {
       setLoading(false);
@@ -344,7 +374,7 @@ const CompanyLogin = ({ navigate }) => {
           setError(data.error);
         }
       } else {
-        console.error('Error logging in user:', error.message);
+        console.error("Error logging in user:", error.message);
       }
     }
   };
@@ -355,40 +385,58 @@ const CompanyLogin = ({ navigate }) => {
     <form onSubmit={handleSubmit}>
       <div className={styles.login__group}>
         <div>
-          <label htmlFor="email" className={styles.login__label}>Email</label>
-          <input required type="email" placeholder="Write your email" id="email" className={styles.login__input} value={email} onChange={handleEmailChange} />
+          <label htmlFor="email" className={styles.login__label}>
+            Email
+          </label>
+          <input
+            required
+            type="email"
+            placeholder="Write your email"
+            id="email"
+            className={styles.login__input}
+            value={email}
+            onChange={handleEmailChange}
+          />
         </div>
         <div>
-        <label htmlFor="password" className={styles.login__label}>Password</label>
-        <div className={styles.passwordContainer}>
-                <input
-                  required
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
-                  id="password"
-                  className={styles.login__input}
-                  value={password}
-                  onChange={handlePasswordChange}
-                />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className={styles.eyeButton}
-                >
-                  {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
-                </button>
-              </div>
+          <label htmlFor="password" className={styles.login__label}>
+            Password
+          </label>
+          <div className={styles.passwordContainer}>
+            <input
+              required
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              id="password"
+              className={styles.login__input}
+              value={password}
+              onChange={handlePasswordChange}
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className={styles.eyeButton}
+            >
+              {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+            </button>
+          </div>
         </div>
         {error && (
           <p className={styles.error}>
-            <i className="fas fa-exclamation-circle" style={{ marginRight: '8px', borderRadius: '50%' }}></i>
+            <i
+              className="fas fa-exclamation-circle"
+              style={{ marginRight: "8px", borderRadius: "50%" }}
+            ></i>
             {error}
           </p>
-        )}      </div>
-      <Link className={styles.login__forgot} to={"/reset-password"}>Forgot Password?</Link>
+        )}{" "}
+      </div>
+      <Link className={styles.login__forgot} to={"/reset-password"}>
+        Forgot Password?
+      </Link>
 
       <button type="submit" className={styles.login__button} disabled={loading}>
-        {loading ? 'Logging In...' : 'Log In as Company'}
+        {loading ? "Logging In..." : "Log In as Company"}
       </button>
     </form>
   );

@@ -211,13 +211,14 @@ img {
   width: 100%;
   background-color: var(--body-color);
   box-shadow: 0 2px 16px hsla(230, 75%, 32%, .15);
-  z-index: var(--z-fixed);
+  /* z-index: var(--z-fixed); */
+  z-index: 48;
 }
 
 .nav {
   height: var(--header-height);
   display: flex;
-  max-width: 1160px;
+  max-width: 1160px; 
   justify-content: space-between;
   /* width: fit-content; */
   /* gap: 2.3rem; */
@@ -247,6 +248,7 @@ img {
 .nav__login, 
 .nav__toggle, 
 .nav__close {
+  z-index: 20;
   font-size: 1.25rem;
   color: var(--title-color);
   cursor: pointer;

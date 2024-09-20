@@ -1,12 +1,11 @@
-import AboutUs from '../../components/aboutus/AboutUs';
-import Footer from '../../components/footer/Footer';
-
+import AboutUs from "../../components/aboutus/AboutUs";
+import Footer from "../../components/footer/Footer";
 
 function AboutUsLayout() {
   return (
-    <div>
-      <AboutUs/>
-      <Footer/>
+    <div style={{ width: "100%", overflowX: "hidden" }}>
+      <AboutUs />
+      <Footer />
     </div>
   );
 }
