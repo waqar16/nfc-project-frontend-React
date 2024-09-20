@@ -1,44 +1,42 @@
-import '../../assets/css/index/styles.css';
-import { Link } from 'react-router-dom';
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Logo from '../../assets/img/logo.png';
-import axios from 'axios';
-
-
-
+import "../../assets/css/index/styles.css";
+import { Link } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import Logo from "../../assets/img/logo.png";
+import axios from "axios";
 
 const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [profileType, setProfileType] = useState('');
-  const [username, setUsername] = useState('');
-  const [userId, setUserId] = useState('');
-
-
+  const [profileType, setProfileType] = useState("");
+  const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
     const userInfo = async () => {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem("authToken");
       if (token) {
         setIsAuthenticated(true);
         try {
-          const response = await axios.get('https://api.onesec.shop/auth/users/me', {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          });
+          const response = await axios.get(
+            "https://api.onesec.shop/auth/users/me",
+            {
+              headers: {
+                Authorization: `Token ${token}`,
+              },
+            }
+          );
 
           setProfileType(response.data.profile_type);
           setUserId(response.data.id);
-          setUsername(response.data.username)
+          setUsername(response.data.username);
 
           setLoading(false); // Data fetching complete
         } catch (error) {
-          console.error('Error fetching profile type:', error);
+          console.error("Error fetching profile type:", error);
           setLoading(false); // Data fetching complete even if there is an error
         }
       } else {
@@ -53,11 +51,11 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.clear();
     setIsAuthenticated(false);
-    navigate('/');
-    const profile = document.getElementById('profile');
+    navigate("/");
+    const profile = document.getElementById("profile");
     if (profile) {
-      profile.classList.remove('show-profile');
-    }  
+      profile.classList.remove("show-profile");
+    }
     // window.location.reload();
   };
 
@@ -72,143 +70,143 @@ const Navbar = () => {
     //   return;
     // }
 
-    // console.log(profileType);  
-    if (profileType === 'individual') {
+    // console.log(profileType);
+    if (profileType === "individual") {
       navigate(`/user-profile/${userId}/${username}`);
-    } else if (profileType === 'company'){
+    } else if (profileType === "company") {
       navigate(`/company-profile/${userId}/${username}`);
-    } else if (profileType === 'employee'){
+    } else if (profileType === "employee") {
       navigate(`/employee-profile/${userId}/${username}`);
     }
   };
 
   const closeProfile = useCallback(() => {
-    const profile = document.getElementById('profile');
+    const profile = document.getElementById("profile");
     if (profile) {
-      profile.classList.remove('show-profile');
+      profile.classList.remove("show-profile");
     }
   }, []);
 
   const closeNotifications = useCallback(() => {
-    const notifications = document.getElementById('notifications');
+    const notifications = document.getElementById("notifications");
     if (notifications) {
-      notifications.classList.remove('show-notifications');
+      notifications.classList.remove("show-notifications");
     }
   }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    const navMenu = document.getElementById('nav-menu');
-    const navToggle = document.getElementById('nav-toggle');
-    const navClose = document.getElementById('nav-close');
-    const search = document.getElementById('search');
-    const searchBtn = document.getElementById('search-btn');
-    const searchClose = document.getElementById('search-close');
-    const profile = document.getElementById('profile');
-    const profileBtn = document.getElementById('profile-btn');
-    const profileClose = document.getElementById('profile-close');
-    const notifications = document.getElementById('notifications');
-    const notificationsBtn = document.getElementById('notifications-btn');
-    const notificationsClose = document.getElementById('notifications-close');
+    const navMenu = document.getElementById("nav-menu");
+    const navToggle = document.getElementById("nav-toggle");
+    const navClose = document.getElementById("nav-close");
+    const search = document.getElementById("search");
+    const searchBtn = document.getElementById("search-btn");
+    const searchClose = document.getElementById("search-close");
+    const profile = document.getElementById("profile");
+    const profileBtn = document.getElementById("profile-btn");
+    const profileClose = document.getElementById("profile-close");
+    const notifications = document.getElementById("notifications");
+    const notificationsBtn = document.getElementById("notifications-btn");
+    const notificationsClose = document.getElementById("notifications-close");
 
     if (navToggle) {
-      navToggle.addEventListener('click', () => {
-        navMenu.classList.add('show-menu');
+      navToggle.addEventListener("click", () => {
+        navMenu.classList.add("show-menu");
       });
     }
 
     if (navClose) {
-      navClose.addEventListener('click', () => {
-        navMenu.classList.remove('show-menu');
+      navClose.addEventListener("click", () => {
+        navMenu.classList.remove("show-menu");
       });
     }
 
     if (searchBtn) {
-      searchBtn.addEventListener('click', () => {
-        search.classList.add('show-search');
+      searchBtn.addEventListener("click", () => {
+        search.classList.add("show-search");
       });
     }
 
     if (searchClose) {
-      searchClose.addEventListener('click', () => {
-        search.classList.remove('show-search');
+      searchClose.addEventListener("click", () => {
+        search.classList.remove("show-search");
       });
     }
 
     if (profileBtn) {
-      profileBtn.addEventListener('click', () => {
-        profile.classList.add('show-profile');
+      profileBtn.addEventListener("click", () => {
+        profile.classList.add("show-profile");
       });
     }
 
     if (profileClose) {
-      profileClose.addEventListener('click', closeProfile);
+      profileClose.addEventListener("click", closeProfile);
     }
 
     if (notificationsBtn) {
-      notificationsBtn.addEventListener('click', () => {
-        notifications.classList.add('show-notifications');
+      notificationsBtn.addEventListener("click", () => {
+        notifications.classList.add("show-notifications");
       });
     }
 
     if (notificationsClose) {
-      notificationsClose.addEventListener('click', closeNotifications);
+      notificationsClose.addEventListener("click", closeNotifications);
     }
 
-    const profileItems = document.querySelectorAll('.profile__item');
+    const profileItems = document.querySelectorAll(".profile__item");
     profileItems.forEach((item) => {
-      item.addEventListener('click', closeProfile);
+      item.addEventListener("click", closeProfile);
     });
 
     // Cleanup event listeners on component unmount
     return () => {
       if (navToggle) {
-        navToggle.removeEventListener('click', () => {
-          navMenu.classList.add('show-menu');
+        navToggle.removeEventListener("click", () => {
+          navMenu.classList.add("show-menu");
         });
       }
 
       if (navClose) {
-        navClose.removeEventListener('click', () => {
-          navMenu.classList.remove('show-menu');
+        navClose.removeEventListener("click", () => {
+          navMenu.classList.remove("show-menu");
         });
       }
 
       if (searchBtn) {
-        searchBtn.removeEventListener('click', () => {
-          search.classList.add('show-search');
+        searchBtn.removeEventListener("click", () => {
+          search.classList.add("show-search");
         });
       }
 
       if (searchClose) {
-        searchClose.removeEventListener('click', () => {
-          search.classList.remove('show-search');
+        searchClose.removeEventListener("click", () => {
+          search.classList.remove("show-search");
         });
       }
 
       if (profileBtn) {
-        profileBtn.removeEventListener('click', () => {
-          profile.classList.add('show-profile');
+        profileBtn.removeEventListener("click", () => {
+          profile.classList.add("show-profile");
         });
       }
 
       if (profileClose) {
-        profileClose.removeEventListener('click', closeProfile);
+        profileClose.removeEventListener("click", closeProfile);
       }
 
       if (notificationsBtn) {
-        notificationsBtn.removeEventListener('click', () => {
-          notifications.classList.add('show-notifications');
+        notificationsBtn.removeEventListener("click", () => {
+          notifications.classList.add("show-notifications");
         });
       }
 
       if (notificationsClose) {
-        notificationsClose.removeEventListener('click', closeNotifications);
+        notificationsClose.removeEventListener("click", closeNotifications);
       }
 
       profileItems.forEach((item) => {
-        item.removeEventListener('click', closeProfile);
+        item.removeEventListener("click", closeProfile);
       });
     };
   }, [closeProfile, closeNotifications]);
@@ -218,11 +216,11 @@ const Navbar = () => {
       {/*==================== HEADER ====================*/}
       <header className="header" id="header">
         <nav className="nav container">
-          <Link to={'/'}>
+          <Link to={"/"}>
             <img src={Logo} alt="Logo" className="nav__logo" />
           </Link>
 
-          <div className="nav__menu" id="nav-menu">
+          <div className="nav__menu" id="nav-menu" style={{ zIndex: "5000" }}>
             <ul className="nav__list">
               <li className="nav__item">
                 <Link className="nav__link" to="/">
@@ -275,7 +273,11 @@ const Navbar = () => {
       <div className="search" id="search">
         <form action="" className="search__form">
           <i className="ri-search-line search__icon"></i>
-          <input type="search" placeholder="What are you looking for?" className="search__input" />
+          <input
+            type="search"
+            placeholder="What are you looking for?"
+            className="search__input"
+          />
         </form>
         <i className="ri-close-line search__close" id="search-close"></i>
       </div>
@@ -284,19 +286,21 @@ const Navbar = () => {
       <div className="profile" id="profile">
         {isAuthenticated ? (
           <ul className="profile__list">
-            <span >
-              <li onClick={manageProfile} className="profile__item">Manage Profile</li>
+            <span>
+              <li onClick={manageProfile} className="profile__item">
+                Manage Profile
+              </li>
             </span>
-            <Link to={'/'}>
+            <Link to={"/"}>
               <li onClick={handleLogout} className="profile__item">
                 Logout
               </li>
             </Link>
-
           </ul>
         ) : (
           <div className="nonAuthbtns">
-            <Link to={'/login'}><i className='ri-user-line'></i> Login / Signup?
+            <Link to={"/login"}>
+              <i className="ri-user-line"></i> Login / Signup?
             </Link>
           </div>
         )}
@@ -307,16 +311,37 @@ const Navbar = () => {
       <div className="notifications" id="notifications">
         <div className="notifications-container">
           <ul className="notifications__list">
-            <li className="notifications__item"><i style={{color:"black", padding:"8px"}} className="ri-notification-line "></i> Digital card sent successfully to user 125</li>
+            <li className="notifications__item">
+              <i
+                style={{ color: "black", padding: "8px" }}
+                className="ri-notification-line "
+              ></i>{" "}
+              Digital card sent successfully to user 125
+            </li>
           </ul>
           <ul className="notifications__list">
-          <li className="notifications__item"><i style={{color:"black", padding:"8px"}} className="ri-notification-line "></i> Digital card sent successfully to user 125</li>
+            <li className="notifications__item">
+              <i
+                style={{ color: "black", padding: "8px" }}
+                className="ri-notification-line "
+              ></i>{" "}
+              Digital card sent successfully to user 125
+            </li>
           </ul>
           <ul className="notifications__list">
-          <li className="notifications__item"><i style={{color:"black", padding:"8px"}} className="ri-notification-line "></i> Digital card sent successfully to user 125</li>
+            <li className="notifications__item">
+              <i
+                style={{ color: "black", padding: "8px" }}
+                className="ri-notification-line "
+              ></i>{" "}
+              Digital card sent successfully to user 125
+            </li>
           </ul>
         </div>
-        <i className="ri-close-line notifications__close" id="notifications-close"></i>
+        <i
+          className="ri-close-line notifications__close"
+          id="notifications-close"
+        ></i>
       </div>
     </>
   );
