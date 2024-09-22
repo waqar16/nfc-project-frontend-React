@@ -207,11 +207,11 @@ const PersonalLogin = ({ navigate }) => {
         // Hard refresh the page
         window.location.reload();
       } else {
-        alert("Network error from response");
+        alert("An unexpected error occurred. Please check your internet connection.");
       }
     } catch (error) {
       setLoading(false);
-      alert(error);
+      toast.error(error);
 
       if (error.response && error.response.data) {
         const data = error.response.data;
