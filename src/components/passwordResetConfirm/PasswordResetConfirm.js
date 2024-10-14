@@ -37,7 +37,7 @@ const PasswordResetConfirm = () => {
         new_password: newPassword,
       });
       setMessage('Password reset successfully');
-      navigate('/personal-login');
+      navigate('/login');
     }catch (error) {
         const data = error.response.data;
         setError(data.new_password[0]);

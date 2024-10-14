@@ -152,7 +152,7 @@ const CompanySignup = () => {
             {loading ? 'Signing Up...' : 'Sign Up as Company'}
           </button>
           <p className={styles.login__signup}>
-            Already have an account? <Link to={"/personal-login"}>Log in here</Link>
+            Already have an account? <Link to={"/login"}>Log in here</Link>
           </p>
         </div>
       </form>

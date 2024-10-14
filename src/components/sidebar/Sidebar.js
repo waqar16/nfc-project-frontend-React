@@ -146,14 +146,14 @@ const Sidebar = ({ profileType, profilePic, logo }) => {
                   Profile Management
                 </Link>
               </li>
-              <li className={styles.sidebar__item}>
+              {/* <li className={styles.sidebar__item}>
                 <Link
                   to={`/nfc-management/${userData.id}/${userData.username}`}
                 >
                   <i className="ri-wifi-line"></i>
                   NFC Card Management
                 </Link>
-              </li>
+              </li> */}
               <li className={styles.sidebar__item}>
                 <Link
                   to={`/digital-profile/${userData.id}/${userData.username}`}
@@ -257,14 +257,14 @@ const Sidebar = ({ profileType, profilePic, logo }) => {
                   Employee Profile
                 </Link>
               </li>
-              <li className={styles.sidebar__item}>
+              {/* <li className={styles.sidebar__item}>
                 <Link
                   to={`/nfc-management/${userData.id}/${userData.username}`}
                 >
                   <i className="ri-wifi-line"></i>
                   NFC Card Management
                 </Link>
-              </li>
+              </li> */}
               <li className={styles.sidebar__item}>
                 <Link
                   to={`/digital-profile/${userData.id}/${userData.username}`}
