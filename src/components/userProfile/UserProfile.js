@@ -9,10 +9,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { uploadFileToS3 } from "../../s3Service";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from "react-places-autocomplete";
+// import PlacesAutocomplete, {
+//   geocodeByAddress,
+//   getLatLng,
+// } from "react-places-autocomplete";
 import defaultProfilePic from "../../assets/img/userPlaceholder.jpg";
 import Cropper from "react-easy-crop";
 
@@ -640,7 +640,7 @@ const UserProfile = () => {
 
           <label className={styles.label}>
             Address:
-            <PlacesAutocomplete
+            {/* <PlacesAutocomplete
               value={user.address || ""}
               onChange={(address) => setUser({ ...user, address })}
               onSelect={(address) => {
@@ -684,7 +684,15 @@ const UserProfile = () => {
                   </div>
                 </div>
               )}
-            </PlacesAutocomplete>
+            </PlacesAutocomplete> */}
+            <input
+              type="text"
+              name="address"
+              value={user.address}
+              onChange={handleChange}
+              className={styles.input}
+              placeholder="Enter your address"
+            />
           </label>
 
           <label className={styles.label}>

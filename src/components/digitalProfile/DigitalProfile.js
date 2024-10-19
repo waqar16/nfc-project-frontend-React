@@ -16,6 +16,7 @@ import Aos from 'aos';
 import 'aos/dist/aos.css';
 import { Link } from 'react-router-dom';
 import QrCodeModal from '../modal/QrCodeModal';
+import { ClipLoader } from 'react-spinners';
 
 
 
@@ -24,6 +25,7 @@ const DigitalProfile = () => {
   const navigate = useNavigate();
   const [profileTypeWhoShared, setProfileTypeWhoShared] = useState('');
   const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(true);
 
   const [user, setUser] = useState({
     firstName: '',
@@ -100,7 +102,7 @@ const DigitalProfile = () => {
 
   const fetchReceivedCards = useCallback(async () => {
     try {
-      // setLoading(true);
+      setLoading2(true);
       const token = localStorage.getItem('authToken');
       const response = await axios.get('https://api.onesec.shop/api/received-cards/', {
         headers: {
@@ -120,7 +122,7 @@ const DigitalProfile = () => {
         };
       }));
       setReceivedCards(cards);
-      // setLoading(false);
+      setLoading2(false);
       console.log('Received cards:', cards);
     } catch (error) {
       setLoading(false)
@@ -348,7 +350,7 @@ const DigitalProfile = () => {
           position={user.position}
           profilePic={user.profilePic} 
         />
-        <div data-aos="flip-right" className={styles.receivedCardsSection}>
+        {/* <div data-aos="flip-right" className={styles.receivedCardsSection}>
           <div className={styles.receivedCardsList}>
             <h2>Received Digital Cards</h2>
 
@@ -357,7 +359,6 @@ const DigitalProfile = () => {
                 .sort((a, b) => new Date(b.shared_at) - new Date(a.shared_at)) // Sort by shared_at date in descending order
                 .map(card => (
                   <div key={card.id} className={styles.receivedCard}>
-                    {/* <img src={card.shared_from_user.profilePic || 'https://via.placeholder.com/150'} alt="Profile" className={styles.receivedCardPic} /> */}
                     <div className={styles.receivedCardDetails}>
                       <div className={styles.receivedCardName}>
                         {` From: ${card.shared_from_user.email}`}
@@ -377,7 +378,43 @@ const DigitalProfile = () => {
             )}
           </div>
           <Link to="received-cards">Load More</Link>
-        </div>
+        </div> */}
+        <div data-aos="flip-right" className={styles.receivedCardsSection}>
+  <div className={styles.receivedCardsList}>
+    <h2>Received Digital Cards</h2>
+
+    {loading2 ? (
+      <div className={styles.loaderContainer}>
+        <ClipLoader color="#4CAF50" size={25} />
+        {/* <p>Loading received cards...</p> */}
+      </div>
+    ) : (
+      receivedCards.length > 0 ? (
+        receivedCards
+          .sort((a, b) => new Date(b.shared_at) - new Date(a.shared_at)) // Sort by shared_at date in descending order
+          .map(card => (
+            <div key={card.id} className={styles.receivedCard}>
+              <div className={styles.receivedCardDetails}>
+                <div className={styles.receivedCardName}>
+                  {` From: ${card.shared_from_user.email}`}
+                </div>
+                <div className={styles.receivedCardDate}>Received on: {timeAgo(new Date(card.shared_at))}</div>
+                <span
+                  onClick={() => handleShowDetails(card.shared_from_user.username, card.profile_type_who_shared)}
+                  className={styles.showDetailsButton}
+                >
+                  View Card
+                </span>
+              </div>
+            </div>
+          ))
+      ) : (
+        <p>No received cards</p>
+      )
+    )}
+  </div>
+  <Link to="received-cards">Load More</Link>
+</div>
       </div>
 
       {loading && <Loader />}

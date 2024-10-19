@@ -9,10 +9,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
 import { uploadFileToS3 } from '../../s3Service';
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
+// import PlacesAutocomplete, {
+//   geocodeByAddress,
+//   getLatLng,
+// } from 'react-places-autocomplete';
 
 
 const CompanyProfile = () => {
@@ -371,7 +371,7 @@ const CompanyProfile = () => {
           {/* Address */}
           <label className={styles.label}>
             Address:
-            <PlacesAutocomplete
+            {/* <PlacesAutocomplete
               required
               value={company.address || ''}
               onChange={(address) => setCompany({ ...company, address })}
@@ -411,7 +411,15 @@ const CompanyProfile = () => {
                   </div>
                 </div>
               )}
-            </PlacesAutocomplete>
+            </PlacesAutocomplete> */}
+              <input
+              type="text"
+              name="address"
+              value={company.address}
+              onChange={handleChange}
+              className={styles.input}
+              placeholder="Enter your address"
+            />
           </label>
           {/* Company Description */}
           <label className={styles.label}>

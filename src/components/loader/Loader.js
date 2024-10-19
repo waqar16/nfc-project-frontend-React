@@ -5,7 +5,9 @@ import styles from '../../assets/css/Loader.module.css';
 const Loader = () => {
   return (
     <div className={styles.loaderContainer}>
-      <ClipLoader color="#ffffff" size={150} />
+      <ClipLoader color="#4CAF50" size={30}
+      />
+      <p className={styles.loaderText}>Redirecting</p>
     </div>
   );
 };
