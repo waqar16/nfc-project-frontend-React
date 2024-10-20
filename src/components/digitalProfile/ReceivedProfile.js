@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import styles from '../../assets/css/profiles/DigitalProfile.module.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import facebook from '../../assets/img/socials/facebook.png';
 import instagram from '../../assets/img/socials/instagram.png';
 import linkedin from '../../assets/img/socials/linkedin.png';
@@ -17,6 +17,7 @@ import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
 const ReceivedProfile = () => {
+  const navigate = useNavigate();
   const { identifier } = useParams();
   const [loading, setloading] = useState(true)
   // const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -164,7 +165,8 @@ const ReceivedProfile = () => {
     } catch (error) {
       console.error('Error fetching user data:', error);
       if (error.response?.status === 404) {
-        toast.error('Profile Card Not Found');
+        // toast.error('Profile Card Not Found');
+        navigate('/not-found');
       } else {
         toast.error('Error fetching user data');
       }

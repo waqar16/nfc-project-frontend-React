@@ -204,8 +204,8 @@ const PersonalLogin = ({ navigate }) => {
           navigate(`/employee-profile/${id}/${username}`);
         }
 
-        // Hard refresh the page
         window.location.reload();
+
       } else {
         alert("An unexpected error occurred. Please check your internet connection.");
       }

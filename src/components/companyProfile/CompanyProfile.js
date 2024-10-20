@@ -354,7 +354,6 @@ const CompanyProfile = () => {
               onChange={handlePhoneChange}
               inputClass={styles.input}
               specialLabel=""
-              required
             />
           </label>
           {/* <label className={styles.label}>
