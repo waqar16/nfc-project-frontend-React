@@ -288,8 +288,10 @@ import ConfirmationModal from '../modal/ConfirmationModal';
 import Sidebar from '../sidebar/Sidebar';
 import { ToastContainer, toast } from 'react-toastify';
 import Loader from '../loader/Loader';
+import { useNavigate } from 'react-router-dom';
 
 const TeamManagement = () => {
+  const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [employee, setEmployee] = useState({
@@ -301,6 +303,7 @@ const TeamManagement = () => {
     company: '',
   });
   const [companyId, setCompanyId] = useState('');
+  const [companyLogo, setCompanyLogo] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [originalEmail, setOriginalEmail] = useState('');
   const [loading, setLoading] = useState(true);
@@ -333,6 +336,7 @@ const TeamManagement = () => {
       if (companyResponse.data.length > 0) {
         const company = companyResponse.data[0];
         setCompanyId(company.id);
+        setCompanyLogo(company.company_logo);
         setEmployee((prevEmployee) => ({
           ...prevEmployee,
           company: company.id,
@@ -342,6 +346,7 @@ const TeamManagement = () => {
       fetchEmployees(token);
     } catch (error) {
       console.error('Error fetching company and employees:', error);
+      setLoading(false);
     }
   };
 
@@ -374,7 +379,8 @@ const TeamManagement = () => {
     const token = localStorage.getItem('authToken');
 
     if (!employee.company) {
-      alert('Company is required. Please complete your company profile first.');
+      navigate('/login');
+      localStorage.clear(); 
       return;
     }
 
@@ -460,7 +466,7 @@ const TeamManagement = () => {
 
   return (
     <div className={styles.teamManagementContainer}>
-      <Sidebar profileType={localStorage.getItem('profile_type')} />
+      <Sidebar profileType={localStorage.getItem('profile_type')} logo={companyLogo}/>
       <div className={styles.formContainer}>
         <h2>{isEditing ? 'Edit Employee' : 'Create Employee'}</h2>
         <form onSubmit={handleSubmit} className={styles.form}>

@@ -16,8 +16,6 @@ import "react-phone-input-2/lib/style.css";
 import defaultProfilePic from "../../assets/img/userPlaceholder.jpg";
 import Cropper from "react-easy-crop";
 
-// cropImage.js
-// cropImage.js
 export const getCroppedImg = (imageSrc, croppedAreaPixels) => {
   const createImage = (url) =>
     new Promise((resolve, reject) => {
@@ -62,6 +60,7 @@ export const getCroppedImg = (imageSrc, croppedAreaPixels) => {
 };
 
 const UserProfile = () => {
+  const defaultProfilePic = "https://th.bing.com/th/id/OIP.apbH6Ab6rTVtvyIlbsyQFAHaGv?w=699&h=636&rs=1&pid=ImgDetMain";
   const { userId, username } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState({
@@ -81,8 +80,7 @@ const UserProfile = () => {
     linkedin: null,
     whatsapp: null,
     github: null,
-    profile_pic:
-      "https://th.bing.com/th/id/OIP.apbH6Ab6rTVtvyIlbsyQFAHaGv?w=699&h=636&rs=1&pid=ImgDetMain",
+    profile_pic:null,
     receive_marketing_emails: false,
   });
 
@@ -138,12 +136,12 @@ const UserProfile = () => {
             ...profileResponse.data,
             profile_pic:
               profileResponse.data.profile_pic ||
-              localStorage.getItem("profile_pic") ||
-              "https://th.bing.com/th/id/OIP.apbH6Ab6rTVtvyIlbsyQFAHaGv?w=699&h=636&rs=1&pid=ImgDetMain",
+              localStorage.getItem("profile_pic"),
             receive_marketing_emails:
               profileResponse.data.receive_marketing_emails || false,
           }));
           setProfileExists(true); // Mark profile as existing
+          localStorage.setItem('profile_pic', profileResponse.data.profile_pic);
         } catch (error) {
           if (error.response && error.response.status === 404) {
             setUser((prevUser) => ({
@@ -154,8 +152,7 @@ const UserProfile = () => {
               email,
               username: authenticatedUsername,
               profile_pic:
-                localStorage.getItem("profile_pic") ||
-                "https://th.bing.com/th/id/OIP.apbH6Ab6rTVtvyIlbsyQFAHaGv?w=699&h=636&rs=1&pid=ImgDetMain",
+                localStorage.getItem("profile_pic")
             }));
             setProfileExists(false);
           } else {
@@ -331,6 +328,7 @@ const UserProfile = () => {
         ...prevUser,
         profile_pic: profilePicUrl,
       }));
+
       setImage(null);
       setCroppedImage(profilePicUrl); // Set the cropped image preview with the uploaded one
       toast.success("Image cropped and uploaded successfully!");
@@ -547,7 +545,7 @@ const UserProfile = () => {
           />
           <div className={styles.profilePicContainer}>
             <img
-              src={user.profile_pic}
+              src={user.profile_pic? user.profile_pic : defaultProfilePic}
               alt={"user"}
               className={styles.profilePic}
             />

@@ -11,6 +11,9 @@ const Analytics = () => {
   const [inactiveCount, setInactiveCount] = useState(0);
   const [interactionFrequency, setInteractionFrequency] = useState([]);
 
+  const companyLogo = localStorage.getItem('company_logo');
+  const profilePic = localStorage.getItem('profile_pic');
+
   const options = ['Daily', 'Weekly', 'Monthly'];
 const defaultOption = options[0];
 
@@ -45,7 +48,7 @@ const defaultOption = options[0];
 
   return (
     <div className={styles.analyticsContainer}>
-      <Sidebar profileType={localStorage.getItem('profile_type')} />
+      <Sidebar profileType={localStorage.getItem('profile_type')} logo={companyLogo} profilePic={profilePic} />
 
       <h2 className={styles.analyticTitle}>Analytics</h2>
       <div className={styles.analyticsContent}>

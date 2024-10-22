@@ -93,13 +93,13 @@ const ReceivedProfile = () => {
   const fetchUserData = useCallback(async () => {
     try {
       const profileEndpoint = `https://api.onesec.shop/api/profiles/${identifier}/`;
-      
+
       // Try fetching profile data first
       let profileResponse;
       try {
         profileResponse = await axios.get(profileEndpoint);
         console.log('Profile response:', profileResponse.status);
-  
+
         const profileData = profileResponse.data;
         console.log('Profile data:', profileData);
         setUser({
@@ -121,19 +121,19 @@ const ReceivedProfile = () => {
           profilePic: profileData.profile_pic || '',
         });
         setloading(false);
-  
+
         // Create interaction when profile is viewed
         await createInteraction(profileData.user);
       } catch (error) {
         if (error.response?.status === 404) {
           console.log('Profile not found, trying employee endpoint...');
-  
+
           // Fetch employee data if profile is not found
           const employeeEndpoint = `https://api.onesec.shop/api/employees/${identifier}/`;
           const employeeResponse = await axios.get(employeeEndpoint);
-          
+
           console.log('Employee response:', employeeResponse.status);
-  
+
           const employeeData = employeeResponse.data;
           console.log('Employee data:', employeeData);
           setUser({
@@ -155,7 +155,7 @@ const ReceivedProfile = () => {
             profilePic: employeeData.profile_pic || '',
           });
           setloading(false);
-  
+
           // Create interaction when employee profile is viewed
           await createInteraction(employeeData.user);
         } else {
@@ -289,107 +289,108 @@ const ReceivedProfile = () => {
     setShareLink(shareLink);
     setIsModalOpen(true);
   };
-  
+
 
   return (
     // <GoogleOAuthProvider clientId={clientId}>
-      <div className={styles.digitalProfileContainer}>
-        <ToastContainer/>
-        {loading && <Loader/>}
-        <div className={styles.profileCard}>
+    <div className={styles.digitalProfileContainer}>
+      <ToastContainer />
+      {loading && <Loader />}
+      <div className={styles.profileCard} >
         <div className={styles.profileHeader}>
-            <div className={styles.profileinfo}>
-              {user.profilePic ? (
-                <>
-                <img src={user.profilePic} alt="Profile" className={styles.profilePic} /> 
+          <div className={styles.profileinfo}>
+            {user.profilePic ? (
+              <>
+                <img src={user.profilePic} alt="Profile" className={styles.profilePic} />
                 <div className={styles.relative}>
-                <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
-                <div className={styles.position}>{user.position}</div>
-               
-                  </div>
-                  </>
-              ) : (
-                <>
+                  <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
+                  <div className={styles.position}>{user.position}</div>
+
+                </div>
+              </>
+            ) : (
+              <>
                 <div className={styles.profilePicPlaceholder}>
-                  
+
                 </div>
                 <div className={styles.profileTitle}>
-                <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
-                <div className={styles.position}>{user.position}</div>
+                  <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
+                  <div className={styles.position}>{user.position}</div>
                 </div>
-                </>
-              )}
-            </div>
+              </>
+            )}
           </div>
+        </div>
 
-          <div className={styles.profileBody}>
-            <div className={styles.profileAbout}>
-              <p className={styles.titleText}>About Me</p>
-              <p className={styles.bio}>{user.bio}</p>
-            </div>
-            <p className={styles.titleText}>Contact me</p>
-            <div className={styles.contactInfo}>
-            {user.email && (
-               <p><i className="ri-mail-fill"></i> {user.display_email}</p>
-              )}
-              {user.phone && (
-                <p><i className="ri-phone-fill"></i> {user.phone}</p>
-              )}
-              {user.address && (
-                <p><i className="ri-map-pin-fill"></i> {user.address}</p>
-              )}
-            </div>
-            <div className={styles.socialIcons}>
-              {user.facebook && (
-                <a href={user.facebook} target="_blank" rel="noopener noreferrer">
-                  <img className={styles.icon} src={facebook} alt="Facebook" />
-                </a>
-              )}
-              {user.instagram && (
-                <a href={user.instagram} target="_blank" rel="noopener noreferrer">
-                  <img className={styles.icon} src={instagram} alt="Instagram" />
-                </a>
-              )}
-              {user.linkedin && (
-                <a href={user.linkedin} target="_blank" rel="noopener noreferrer">
-                  <img className={styles.icon} src={linkedin} alt="LinkedIn" />
-                </a>
-              )}
-              {user.whatsapp && (
-                <a href={`https://wa.me/${user.whatsapp}`} target="_blank" rel="noopener noreferrer">
-                  <img className={styles.icon} src={whatsapp} alt="WhatsApp" />
-                </a>
-              )}
-              {user.website && (
-                <a href={user.website} target="_blank" rel="noopener noreferrer">
-                  <img className={styles.icon} src={website} alt="Website" />
-                </a>
-              )}
-            </div>
+        <div className={styles.profileBody}>
+          <div className={styles.profileAbout}>
+            <p className={styles.titleText}>About Me</p>
+            <p className={styles.bio}>{user.bio}</p>
           </div>
-          <div className={styles.cardActions}>
+          {user.phone || user.address || user.display_email ?
+            (<p className={styles.titleText}>Contact me</p>)
+            : null
+          }
+          <div className={styles.contactInfo}>
+            {user.display_email && (
+              <p><i className="ri-mail-fill"></i> {user.display_email}</p>
+            )}
+            {user.phone && (
+              <p><i className="ri-phone-fill"></i> {user.phone}</p>
+            )}
+            {user.address && (
+              <p><i className="ri-map-pin-fill"></i> {user.address}</p>
+            )}
+          </div>
+          <div className={styles.socialIcons}>
+            {user.facebook && (
+              <a href={user.facebook} target="_blank" rel="noopener noreferrer">
+                <img className={styles.icon} src={facebook} alt="Facebook" />
+              </a>
+            )}
+            {user.instagram && (
+              <a href={user.instagram} target="_blank" rel="noopener noreferrer">
+                <img className={styles.icon} src={instagram} alt="Instagram" />
+              </a>
+            )}
+            {user.linkedin && (
+              <a href={user.linkedin} target="_blank" rel="noopener noreferrer">
+                <img className={styles.icon} src={linkedin} alt="LinkedIn" />
+              </a>
+            )}
+            {user.whatsapp && (
+              <a href={`https://wa.me/${user.whatsapp}`} target="_blank" rel="noopener noreferrer">
+                <img className={styles.icon} src={whatsapp} alt="WhatsApp" />
+              </a>
+            )}
+            {user.website && (
+              <a href={user.website} target="_blank" rel="noopener noreferrer">
+                <img className={styles.icon} src={website} alt="Website" />
+              </a>
+            )}
+          </div>
+        </div>
+        <div className={styles.cardActions}>
           <div className={styles.cardActionscontent}>
-          <button data-tooltip-id="website-shareBack" data-tooltip-content="Share Your Profile Back" onClick={shareProfileBack} className={styles.actionButton}>
-            <i className="ri-share-forward-line"></i>
-          </button>
-          {/* <span>Share Back</span> */}
-          </div>
+            <button data-tooltip-id="website-shareBack" data-tooltip-content="Share Your Profile Back" onClick={shareProfileBack} className={styles.actionButton}>
+              <i className="ri-share-forward-line"></i>
+            </button>
+             </div>
           <div className={styles.cardActionscontent}>
 
-          <button data-tooltip-id="website-addContact" data-tooltip-content="Add to Your Contact"  onClick={addToContacts} className={styles.actionButton}>
-            <i className="ri-user-add-line"></i> 
-            {/* <span>Add Contact</span> */}
-          </button>
+            <button data-tooltip-id="website-addContact" data-tooltip-content="Add to Your Contact" onClick={addToContacts} className={styles.actionButton}>
+              <i className="ri-user-add-line"></i>
+             </button>
 
 
-          <button  data-tooltip-id="website-QrCode" data-tooltip-content="Scan or Download QrCode" onClick={handleShareQrCode} className={styles.actionButton}>
-          <i className="ri-qr-code-line"></i>
-        </button>
+            <button data-tooltip-id="website-QrCode" data-tooltip-content="Scan or Download QrCode" onClick={handleShareQrCode} className={styles.actionButton}>
+              <i className="ri-qr-code-line"></i>
+            </button>
 
           </div>
         </div>
-        </div>
-        {user.user && (
+      </div>
+      {user.user && (
         <ScheduleMeeting
           attendeeEmail={user.email}
           userId={user.user}
@@ -398,21 +399,21 @@ const ReceivedProfile = () => {
       )}
 
       <QrCodeModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          // onShare={handleShareProfile}
-          shareLink={shareLink}
-          name={`${user.firstName} ${user.lastName}`}
-          position={user.position}
-          profilePic={user.profilePic} 
-        />
-        <Tooltip id="website-shareBack" />
-        <Tooltip id="website-addContact" />
-        <Tooltip id="website-QrCode" />
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        // onShare={handleShareProfile}
+        shareLink={shareLink}
+        name={`${user.firstName} ${user.lastName}`}
+        position={user.position}
+        profilePic={user.profilePic}
+      />
+      <Tooltip id="website-shareBack" />
+      <Tooltip id="website-addContact" />
+      <Tooltip id="website-QrCode" />
 
-      </div>
+    </div>
     // </GoogleOAuthProvider>
-  );  
+  );
 };
 
 export default ReceivedProfile;

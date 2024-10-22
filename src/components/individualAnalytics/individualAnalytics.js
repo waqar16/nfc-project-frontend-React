@@ -16,7 +16,10 @@ import 'react-toastify/dist/ReactToastify.css';
 const options = ['Daily', 'Weekly', 'Monthly'];
 const options2 = ['Time of Day', 'Day of Week'];
 const defaultOption = options[0];
-const defaultOption2 = options2[0];
+const defaultOption2 = options2[0];  
+
+const profilePic = localStorage.getItem('profile_pic');
+
 
 const dummyPeakInteractionTime = [
   { period: '00:00 - 03:59', count: 0 },
@@ -141,7 +144,7 @@ const Analytics = () => {
   return (
     <div className={styles.analyticsContainer}>
       <h2 className={styles.analyticTitle}>Analytics Dashboard</h2>
-      <Sidebar profileType={localStorage.getItem('profile_type')} />
+      <Sidebar profileType={localStorage.getItem('profile_type')}  profilePic={profilePic} />
       <div className={styles.analyticsContent}>
                 {/* Geographic Data */}
                 <div className={styles.card}>

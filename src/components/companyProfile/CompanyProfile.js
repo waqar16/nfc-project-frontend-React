@@ -97,6 +97,7 @@ const CompanyProfile = () => {
           });
           setProfileExists(true);
           setLoading(false)
+          localStorage.setItem('company_logo', companyResponse.data.company_logo);
         } catch (error) {
           
           if (error.response && error.response.status === 404) {
@@ -197,6 +198,7 @@ const CompanyProfile = () => {
           company_logo: profileLogoUrl
         }));
         setLogo(profileLogoUrl);
+        localStorage.setItem('companyLogo', profileLogoUrl);
   
       } catch (error) {
         console.error('Error uploading file:', error);
@@ -246,7 +248,7 @@ const CompanyProfile = () => {
 
     } catch (error) {
       setLoading(false)
-      console.error('Error updating/creating company profile:', error);
+      console.error('Error updating/creating company profile:', error.response.data);
       toast.error('Failed to update/create company profile.');
     }
   };
@@ -254,7 +256,7 @@ const CompanyProfile = () => {
   return (
     <div style={{width:'100%',display:'flex',flexDirection:'column',alignItems:'center'}}>
       <div className={styles.companyProfileContainer}>
-      <Sidebar profileType={localStorage.getItem('profile_type')} logo={company.logo}/>
+      <Sidebar profileType={localStorage.getItem('profile_type')} logo={company.company_logo}/>
       {/* Preview Card */}
       {/* <div className={styles.previewCard}>
         <h2>{company.company_name}</h2>
@@ -343,6 +345,7 @@ const CompanyProfile = () => {
               placeholder='email@example.com'
               onChange={handleChange}
               className={styles.input}
+              required
             />
           </label>
           {/* Phone */}
@@ -466,7 +469,7 @@ const CompanyProfile = () => {
             Receive marketing emails
           </label>
           {/* Submit Button */}
-          <button type='submit' onClick={handleSubmit} className={styles.buttonSaveProfile}>
+          <button type='submit'   className={styles.buttonSaveProfile}>
             {profileExists ? 'Update Profile' : 'Create Profile'}
           </button>
 

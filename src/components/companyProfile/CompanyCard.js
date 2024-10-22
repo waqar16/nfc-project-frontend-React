@@ -39,6 +39,10 @@ const CompanyCard = () => {
   });
 
   // Fetch company data
+
+  const companyLogo = localStorage.getItem('company_logo');
+  const profilePic = localStorage.getItem('profile_pic');
+
   const fetchCompanyData = async () => {
     try {
       setLoading(true);
@@ -229,7 +233,7 @@ const CompanyCard = () => {
   return (
     <>
       <div className={styles.digitalProfileContainer}>
-        <Sidebar profileType={localStorage.getItem('profile_type')} />
+        <Sidebar profileType={localStorage.getItem('profile_type')} logo={companyLogo} profilePic={profilePic} />
         <div className={styles.profileCard}>
           <div className={styles.profileHeaderCompany}>
             <div className={styles.profileinfo}>
@@ -309,6 +313,7 @@ const CompanyCard = () => {
         {receivedCards.length > 0 ? (
             receivedCards
                 .sort((a, b) => new Date(b.shared_at) - new Date(a.shared_at)) // Sort by shared_at date in descending order
+                .slice(0, 2)
                 .map(card => (
                     <div key={card.id} className={styles.receivedCard}>
                         {/* <img src={card.shared_from_user.profilePic || 'https://via.placeholder.com/150'} alt="Profile" className={styles.receivedCardPic} /> */}

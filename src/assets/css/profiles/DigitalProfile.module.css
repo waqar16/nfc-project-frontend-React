@@ -4,8 +4,7 @@
   gap: 30px;
   justify-content: center;
   padding: 2rem;
-  margin-top: 75px;
-    /* padding: 20px; */
+  margin-top: 75px; 
 
 }
 .qrCodeContainer {
@@ -29,7 +28,7 @@
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
-
+  
 }
 
 .profileCard:hover {
@@ -47,16 +46,7 @@
   height: 200px;
 }
 
-.profileHeaderCompany{
-    /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
-    /* background: linear-gradient(49deg, #00c6ff, #0072ff, #8e2de2, #fc248d); */
-    /* padding: 20px; */
-    /* border-bottom: 1px solid #ddd; */
-    /* color: #e8e7e7; */
-    /* display: flex;
-    justify-content: center; */
-    /* height: 200px; */
-}
+ 
 
 .logo{
 height: 130px;
@@ -166,8 +156,7 @@ padding: 20px;
 }
 
 .socialIcons {
-  margin-top: 20px;
-  position: absolute;
+  margin-top: 20px; 
   display: flex;
   flex-direction: row;
   width: 100%;

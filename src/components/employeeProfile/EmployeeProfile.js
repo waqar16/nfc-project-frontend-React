@@ -101,6 +101,7 @@ const EmployeeProfile = () => {
           }));
           setProfileExists(true);
           setLoading(false);
+          localStorage.setItem('profile_pic', profileResponse.data.profile_pic);
         } catch (error) {
           if (error.response && error.response.status === 404) {
             // Profile does not exist

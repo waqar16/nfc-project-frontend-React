@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styles from '../../assets/css/profiles/ManageAppointments.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import axios from 'axios';
+import CompanyCard from '../companyProfile/CompanyCard';
 
 const ManageAppointments = () => {
     const [appointments, setAppointments] = useState([]);
@@ -11,6 +12,10 @@ const ManageAppointments = () => {
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true); 
     const [loadingNextPage, setLoadingNextPage] = useState(false);
+
+    const companyLogo = localStorage.getItem('company_logo');
+    const profilePic = localStorage.getItem('profile_pic');
+    
 
     const fetchAppointments = useCallback(async () => {
         try {
@@ -67,7 +72,7 @@ const ManageAppointments = () => {
 
     return (
         <div className={styles.manageAppointmentsSection}>
-            <Sidebar profileType={localStorage.getItem('profile_type')} />
+            <Sidebar profileType={localStorage.getItem('profile_type')} logo={companyLogo} profilePic={profilePic} />
             <h2 className={styles.title}>Appointments</h2>
             <div className={styles.manageAppointments}>
                 {message && <p className={styles.message}>{message}</p>}

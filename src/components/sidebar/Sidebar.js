@@ -13,7 +13,7 @@ const Sidebar = ({ profileType, profilePic, logo }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
+    localStorage.clear();
     navigate("/login");
     window.location.reload();
   };
@@ -32,6 +32,11 @@ const Sidebar = ({ profileType, profilePic, logo }) => {
           }
         );
         setUserData(response.data);
+
+        if (response.status === 401) {
+          navigate("/login");
+          localStorage.clear();
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
         // Handle errors, e.g., redirect to login page or show error message
@@ -40,59 +45,6 @@ const Sidebar = ({ profileType, profilePic, logo }) => {
 
     fetchUserData();
   }, []);
-
-  // Fetch profile picture based on profileType and userData
-  // useEffect(() => {
-  //   const fetchProfilePic = async () => {
-  //     if (!userData.username) return;
-
-  //     try {
-  //       const token = localStorage.getItem('authToken');
-  //       if (profileType === 'company') {
-  //         const response = await axios.get(`https://api.onesec.shop/api/companies/${userData.username}/`, {
-  //           headers: {
-  //             Authorization: `Token ${token}`
-  //           }
-  //         });
-  //         if (response.data.logo) {
-  //           setLogo(response.data.logo);
-  //         } else {
-  //           setLogo(response.data.logo);
-  //         }
-
-  //       } else if (profileType === 'individual') {
-  //         const response = await axios.get(`https://api.onesec.shop/api/profiles/${userData.username}/`, {
-  //           headers: {
-  //             Authorization: `Token ${token}`
-  //           }
-  //         });
-
-  //         if (response.data.profile_pic) {
-  //           setProfilePic(response.data.profile_pic);
-  //         } else {
-  //           setProfilePic(defaultProfilePic);
-  //         }
-
-  //       } else if (profileType === 'employee' ) {
-  //         const response = await axios.get(`https://api.onesec.shop/api/employees/${userData.username}/`, {
-  //           headers: {
-  //             Authorization: `Token ${token}`
-  //           }
-  //         });
-
-  //         if (response.data.profile_pic) {
-  //           setProfilePic(response.data.profile_pic);
-  //         } else {
-  //           setProfilePic(defaultProfilePic);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching profile pic:', error);
-  //     }
-  //   };
-
-  //   fetchProfilePic();
-  // }, [userData, profileType]);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -104,8 +56,14 @@ const Sidebar = ({ profileType, profilePic, logo }) => {
       >
         {/* Profile Section */}
         <div className={styles.profileSection}>
-          {profileType === "company" && logo ? (
-            <img className={styles.logo} src={logo || defaultLogo} alt="Logo" />
+        {/* Profile Section */}
+        <div className={styles.profileSection}>
+          {profileType === "company" ? (
+            logo ? (
+              <img className={styles.logo} src={logo} alt="Logo" />
+            ) : (
+              <img className={styles.logo} src={defaultLogo} alt="Default Logo" />
+            )
           ) : (
             <img
               className={styles.profilePic}
@@ -113,6 +71,8 @@ const Sidebar = ({ profileType, profilePic, logo }) => {
               alt="Profile"
             />
           )}
+        </div>
+
           {isOpen && (
             <div className={styles.profileInfo}>
               <p className={styles.profileUsername}>@{userData.username}</p>

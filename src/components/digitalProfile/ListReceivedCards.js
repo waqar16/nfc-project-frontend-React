@@ -13,6 +13,9 @@ const ListReceivedCards = () => {
     const [hasMore, setHasMore] = useState(true);
     const [loadingNextPage, setLoadingNextPage] = useState(false);
 
+    const companyLogo = localStorage.getItem('company_logo');
+    const profilePic = localStorage.getItem('profile_pic');
+
     const navigate = useNavigate();
 
     const fetchCards = useCallback(async () => {
@@ -62,7 +65,7 @@ const ListReceivedCards = () => {
 
     return (
         <div className={styles.manageAppointmentsSection}>
-            <Sidebar profileType={localStorage.getItem('profile_type')} />
+            <Sidebar profileType={localStorage.getItem('profile_type')} profilePic={profilePic} logo={companyLogo} />
             <h2 className={styles.title}>Received Cards</h2>
             <div className={styles.manageAppointments}>
                 {message && <p className={styles.message}>{message}</p>}

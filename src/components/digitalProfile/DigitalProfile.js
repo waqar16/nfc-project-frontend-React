@@ -227,7 +227,7 @@ const DigitalProfile = () => {
   return (
     <>
       <div className={styles.digitalProfileContainer}>
-        <Sidebar profileType={localStorage.getItem('profile_type')} />
+        <Sidebar profileType={localStorage.getItem('profile_type')} profilePic= {localStorage.getItem('profile_pic')} />
         <div data-aos="flip-right" className={styles.profileCard}>
           <div className={styles.profileHeader}>
             <div className={styles.profileinfo}>
@@ -259,7 +259,10 @@ const DigitalProfile = () => {
               <p className={styles.titleText}>About Me</p>
               <p className={styles.bio}>{user.bio}</p>
             </div>
-            <p className={styles.titleText}>Contact me</p>
+            { user.phone || user.address || user.display_email ?
+            (<p className={styles.titleText}>Contact me</p>)
+            : null
+            }
             <div className={styles.contactInfo}>
             {user.display_email && (
             <p>
@@ -392,6 +395,7 @@ const DigitalProfile = () => {
       receivedCards.length > 0 ? (
         receivedCards
           .sort((a, b) => new Date(b.shared_at) - new Date(a.shared_at)) // Sort by shared_at date in descending order
+          .slice(0, 2)
           .map(card => (
             <div key={card.id} className={styles.receivedCard}>
               <div className={styles.receivedCardDetails}>

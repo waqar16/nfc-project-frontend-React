@@ -20,6 +20,9 @@ const AccountDeletion = () => {
     const [authType, setAuthType] = useState('');
     const [loading, setLoading] = useState(true);
 
+    const companyLogo = localStorage.getItem('company_logo');
+    const profilePic = localStorage.getItem('profile_pic');
+
     useEffect(() => {
         window.scrollTo(0, 0);
 
@@ -135,7 +138,7 @@ const AccountDeletion = () => {
             {loading && <Loader />} 
             <ToastContainer />
         <div className={`${styles.login}`}>
-            <Sidebar profileType={profileType} />
+            <Sidebar profileType={profileType} logo={companyLogo} profilePic={profilePic} />
 
             <form className={styles.login__form} onSubmit={handleSubmit}>
                 <h2 className={styles.login__title}>Delete Account</h2>
