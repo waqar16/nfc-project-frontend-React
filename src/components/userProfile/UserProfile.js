@@ -95,7 +95,7 @@ const UserProfile = () => {
       try {
         const token = localStorage.getItem("authToken");
         const userResponse = await axios.get(
-          "https://api.onesec.shop/auth/users/me/",
+          "http://localhost:8000/auth/users/me/",
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -123,7 +123,7 @@ const UserProfile = () => {
 
         try {
           const profileResponse = await axios.get(
-            `https://api.onesec.shop/api/profiles/${authenticatedUsername}/`,
+            `http://localhost:8000/api/profiles/${authenticatedUsername}/`,
             {
               headers: {
                 Authorization: `Token ${token}`,
@@ -225,10 +225,10 @@ const UserProfile = () => {
 
     try {
       const authToken = localStorage.getItem("authToken");
-      const url = `https://api.onesec.shop/api/profiles/${user.username}/`;
+      const url = `http://localhost:8000/api/profiles/${user.username}/`;
 
       if (!profileExists) {
-        await axios.post("https://api.onesec.shop/api/profiles/", user, {
+        await axios.post("http://localhost:8000/api/profiles/", user, {
           headers: {
             Authorization: `Token ${authToken}`,
           },

@@ -554,7 +554,7 @@ img {
 @media screen and (min-width: 1023px) {
 
   .nav__logo{
-    margin-left: 2rem;
+    margin-left: 4rem;
   }
   .nav {
     height: calc(var(--header-height) + 2rem);

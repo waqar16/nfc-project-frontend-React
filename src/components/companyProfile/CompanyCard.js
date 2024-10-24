@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../loader/Loader';
 import { Link } from 'react-router-dom';
 import QrCodeModal from '../modal/QrCodeModal';
-
+import { ClipLoader } from 'react-spinners';
 
 const CompanyCard = () => {
   const { userId, username } = useParams();
@@ -23,6 +23,7 @@ const CompanyCard = () => {
   const [shareLink, setShareLink] = useState('');
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [profileTypeWhoShared , setProfileTypeWhoShared] = useState('');
+  const [loading2, setLoading2] = useState(true);
   const [company, setCompany] = useState({
     company_name: '',
     admin_name: '',
@@ -45,7 +46,7 @@ const CompanyCard = () => {
 
   const fetchCompanyData = async () => {
     try {
-      setLoading(true);
+      setLoading2(true);
       const token = localStorage.getItem('authToken');
       const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
         headers: {
@@ -136,9 +137,9 @@ const CompanyCard = () => {
         };
       }));
       setReceivedCards(cards);
-      // setLoading(false);
+      setLoading2(false);
     } catch (error) {
-      setLoading(false);
+      setLoading2(false);
       console.error('Error fetching received cards:', error);
     }
   }, []);
@@ -306,7 +307,9 @@ const CompanyCard = () => {
           shareLink={shareLink}  // Pass the share link to the modal
         /> */}
 
-<div className={styles.receivedCardsSection}>
+
+
+{/* <div className={styles.receivedCardsSection}>
     <div className={styles.receivedCardsList}>
     <h2>Received Digital Cards</h2>
 
@@ -316,7 +319,6 @@ const CompanyCard = () => {
                 .slice(0, 2)
                 .map(card => (
                     <div key={card.id} className={styles.receivedCard}>
-                        {/* <img src={card.shared_from_user.profilePic || 'https://via.placeholder.com/150'} alt="Profile" className={styles.receivedCardPic} /> */}
                         <div className={styles.receivedCardDetails}>
                             <div className={styles.receivedCardName}>
                                 {` From: ${card.shared_from_user.email}`}
@@ -334,7 +336,75 @@ const CompanyCard = () => {
     </div>
     <Link to="received-cards">Load More</Link>
 
+        </div> */}
+
+
+    <div  className="p-6 bg-white  shadow-2xl rounded-lg min-w-[500px] mx-10">
+      <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Recently Received Cards</h2>
+
+      {loading2 ? (
+        <div className="flex justify-center items-center py-6">
+          <ClipLoader color="#4CAF50" size={30} />
         </div>
+      ) : receivedCards.length > 0 ? (
+        receivedCards
+          .sort((a, b) => new Date(b.shared_at) - new Date(a.shared_at))
+          .slice(0, 4)
+          .map(card => (
+            <div key={card.id} className="flex items-center space-x-6 p-6 border border-gray-300 rounded-lg bg-gray-50 shadow-lg hover:shadow-2xl transition-shadow duration-300 mb-8">
+              {/* Profile Picture */}
+              <img
+                src={card.shared_from_user.profile_pic || card.shared_from_user.company_logo} // Replace with dynamic profile picture URL
+                alt="Profile"
+                className={`w-24 h-30 object-cover border-blue-500 ${card.shared_from_user.profile_pic ? 'rounded-full' : 'rounded-lg'}`}
+              />
+
+              {/* User Details */}
+              <div className="flex-1">
+                <div className="flex justify-between items-center">
+                  <div>
+                    {/* First Name and Last Name */}
+                    <h3 className="text-2xl font-semibold text-gray-800">
+                    {card.shared_from_user.first_name && card.shared_from_user.last_name
+                      ? `${card.shared_from_user.first_name} ${card.shared_from_user.last_name}`
+                      : card.shared_from_user.company_name}
+                  </h3>
+                    {/* Username */}
+                    <p className="text-sm text-gray-500">@{card.shared_from_user.username}</p>
+                    {/* Received Date */}
+                  <p className="text-sm text-gray-400">{timeAgo(new Date(card.shared_at))}</p>
+                  </div>
+
+                </div>
+                {/* View Card Button */}
+                <button
+                  onClick={() => handleShowDetails(card.shared_from_user.username, card.profile_type_who_shared)}
+                  className="mt-4 inline-block text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 px-5 py-2 rounded-full transition duration-300 ease-in-out"
+                >
+                  View Card
+                </button>
+              </div>
+            </div>
+          ))
+      ) : (
+        <p className="text-center text-lg text-gray-500 py-6">No received cards</p>
+      )}
+
+      {/* Load More Button */}
+      <Link
+        to="received-cards"
+        className="block text-center text-white text-sm font-medium mt-10 bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-full transition duration-300 ease-in-out"
+      >
+        View all
+      </Link>
+    </div>
+
+
+
+
+
+
+
       </div>
 
       <ShareProfileModal

@@ -24,7 +24,7 @@ const Sidebar = ({ profileType, profilePic, logo }) => {
       try {
         const token = localStorage.getItem("authToken");
         const response = await axios.get(
-          "https://api.onesec.shop/auth/users/me/",
+          "http://localhost:8000/auth/users/me/",
           {
             headers: {
               Authorization: `Token ${token}`,

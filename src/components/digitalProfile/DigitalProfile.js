@@ -53,7 +53,7 @@ const DigitalProfile = () => {
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
+      const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
         headers: {
           Authorization: `Token ${token}`
         }
@@ -65,7 +65,7 @@ const DigitalProfile = () => {
       if (profile_type !== profile_type || userId !== id.toString() || userName !== authenticatedUsername) {
         navigate('/not-authorized'); // Redirect to not authorized page
       } else {
-        const endpoint = profile_type === 'employee' ? `https://api.onesec.shop/api/employees/${email}/` : `  https://api.onesec.shop/api/profiles/${userName}/`;
+        const endpoint = profile_type === 'employee' ? `http://localhost:8000/api/employees/${email}/` : `  http://localhost:8000/api/profiles/${userName}/`;
         const profileResponse = await axios.get(endpoint, {
           headers: {
             Authorization: `Token ${token}`
@@ -104,14 +104,14 @@ const DigitalProfile = () => {
     try {
       setLoading2(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.get('https://api.onesec.shop/api/received-cards/', {
+      const response = await axios.get('http://localhost:8000/api/received-cards/', {
         headers: {
           Authorization: `Token ${token}`
         }
       });
       const cards = await Promise.all(response.data.results.map(async (card) => {
         setProfileTypeWhoShared(card.profile_type_who_shared);
-        const userResponse = await axios.get(`https://api.onesec.shop/api/profiles/${card.shared_from_username}/`, {
+        const userResponse = await axios.get(`http://localhost:8000/api/profiles/${card.shared_from_username}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -125,7 +125,7 @@ const DigitalProfile = () => {
       setLoading2(false);
       console.log('Received cards:', cards);
     } catch (error) {
-      setLoading(false)
+      setLoading2(false);
       // toast.error('Failed to fetch received cards.');
     }
   }, []);
@@ -147,7 +147,7 @@ const DigitalProfile = () => {
     try {
       // setLoading(true);
       // const token = localStorage.getItem('authToken');
-      // const response = await axios.post('https://api.onesec.shop/api/share-profile-url/', {}, {
+      // const response = await axios.post('http://localhost:8000/api/share-profile-url/', {}, {
       //   headers: {
       //     Authorization: `Token ${token}`
       //   }
@@ -169,7 +169,7 @@ const DigitalProfile = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('https://api.onesec.shop/api/share-profile/', { shared_to: recipient }, {
+      const response = await axios.post('http://localhost:8000/api/share-profile/', { shared_to: recipient }, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -353,43 +353,18 @@ const DigitalProfile = () => {
           position={user.position}
           profilePic={user.profilePic} 
         />
+
+
+
+
+
         {/* <div data-aos="flip-right" className={styles.receivedCardsSection}>
           <div className={styles.receivedCardsList}>
             <h2>Received Digital Cards</h2>
 
-            {receivedCards.length > 0 ? (
-              receivedCards
-                .sort((a, b) => new Date(b.shared_at) - new Date(a.shared_at)) // Sort by shared_at date in descending order
-                .map(card => (
-                  <div key={card.id} className={styles.receivedCard}>
-                    <div className={styles.receivedCardDetails}>
-                      <div className={styles.receivedCardName}>
-                        {` From: ${card.shared_from_user.email}`}
-                      </div>
-                      <div className={styles.receivedCardDate}>Received on: {timeAgo(new Date(card.shared_at))}</div>
-                      <span
-                        onClick={() => handleShowDetails(card.shared_from_user.username, card.profile_type_who_shared)}
-                        className={styles.showDetailsButton}
-                      >
-                        View Card
-                      </span>
-                    </div>
-                  </div>
-                ))
-            ) : (
-              <p>No received cards</p>
-            )}
-          </div>
-          <Link to="received-cards">Load More</Link>
-        </div> */}
-        <div data-aos="flip-right" className={styles.receivedCardsSection}>
-  <div className={styles.receivedCardsList}>
-    <h2>Received Digital Cards</h2>
-
     {loading2 ? (
       <div className={styles.loaderContainer}>
         <ClipLoader color="#4CAF50" size={25} />
-        {/* <p>Loading received cards...</p> */}
       </div>
     ) : (
       receivedCards.length > 0 ? (
@@ -418,7 +393,79 @@ const DigitalProfile = () => {
     )}
   </div>
   <Link to="received-cards">Load More</Link>
+</div> */}
+
+
+
+
+
+<div data-aos="flip-right" className="p-6 bg-white  shadow-2xl rounded-lg min-w-[500px] mx-10">
+  <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Recently Received Cards</h2>
+
+  {loading2 ? (
+    <div className="flex justify-center items-center py-6">
+      <ClipLoader color="#4CAF50" size={30} />
+    </div>
+  ) : receivedCards.length > 0 ? (
+    receivedCards
+      .sort((a, b) => new Date(b.shared_at) - new Date(a.shared_at))
+      .slice(0, 4) 
+      .map(card => (
+        <div key={card.id} className="flex items-center space-x-6 p-6 border border-gray-300 rounded-lg bg-gray-50 shadow-lg hover:shadow-2xl transition-shadow duration-300 mb-8">
+          {/* Profile Picture */}
+          <img
+            src={card.shared_from_user.profile_pic || card.shared_from_user.company_logo} // Replace with dynamic profile picture URL
+            alt="Profile"
+            className={`w-24 h-30 object-cover  border-blue-500 ${card.shared_from_user.profile_pic ? 'rounded-full' : 'rounded-lg'}`}
+          />
+
+          {/* User Details */}
+          <div className="flex-1">
+            <div className="flex justify-between items-center">
+              <div>
+                {/* First Name and Last Name */}
+                <h3 className="text-2xl font-semibold text-gray-800">
+                {card.shared_from_user.first_name && card.shared_from_user.last_name
+                  ? `${card.shared_from_user.first_name} ${card.shared_from_user.last_name}`
+                  : card.shared_from_user.company_name}
+              </h3>
+                {/* Username */}
+                <p className="text-sm text-gray-500">@{card.shared_from_user.username}</p>
+                {/* Received Date */}
+               <p className="text-sm text-gray-400">{timeAgo(new Date(card.shared_at))}</p>
+              </div>
+
+            </div>
+            {/* View Card Button */}
+            <button
+              onClick={() => handleShowDetails(card.shared_from_user.username, card.profile_type_who_shared)}
+              className="mt-4 inline-block text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 px-5 py-2 rounded-full transition duration-300 ease-in-out"
+            >
+              View Card
+            </button>
+          </div>
+        </div>
+      ))
+  ) : (
+    <p className="text-center text-lg text-gray-500 py-6">No received cards</p>
+  )}
+
+  {/* Load More Button */}
+  <Link
+    to="received-cards"
+    className="block text-center text-white text-sm font-medium mt-10 bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-full transition duration-300 ease-in-out"
+  >
+    View all
+  </Link>
 </div>
+
+
+
+
+
+
+
+
       </div>
 
       {loading && <Loader />}

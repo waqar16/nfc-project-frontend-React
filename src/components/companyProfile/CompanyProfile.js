@@ -45,7 +45,7 @@ const CompanyProfile = () => {
     const fetchCompanyData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
+        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -73,7 +73,7 @@ const CompanyProfile = () => {
 
         try {
           setLoading(true)
-          const companyResponse = await axios.get(`https://api.onesec.shop/api/companies/${username}/`, {
+          const companyResponse = await axios.get(`http://localhost:8000/api/companies/${username}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -218,7 +218,7 @@ const CompanyProfile = () => {
       const authToken = localStorage.getItem('authToken');
 
       if (profileExists) {
-        await axios.put(`https://api.onesec.shop/api/companies/${username}/`, company, {
+        await axios.put(`http://localhost:8000/api/companies/${username}/`, company, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -227,7 +227,7 @@ const CompanyProfile = () => {
         toast.success('Company profile updated successfully!');
 
       } else {
-        const createResponse = await axios.post('https://api.onesec.shop/api/companies/', company, {
+        const createResponse = await axios.post('http://localhost:8000/api/companies/', company, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -269,7 +269,7 @@ const CompanyProfile = () => {
         </div>
       </div> */}
       <div className={styles.formContainer}>
-        <h2>Company Profile Management</h2>
+        <h2 className='text-2xl text-bold'>Company Profile Management</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.profilePicContainer}>
         {company.company_logo ? (
