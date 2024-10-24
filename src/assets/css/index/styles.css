@@ -259,6 +259,7 @@ img {
   color: var(--first-color);
 }
 
+
 /* Navigation for mobile devices */
 @media screen and (max-width: 1023px) {
   .nav__logo {

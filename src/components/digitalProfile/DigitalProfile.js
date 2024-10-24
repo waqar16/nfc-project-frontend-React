@@ -399,7 +399,7 @@ const DigitalProfile = () => {
 
 
 
-<div data-aos="flip-right" className="p-6 bg-white  shadow-2xl rounded-lg min-w-[500px] mx-10">
+<div data-aos="flip-right" className="p-6 bg-white shadow-2xl rounded-lg mx-5 sm:mx-10 min-w-[300px] md:min-w-[300px] lg:min-w-[500px]">
   <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Recently Received Cards</h2>
 
   {loading2 ? (
@@ -409,7 +409,7 @@ const DigitalProfile = () => {
   ) : receivedCards.length > 0 ? (
     receivedCards
       .sort((a, b) => new Date(b.shared_at) - new Date(a.shared_at))
-      .slice(0, 4) 
+      .slice(0, 4)
       .map(card => (
         <div key={card.id} className="flex items-center space-x-6 p-6 border border-gray-300 rounded-lg bg-gray-50 shadow-lg hover:shadow-2xl transition-shadow duration-300 mb-8">
           {/* Profile Picture */}

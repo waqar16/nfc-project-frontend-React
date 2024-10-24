@@ -339,7 +339,7 @@ const CompanyCard = () => {
         </div> */}
 
 
-    <div  className="p-6 bg-white  shadow-2xl rounded-lg min-w-[500px] mx-10">
+<div data-aos="flip-right" className="p-6 bg-white shadow-2xl rounded-lg mx-5 sm:mx-10 min-w-[300px] md:min-w-[300px] lg:min-w-[500px]">
       <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Recently Received Cards</h2>
 
       {loading2 ? (

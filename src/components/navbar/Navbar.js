@@ -214,7 +214,7 @@ const Navbar = () => {
   return (
     <>
       {/*==================== HEADER ====================*/}
-      <header className="header" id="header">
+      <header className="header md: w-[300]" id="header">
         <nav className="nav container">
           <Link to={"/"}>
             <img src={Logo} alt="Logo" className="nav__logo" />
@@ -258,11 +258,11 @@ const Navbar = () => {
 
             {/* Profile button */}
             {!isAuthenticated && (
-              <i className="ri-user-line nav__login" id="profile-btn"></i>
+              <i className="ri-user-line nav__login mr-4 lg:mr-10" id="profile-btn"></i>
             )}
 
             {/* Toggle button */}
-            <div className="nav__toggle" id="nav-toggle">
+            <div className="nav__toggle position-absolute" id="nav-toggle">
               <i className="ri-menu-line"></i>
             </div>
           </div>
