@@ -46,7 +46,7 @@ const EmployeeProfile = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('authToken');
-        const userResponse = await axios.get('http://localhost:8000/auth/users/me/', {
+        const userResponse = await axios.get('https://api.onesec.shop/auth/users/me/', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -76,7 +76,7 @@ const EmployeeProfile = () => {
 
 
         try {
-          const profileResponse = await axios.get(`http://localhost:8000/api/employees/${email}/`, {
+          const profileResponse = await axios.get(`https://api.onesec.shop/api/employees/${email}/`, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -193,7 +193,7 @@ const EmployeeProfile = () => {
     try {
       const authToken = localStorage.getItem('authToken');
       if (profileExists) {
-        await axios.put(`http://localhost:8000/api/employees/${user.email}/`, user, {
+        await axios.put(`https://api.onesec.shop/api/employees/${user.email}/`, user, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -202,7 +202,7 @@ const EmployeeProfile = () => {
         toast.success('Profile updated successfully!');
         setLoading(false);
       } else {
-        await axios.post('  http://localhost:8000/api/employees/', user, {
+        await axios.post('  https://api.onesec.shop/api/employees/', user, {
           headers: {
             Authorization: `Token ${authToken}`,
           },
@@ -213,7 +213,7 @@ const EmployeeProfile = () => {
       }
       
       // Fetch updated profile data
-      const profileResponse = await axios.get(`http://localhost:8000/api/employees/${user.email}/`, {
+      const profileResponse = await axios.get(`https://api.onesec.shop/api/employees/${user.email}/`, {
         headers: {
           Authorization: `Token ${authToken}`,
         },

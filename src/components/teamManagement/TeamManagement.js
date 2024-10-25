@@ -35,7 +35,7 @@
 //   const fetchCompanyAndEmployees = async () => {
 //     try {
 //       const token = localStorage.getItem('authToken');
-//       const companyResponse = await axios.get('http://localhost:8000/api/companies/', {
+//       const companyResponse = await axios.get('https://api.onesec.shop/api/companies/', {
 //         headers: {
 //           Authorization: `Token ${token}`,
 //         },
@@ -60,7 +60,7 @@
 
 //   const fetchEmployees = async (token) => {
 //     try {
-//       const employeeResponse = await axios.get('http://localhost:8000/api/employees/', {
+//       const employeeResponse = await axios.get('https://api.onesec.shop/api/employees/', {
 //         headers: {
 //           Authorization: `Token ${token}`,
 //         },
@@ -95,7 +95,7 @@
 
 //     try {
 //       if (isEditing) {
-//         await axios.put(`http://localhost:8000/api/employees/${originalEmail}/`, employee, {
+//         await axios.put(`https://api.onesec.shop/api/employees/${originalEmail}/`, employee, {
 //           headers: {
 //             Authorization: `Token ${token}`,
 //           },
@@ -104,7 +104,7 @@
 //         setLoading(false)
 //         toast.success("Employee updated successfully!")
 //       } else {
-//         await axios.post('http://localhost:8000/api/employees/', employee, {
+//         await axios.post('https://api.onesec.shop/api/employees/', employee, {
 //           headers: {
 //             Authorization: `Token ${token}`,
 //           },
@@ -154,7 +154,7 @@
 //     setLoading(true)
 //     const token = localStorage.getItem('authToken');
 //     try {
-//       await axios.delete(`http://localhost:8000/api/employees/${email}/`, {
+//       await axios.delete(`https://api.onesec.shop/api/employees/${email}/`, {
 //         headers: {
 //           Authorization: `Token ${token}`,
 //         },
@@ -327,7 +327,7 @@ const TeamManagement = () => {
   const fetchCompanyAndEmployees = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const companyResponse = await axios.get('http://localhost:8000/api/companies/', {
+      const companyResponse = await axios.get('https://api.onesec.shop/api/companies/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -352,7 +352,7 @@ const TeamManagement = () => {
 
   const fetchEmployees = async (token) => {
     try {
-      const employeeResponse = await axios.get('http://localhost:8000/api/employees/', {
+      const employeeResponse = await axios.get('https://api.onesec.shop/api/employees/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -386,14 +386,14 @@ const TeamManagement = () => {
 
     try {
       if (isEditing) {
-        await axios.put(`http://localhost:8000/api/employees/${originalEmail}/`, employee, {
+        await axios.put(`https://api.onesec.shop/api/employees/${originalEmail}/`, employee, {
           headers: {
             Authorization: `Token ${token}`,
           },
         });
         toast.success("Employee updated successfully!");
       } else {
-        await axios.post('http://localhost:8000/api/employees/', employee, {
+        await axios.post('https://api.onesec.shop/api/employees/', employee, {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -448,7 +448,7 @@ const TeamManagement = () => {
     setLoading(true);
     const token = localStorage.getItem('authToken');
     try {
-      await axios.delete(`http://localhost:8000/api/employees/delete/${emailToDelete}/`, {
+      await axios.delete(`https://api.onesec.shop/api/employees/delete/${emailToDelete}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
