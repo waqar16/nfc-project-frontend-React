@@ -392,7 +392,6 @@ const UserProfile = () => {
                     style={{ fontSize: "24px", cursor: "pointer" }}
                     onClick={() => {
                       setImage(null);
-
                       setOpenImageModal(false);
                     }}
                   ></i>
@@ -444,7 +443,7 @@ const UserProfile = () => {
                           onChange={handleProfilePicChange}
                           accept="image/*"
                           style={{
-                            display: "none", // Hide the input element
+                            display: "none",
                           }}
                         />
                       </>
@@ -457,10 +456,10 @@ const UserProfile = () => {
                           flexDirection: "row",
                           alignItems: "center",
                           justifyContent: "center",
-                          width: "300px", // Set to your desired width
-                          height: "300px", // Set to your desired height
-                          borderRadius: "100%", // This creates the round shape
-                          overflow: "hidden", // Ensure the image stays inside the round shape
+                          width: "300px", 
+                          height: "300px",
+                          borderRadius: "100%", 
+                          overflow: "hidden",
                         }}
                       >
                         <Cropper

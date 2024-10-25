@@ -211,7 +211,6 @@ img {
   width: 100%;
   background-color: var(--body-color);
   box-shadow: 0 2px 16px hsla(230, 75%, 32%, .15);
-  /* z-index: var(--z-fixed); */
   z-index: 48;
 }
 
@@ -220,8 +219,6 @@ img {
   display: flex;
   max-width: 1160px; 
   justify-content: space-between;
-  /* width: fit-content; */
-  /* gap: 2.3rem; */
   align-items: center;
 
 }
@@ -290,7 +287,7 @@ img {
 
 .nav__link {
   color: var(--title-color);
-  font-weight: var(--font-semi-bold);
+  /* font-weight: var(--font-semi-bold); */
   transition: color .4s;
 }
 
