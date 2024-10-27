@@ -97,7 +97,6 @@ const EmployeeProfile = () => {
         });
 
         if (userResponse.status !== 200) {
-
           navigate('/login');
           return;
         }
@@ -116,6 +115,7 @@ const EmployeeProfile = () => {
           first_name,
           last_name,
           email,
+          username: authenticatedUsername
         }));
 
 
@@ -126,23 +126,14 @@ const EmployeeProfile = () => {
             },
           });
 
-        setUser(prevUser => ({
-          ...prevUser,
-            phone: profileResponse.data.phone || '',
-            display_email: profileResponse.data.display_email || '',
-            address: profileResponse.data.address || '',
-            bio: profileResponse.data.bio || '',
-            position: profileResponse.data.position || '',
-            username: profileResponse.data.username || '',
-            website: profileResponse.data.website || '',
-            facebook: profileResponse.data.facebook || '',
-            instagram: profileResponse.data.instagram || '',
-            linkedin: profileResponse.data.linkedin || '',
-            whatsapp: profileResponse.data.whatsapp || '',
-            github: profileResponse.data.github || '',
-            profile_pic: profileResponse.data.profile_pic || 'https://th.bing.com/th/id/OIP.apbH6Ab6rTVtvyIlbsyQFAHaGv?w=699&h=636&rs=1&pid=ImgDetMain',
-            receive_marketing_emails: profileResponse.data.receive_marketing_emails || false,
-
+          setUser((prevUser) => ({
+            ...prevUser,
+            ...profileResponse.data,
+            profile_pic:
+              profileResponse.data.profile_pic ||
+              localStorage.getItem("profile_pic"),
+            receive_marketing_emails:
+              profileResponse.data.receive_marketing_emails || false,
           }));
           setProfileExists(true);
           setLoading(false);
@@ -154,6 +145,7 @@ const EmployeeProfile = () => {
               user: id,
               first_name: first_name,
               last_name: last_name,
+              username: authenticatedUsername,
               email: email,
               display_email: '',
               phone: '',
@@ -240,6 +232,7 @@ const EmployeeProfile = () => {
     try {
       const authToken = localStorage.getItem('authToken');
       if (profileExists) {
+        console.log(user);
         await axios.put(`https://api.onesec.shop/api/employees/${user.email}/`, user, {
           headers: {
             Authorization: `Token ${authToken}`,
@@ -308,20 +301,6 @@ const EmployeeProfile = () => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  // This function will handle saving the cropped image
-  // const handleSaveCroppedImage = async () => {
-  //   try {
-  //     const croppedImageUrl = await getCroppedImg(image, croppedAreaPixels);
-  //     setCroppedImage(croppedImageUrl); // Update the cropped image state with the result
-  //     setImage(croppedImageUrl); // Optionally replace the original image with the cropped one
-  //     toast.success("Image cropped successfully!");
-  //     setImage(null);
-  //     setOpenImageModal(false);
-  //   } catch (error) {
-  //     console.error("Error cropping image:", error);
-  //     toast.error("Failed to crop image.");
-  //   }
-  // };
   const handleSaveCroppedImage = async () => {
     if (!croppedAreaPixels || !image) return;
 
@@ -527,23 +506,6 @@ const EmployeeProfile = () => {
                     borderTop: "1px gray solid ",
                   }}
                 >
-                  {/* <button
-                    type="button"
-                    style={{
-                      color: "gray",
-                      marginRight: "20px",
-                      padding: "8px",
-                      borderRadius: "10px",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => {
-                      setImage(null);
-
-                      setOpenImageModal(false);
-                    }}
-                  >
-                    Cancel
-                  </button> */}
                   <button
                     type="button"
                     style={{
@@ -626,6 +588,18 @@ const EmployeeProfile = () => {
             />
           </label>
           <label className={styles.label}>
+          Username:
+          <input
+            type="text"
+            name="username"
+            value={user.username}
+            onChange={handleChange}
+            className={styles.input}
+            required
+          />
+        </label>
+
+          <label className={styles.label}>
             Email:
             <input
               type="text"
@@ -657,7 +631,7 @@ const EmployeeProfile = () => {
               value={user.position}
               onChange={handleChange}
               className={styles.input}
-              // readOnly 
+              readOnly 
               required
             />
           </label>
@@ -739,16 +713,6 @@ const EmployeeProfile = () => {
               className={styles.input}
             />
           </label>
-          {/* <label className={styles.label}>
-            Github (Optional):
-            <input
-              type="url"
-              name="github"
-              value={user.github}
-              onChange={handleChange}
-              className={styles.input}
-            />
-          </label> */}
           <label className={styles.label}>
             Whatsapp (Optional):
             <PhoneInput

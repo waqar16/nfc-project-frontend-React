@@ -184,13 +184,17 @@ const DigitalProfile = () => {
     }
   };
 
-  const handleShowDetails = (profileId, sharedProfileType) => {
+  const handleShowDetails = (profileUsername, profileEmail, sharedProfileType) => {
     console.log('Profile Type:', profileTypeWhoShared);
     if (sharedProfileType === 'company') {
-      navigate(`/company/${profileId}`);
+      navigate(`/company/${profileUsername}`);
+    }
+
+    else if (sharedProfileType === 'employee') {
+      navigate(`/profile/${profileEmail}`);
     }
     else {
-      navigate(`/profile/${profileId}`);
+      navigate(`/profile/${profileUsername}`);
     }
   };
 
@@ -438,7 +442,7 @@ const DigitalProfile = () => {
             </div>
             {/* View Card Button */}
             <button
-              onClick={() => handleShowDetails(card.shared_from_user.username, card.profile_type_who_shared)}
+              onClick={() => handleShowDetails(card.shared_from_user.username, card.shared_from_user.email, card.profile_type_who_shared)}
               className="mt-4 inline-block text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 px-5 py-2 rounded-full transition duration-300 ease-in-out"
             >
               View Card

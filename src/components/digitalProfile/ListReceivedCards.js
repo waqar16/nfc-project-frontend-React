@@ -51,7 +51,7 @@ const ListReceivedCards = () => {
 
     const handleViewDetails = (profileId, sharedProfileType, profileEmail, profileUsername) => {
         if (sharedProfileType === 'company') {
-          navigate(`/company/${profileId}`);
+          navigate(`/company/${profileUsername}`);
         }
 
         else if (sharedProfileType === 'employee') {

@@ -3,8 +3,8 @@ import CardStatusPieChart from './CardStatusPieChart';
 import EngagementMetricsChart from './EngagementMetrics';
 import styles from '../../assets/css/profiles/IndividualAnalaytics.module.css';
 import Sidebar from '../sidebar/Sidebar';
-import axios from 'axios';
-import Map from '../Map/Map';
+import axios from 'axios'; 
+import Map from '../Map/Map'; 
 
 const Analytics = () => {
   const [activeCount, setActiveCount] = useState(0);
