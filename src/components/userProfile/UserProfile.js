@@ -13,7 +13,6 @@ import "react-phone-input-2/lib/style.css";
 //   geocodeByAddress,
 //   getLatLng,
 // } from "react-places-autocomplete";
-import defaultProfilePic from "../../assets/img/userPlaceholder.jpg";
 import Cropper from "react-easy-crop";
 
 export const getCroppedImg = (imageSrc, croppedAreaPixels) => {
@@ -90,7 +89,6 @@ const UserProfile = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("authToken");
@@ -331,7 +329,7 @@ const UserProfile = () => {
 
       setImage(null);
       setCroppedImage(profilePicUrl); // Set the cropped image preview with the uploaded one
-      toast.success("Image cropped and uploaded successfully!");
+      // toast.success("Image cropped and uploaded successfully!");
       setOpenImageModal(false); // Close the modal
     } catch (error) {
       console.error("Error cropping or uploading image:", error);
