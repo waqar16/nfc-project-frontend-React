@@ -110,12 +110,15 @@ const DigitalProfile = () => {
         }
       });
       const cards = await Promise.all(response.data.results.map(async (card) => {
+        console.log('Processing card:', card);
         setProfileTypeWhoShared(card.profile_type_who_shared);
         const userResponse = await axios.get(`https://api.onesec.shop/api/profiles/${card.shared_from_username}/`, {
           headers: {
             Authorization: `Token ${token}`
           }
         });
+
+        console.log('Fetched shared_from_user:', userResponse.data);
         return {
           ...card,
           shared_from_user: userResponse.data
