@@ -95,7 +95,7 @@ const UserProfile = () => {
   const positionLength = 50;
   const nameLength = 18;
   const linkLength = 70;
-  const emailLength = 40;
+  const emailLength = 30;
   const phoneLength = 18;
   const addressLength = 255;
 

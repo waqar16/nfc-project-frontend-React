@@ -87,7 +87,7 @@ const EmployeeProfile = () => {
   const [isbioLengthReached, setIsbioLengthReached] = useState(false);
   const nameLength = 18;
   const linkLength = 70;
-  const emailLength = 40;
+  const emailLength = 30;
   const addressLength = 255;
   const positionLength = 30;
   const bioLength = 1000;
