@@ -418,29 +418,27 @@ const DigitalProfile = () => {
       .sort((a, b) => new Date(b.shared_at) - new Date(a.shared_at))
       .slice(0, 4)
       .map(card => (
-        <div key={card.id} className="flex items-center space-x-6 p-6 border border-gray-300 rounded-lg bg-gray-50 shadow-lg hover:shadow-2xl transition-shadow duration-300 mb-8">
+        <div key={card.id} className="flex items-center space-x-6 p-6 mb-8">
           {/* Profile Picture */}
           <img
             src={card.shared_from_user.profile_pic || card.shared_from_user.company_logo} // Replace with dynamic profile picture URL
             alt="Profile"
-            className={`w-24 h-30 object-cover  border-blue-500 ${card.shared_from_user.profile_pic ? 'rounded-full' : 'rounded-lg'}`}
+            className={`w-24 md:h-24 h-12 object-cover border-blue-500 ${card.shared_from_user.profile_pic ? 'rounded-full' : 'rounded-lg'}`}
           />
 
           {/* User Details */}
           <div className="flex-1">
             <div className="flex justify-between items-center">
-              <div>
-                {/* First Name and Last Name */}
-                <h3 className="text-2xl font-semibold text-gray-800">
-                {card.shared_from_user.first_name && card.shared_from_user.last_name
-                  ? `${card.shared_from_user.first_name} ${card.shared_from_user.last_name}`
-                  : card.shared_from_user.company_name}
-              </h3>
-                {/* Username */}
-                <p className="text-sm text-gray-500">@{card.shared_from_user.username}</p>
-                {/* Received Date */}
-               <p className="text-sm text-gray-400">{timeAgo(new Date(card.shared_at))}</p>
-              </div>
+            <div className="flex flex-col w-full">
+            {/* Title with truncation */}
+            <h3 className="text-sm font-bold truncate">{card.shared_from_user.first_name}</h3>
+
+            {/* Username */}
+            <p className="text-xs text-gray-500 truncate">@{card.shared_from_user.username}</p>
+
+            {/* Received Date */}
+            <p className="text-xs text-gray-400">{timeAgo(new Date(card.shared_at))}</p>
+          </div>
 
             </div>
             {/* View Card Button */}
