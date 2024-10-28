@@ -39,6 +39,13 @@ const CompanyProfile = () => {
   });
   const [profileExists, setProfileExists] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isaddressLengthReached, setIsaddressLengthReached] = useState(false);
+  const [isdescriptionLengthReached, setIsdescriptionLengthReached] = useState(false);
+  const nameLength = 50;
+  const displayEmailLength = 30;
+  const addressLength = 200;
+  const descriptionLength = 1000;
+  const linkLength = 50;
 
   useEffect(() => {
     
@@ -164,6 +171,52 @@ const CompanyProfile = () => {
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
+    if (name === "address") {
+      if (value.length > addressLength) {
+        setIsaddressLengthReached(true);
+        return; // Stop updating if max length is reached
+      } else {
+        setIsaddressLengthReached(false);
+      }
+    }
+    if (name === "linkedin" || name === "website") {
+      if (value.length > linkLength) {
+        return; // Stop updating if max length is reached
+      }
+    }
+
+    if (name === "company_name" || name === "admin_name") {
+      if (value.length > nameLength) {
+        return; // Stop updating if max length is reached
+      }
+
+    }
+
+    
+      if (name === "display_email") {
+        if (value.length > displayEmailLength) {
+          return; // Stop updating if max length is reached
+        }
+      }
+
+      if (name === "company_description") {
+        if (value.length > descriptionLength) {
+          setIsdescriptionLengthReached(true);
+          return; // Stop updating if max length is reached
+        } else {
+          setIsdescriptionLengthReached(false);
+        }
+      }
+
+      if (name === "address") {
+        if (value.length > addressLength) {
+          setIsaddressLengthReached(true);
+          return; // Stop updating if max length is reached
+        } else {
+          setIsaddressLengthReached(false);
+        }
+      }
+
     if (type === 'checkbox') {
       setCompany(prevCompany => ({
         ...prevCompany,
@@ -422,6 +475,11 @@ const CompanyProfile = () => {
               className={styles.input}
               placeholder="Enter your address"
             />
+                {isaddressLengthReached && (
+                <p className="mt-1 text-sm text-red-500">
+                  Maximum character limit of {addressLength} reached.
+                </p>
+              )}
           </label>
           {/* Company Description */}
           <label className={styles.label}>
@@ -434,6 +492,11 @@ const CompanyProfile = () => {
               placeholder='Tell us about your company...'
               required
             ></textarea>
+            {isdescriptionLengthReached && (
+              <p className="mt-1 text-sm text-red-500">
+                Maximum character limit of {descriptionLength} reached.
+              </p>
+            )}
           </label>
           {/* Website */}
           <label className={styles.label}>

@@ -82,6 +82,16 @@ const EmployeeProfile = () => {
   });
   const [profileExists, setProfileExists] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [ispositionLengthReached, setIspositionLengthReached] = useState(false);
+  const [isaddressLengthReached, setIsaddressLengthReached] = useState(false);
+  const [isbioLengthReached, setIsbioLengthReached] = useState(false);
+  const nameLength = 18;
+  const linkLength = 70;
+  const emailLength = 40;
+  const addressLength = 255;
+  const positionLength = 30;
+  const bioLength = 1000;
+
 
 
   useEffect(() => {
@@ -185,6 +195,51 @@ const EmployeeProfile = () => {
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
+    if (name === "first_name" || name === "last_name") {
+      if (value.length > nameLength) {
+        return; 
+      }
+    }
+
+    if (name === "display_email") {
+      if (value.length > emailLength) {
+        return; // Stop updating if max length is reached
+      } 
+    }
+
+    if (name === "linkedin" || name === "github" || name === "website" || name === "facebook" || name === "instagram" || name === "whatsapp") {
+      if (value.length > linkLength) {
+        return; // Stop updating if max length is reached
+      }
+    }
+
+    if (name === "position") {
+      if (value.length > positionLength) {
+        setIspositionLengthReached(true);
+        return; // Stop updating if max length is reached
+      } else {
+        setIspositionLengthReached(false);
+      }
+    }
+
+    if (name === "bio") {
+      if (value.length > bioLength) {
+        setIsbioLengthReached(true);
+        return; // Stop updating if max length is reached
+      } else {
+        setIsbioLengthReached(false);
+      }
+    }
+
+    if (name === "address") {
+      if (value.length > addressLength) {
+        setIsaddressLengthReached(true);
+        return; // Stop updating if max length is reached
+      } else {
+        setIsaddressLengthReached(false);
+      }
+    }
+
     if (type === 'checkbox') {
       setUser(prevUser => ({
         ...prevUser,
@@ -574,6 +629,7 @@ const EmployeeProfile = () => {
               required
               readOnly
             />
+
           </label>
           <label className={styles.label}>
             Last Name:
@@ -634,6 +690,11 @@ const EmployeeProfile = () => {
               readOnly 
               required
             />
+              {ispositionLengthReached && (
+                <p className="mt-1 text-sm text-red-500">
+                  Maximum character limit of {positionLength} reached.
+                </p>
+              )}
           </label>
           <label className={styles.label}>
             Phone Number:
@@ -657,6 +718,12 @@ const EmployeeProfile = () => {
               className={styles.input}
               required
             />
+            {isaddressLengthReached && (
+              <p className="mt-1 text-sm text-red-500">
+                Maximum character limit of {addressLength} reached.
+              </p>  
+            )}
+            
           </label>
           <label className={styles.label}>
             Bio:
@@ -668,6 +735,11 @@ const EmployeeProfile = () => {
               className={styles.textarea}
               required
             ></textarea>
+            {isbioLengthReached && (
+              <p className="mt-1 text-sm text-red-500">
+                Maximum character limit of {bioLength} reached.
+              </p>
+            )}
           </label>
           <label className={styles.label}>
             Website (Optional):

@@ -1,8 +1,8 @@
 .userProfileContainer {
   display: flex;
   justify-content: center;
-  padding: 2rem;
-  margin-top: 75px;
+  padding: 1rem;
+  margin-top: 70px;
 }
 
 .autocompleteDropdownContainer {
@@ -41,6 +41,7 @@ h2 {
 .form {
   display: flex;
   flex-direction: column;
+  margin-top: 3rem;
 }
 
 .label {
@@ -102,12 +103,13 @@ h2 {
 .profileSummaryContainer {
   display: flex; 
   justify-content: center; 
+  flex-direction: column;
   align-items: center; 
+  text-align: center;
   height: 40vh;
-  width: 600px; 
-  padding: 20px;
-  padding: 0;
-  /* margin: auto;  */
+  width: 100%; 
+  /* padding: 90px; */
+  margin: auto; 
 }
 
 
@@ -122,7 +124,7 @@ h2 {
 
 .profilePicContainer {
   position: relative;
-  margin-right: 20px;
+  /* margin-right: 20px; */
 }
 
 .profilePic {
@@ -149,7 +151,11 @@ h2 {
 }
 
 .profileDetails {
-  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
 }
 
 .fullName {
@@ -157,6 +163,7 @@ h2 {
   margin: 0;
   font-size: 24px;
   font-weight: bold;
+  text-wrap: wrap;
 }
 
 .username {
@@ -169,13 +176,31 @@ h2 {
 }
 
 @media screen and (max-width: 600px) {
-  .profileSummaryContainer {
-    width: 100%;
+  .userProfileContainer {
+    display: flex;
     flex-direction: column;
-    text-align: center;
-    margin-bottom: 10px;
+    align-items: center;
   }
 
-  
+  .profileSummaryContainer {
+    flex-direction: column;
+    width: 100%;
+    margin: auto;
+  }
+
+  .profileSummaryContainer p {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7rem;
+  }
+
+
+  .formContainer{
+    width: 100%;
+
+  }
+
 }
 

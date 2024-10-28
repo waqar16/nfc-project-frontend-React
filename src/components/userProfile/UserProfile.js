@@ -86,6 +86,18 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [profileExists, setProfileExists] = useState(false); // Track if profile exists
   const [isSubmitting, setIsSubmitting] = useState(false); // Track form submission state
+  const [ispositionLengthReached, setIspositionLengthReached] = useState(false);
+  const [isnameLengthReached, setIsnameLengthReached] = useState(false);
+  const [islinkLengthReached, setIslinkLengthReached] = useState(false);
+  const [isemailLengthReached, setIsemailLengthReached] = useState(false);
+  const [isphoneLengthReached, setIsphoneLengthReached] = useState(false);
+  const [isaddressLengthReached, setIsaddressLengthReached] = useState(false);
+  const positionLength = 50;
+  const nameLength = 18;
+  const linkLength = 70;
+  const emailLength = 40;
+  const phoneLength = 18;
+  const addressLength = 255;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -172,21 +184,67 @@ const UserProfile = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (type === "checkbox") {
-      setUser((prevUser) => ({
-        ...prevUser,
-        [name]: checked,
-      }));
-    } else {
-      setUser((prevUser) => ({
-        ...prevUser,
-        [name]: value,
-      }));
+    
+    // Character limit logic for "position" field
+    if (name === "position") {
+      if (value.length > positionLength) {
+        setIspositionLengthReached(true);
+        return; // Stop updating if max length is reached
+      } else {
+        setIspositionLengthReached(false);
+      }
     }
+
+    if (name === "first_name" || name === "last_name") {
+      if (value.length > nameLength) {
+        setIsnameLengthReached(true);
+        return; // Stop updating if max length is reached
+      } else {
+        setIsnameLengthReached(false);
+      }
+    }
+
+    if (name === "display_email") {
+      if (value.length > emailLength) {
+        setIsemailLengthReached(true);
+        return; // Stop updating if max length is reached
+      } else {
+        setIsemailLengthReached(false);
+      }
+    }
+
+    if (name === "linkedin" || name === "github" || name === "website" || name === "facebook" || name === "instagram" || name === "whatsapp") {
+      if (value.length > linkLength) {
+        setIslinkLengthReached(true);
+        return; // Stop updating if max length is reached
+      } else {
+        setIslinkLengthReached(false);
+      }
+    }
+
+    if (name === "address") {
+      if (value.length > addressLength) {
+        setIsaddressLengthReached(true);
+        return; // Stop updating if max length is reached
+      } else {
+        setIsaddressLengthReached(false);
+      }
+    }
+
+    // Update state based on input type
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handlePhoneChange = (value) => {
     setUser({ ...user, phone: value });
+    if (value.length > phoneLength) {
+      setIsphoneLengthReached(true);
+    } else {
+      setIsphoneLengthReached(false);
+    }
   };
 
   const [image, setImage] = React.useState(null);
@@ -282,20 +340,6 @@ const UserProfile = () => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  // This function will handle saving the cropped image
-  // const handleSaveCroppedImage = async () => {
-  //   try {
-  //     const croppedImageUrl = await getCroppedImg(image, croppedAreaPixels);
-  //     setCroppedImage(croppedImageUrl); // Update the cropped image state with the result
-  //     setImage(croppedImageUrl); // Optionally replace the original image with the cropped one
-  //     toast.success("Image cropped successfully!");
-  //     setImage(null);
-  //     setOpenImageModal(false);
-  //   } catch (error) {
-  //     console.error("Error cropping image:", error);
-  //     toast.error("Failed to crop image.");
-  //   }
-  // };
   const handleSaveCroppedImage = async () => {
     if (!croppedAreaPixels || !image) return;
 
@@ -568,118 +612,158 @@ const UserProfile = () => {
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <input type="hidden" name="user" value={user.user} />
-          {[
-            { label: "First Name", name: "first_name", type: "text" },
-            { label: "Last Name", name: "last_name", type: "text" },
-            { label: "Email", name: "email", type: "text", readOnly: true },
-            { label: "Display Email", name: "display_email", type: "text" },
-            { label: "Position", name: "position", type: "text" },
-            { label: "Phone", name: "phone", type: "phone" },
-            { label: "Bio", name: "bio", type: "textarea" },
-            { label: "Website (Optional)", name: "website", type: "url" },
-            { label: "Facebook (Optional)", name: "facebook", type: "url" },
-            { label: "Instagram (Optional)", name: "instagram", type: "url" },
-            { label: "LinkedIn (Optional)", name: "linkedin", type: "url" },
-            { label: "WhatsApp (Optional)", name: "whatsapp", type: "phone" },
-          ].map(({ label, name, type, readOnly = false }) => (
-            <label key={name} className={styles.label}>
-              {label}:
-              {type === "textarea" ? (
-                <textarea
-                  name={name}
-                  value={user[name]}
-                  placeholder={
-                    name === "bio" ? "Tell us about yourself..." : ""
-                  }
-                  onChange={handleChange}
-                  className={styles.textarea}
-                  required
-                />
-              ) : type === "phone" ? (
-                <PhoneInput
-                  country={"sa"}
-                  value={user.phone}
-                  onChange={handlePhoneChange}
-                  inputClass={styles.input}
-                  specialLabel=""
-                />
-              ) : (
-                <input
-                  type={type}
-                  name={name}
-                  value={user[name]}
-                  onChange={handleChange}
-                  className={styles.input}
-                  readOnly={readOnly}
-                  placeholder={
-                    name === "website"
-                      ? "https://example.com"
-                      : name === "facebook"
-                      ? "https://facebook.com/username"
-                      : name === "instagram"
-                      ? "https://instagram.com/username"
-                      : name === "linkedin"
-                      ? "https://linkedin.com/in/username"
-                      : name === "position"
-                      ? "e.g Software Engineer"
-                      : name === "address"
-                      ? "e.g Riyadh, Saudi Arabia"
-                      : name === "display_email"
-                      ? "This email will be displayed on your digital card"
-                      : ""
-                  }
-                />
+          <label className={styles.label}>
+            First Name:
+            <input
+              type="text"
+              name="first_name"
+              value={user.first_name}
+              onChange={handleChange}
+              className={styles.input}
+              required
+            />
+              {/* {isnameLengthReached && (
+                <p className="mt-1 text-sm text-red-500">
+                  Maximum character limit of {nameLength} reached.
+                </p>
+              )} */}
+            
+          </label>
+
+          <label className={styles.label}>
+            Last Name:
+            <input
+              type="text"
+              name="last_name"
+              value={user.last_name}
+              onChange={handleChange}
+              className={styles.input}
+              required
+            />
+            {/* {isnameLengthReached && (
+                <p className="mt-1 text-sm text-red-500">
+                  Maximum character limit of {nameLength} reached.
+                </p>
+              )} */}
+          </label>
+
+          <label className={styles.label}>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={user.email}
+              onChange={handleChange}
+              className={styles.input}
+              readOnly
+            />
+          </label>
+
+          <label className={styles.label}>
+              Position:
+              <input
+                type="text"
+                className={styles.input}
+                name="position"
+                value={user.position}
+                onChange={handleChange}
+                placeholder="e.g. Software Engineer"
+              />
+              {ispositionLengthReached && (
+                <p className="mt-1 text-sm text-red-500">
+                  Maximum character limit of {positionLength} reached.
+                </p>
               )}
             </label>
-          ))}
+
+          <label className={styles.label}>
+            Display Email:
+            <input
+              type="text"
+              name="display_email"
+              value={user.display_email}
+              onChange={handleChange}
+              className={styles.input}
+            />
+              {isemailLengthReached && (
+                <p className="mt-1 text-sm text-red-500">
+                  Maximum character limit of {emailLength} reached.
+                </p>
+              )}
+          </label>
+
+          <label className={styles.label}>
+            Phone:
+            <PhoneInput
+              country={"sa"}
+              value={user.phone}
+              onChange={handlePhoneChange}
+              inputClass={styles.input}
+              specialLabel=""
+            />
+
+          </label>
+
+          <label className={styles.label}>
+            Bio:
+            <textarea
+              name="bio"
+              value={user.bio}
+              onChange={handleChange}
+              className={styles.textarea}
+            />
+          </label>
+
+          <label className={styles.label}>
+            Website:
+            <input
+              type="url"
+              name="website"
+              value={user.website}
+              onChange={handleChange}
+              className={styles.input}
+            />
+
+          </label>
+
+          <label className={styles.label}>
+            Facebook:
+            <input
+              type="url"
+              name="facebook"
+              value={user.facebook}
+              onChange={handleChange}
+              className={styles.input}
+            />
+
+            </label>
+
+            <label className={styles.label}>
+              Instagram:
+              <input
+                type="url"
+                name="instagram"
+                value={user.instagram}
+                onChange={handleChange}
+                className={styles.input}
+              />
+
+            </label>
+
+            <label className={styles.label}>
+              LinkedIn:
+              <input
+                type="url"
+                name="linkedin"
+                value={user.linkedin}
+                onChange={handleChange}
+                className={styles.input}
+              />
+
+            </label>
 
           <label className={styles.label}>
             Address:
-            {/* <PlacesAutocomplete
-              value={user.address || ""}
-              onChange={(address) => setUser({ ...user, address })}
-              onSelect={(address) => {
-                geocodeByAddress(address)
-                  .then((results) => getLatLng(results[0]))
-                  .then((latLng) => {
-                    console.log("Success:", latLng);
-                    setUser({ ...user, address }); // Set selected address
-                  })
-                  .catch((error) => console.error("Error:", error));
-              }}
-            >
-              {({
-                getInputProps,
-                suggestions,
-                getSuggestionItemProps,
-                loading,
-              }) => (
-                <div>
-                  <input
-                    {...getInputProps({
-                      placeholder: "Enter your address",
-                      className: styles.input,
-                    })}
-                  />
-                  <div className={styles.autocompleteDropdownContainer}>
-                    {loading && <div>Loading...</div>}
-                    {suggestions.map((suggestion) => {
-                      const className = suggestion.active
-                        ? styles.suggestionItemActive
-                        : styles.suggestionItem;
-                      return (
-                        <div
-                          {...getSuggestionItemProps(suggestion, { className })}
-                          key={suggestion.placeId}
-                        >
-                          <span>{suggestion.description}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </PlacesAutocomplete> */}
             <input
               type="text"
               name="address"
@@ -688,6 +772,12 @@ const UserProfile = () => {
               className={styles.input}
               placeholder="Enter your address"
             />
+            {isaddressLengthReached && (
+              <p className="mt-1 text-sm text-red-500">
+                Maximum character limit of {addressLength} reached.
+              </p>
+            )}
+
           </label>
 
           <label className={styles.label}>
@@ -712,6 +802,7 @@ const UserProfile = () => {
       {loading && <Loader />}
       <ToastContainer />
     </div>
+    
   );
 };
 
