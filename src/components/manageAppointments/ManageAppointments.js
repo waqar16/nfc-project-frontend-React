@@ -2,6 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styles from '../../assets/css/profiles/ManageAppointments.module.css';
 import Sidebar from '../sidebar/Sidebar';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import CompanyCard from '../companyProfile/CompanyCard';
 
 const ManageAppointments = () => {
@@ -13,11 +18,31 @@ const ManageAppointments = () => {
     const [hasMore, setHasMore] = useState(true); 
     const [loadingNextPage, setLoadingNextPage] = useState(false);
 
+    const navigate = useNavigate();
+
+    const location = useLocation();
+
+    const queryParams = new URLSearchParams(location.search);
+    const status = queryParams.get('status');
+    const token = queryParams.get('token');
+
     const companyLogo = localStorage.getItem('company_logo');
     const profilePic = localStorage.getItem('profile_pic');
     
 
     const fetchAppointments = useCallback(async () => {
+        if (status === 'success') {
+            toast.success('Appointment scheduled successfully!');
+        }
+        if (token) {
+            localStorage.setItem('authToken', token);
+        }
+        // Clear query params
+        const clearQueryParams = () => {
+            const { pathname } = location;
+            window.history.replaceState(null, '', pathname);
+        };
+        clearQueryParams();
         try {
             const response = await axios.get(`https://api.onesec.shop/api/get-meetings/?page=${page}`, {
                 headers: { Authorization: `Token ${localStorage.getItem('authToken')}` }
@@ -34,13 +59,17 @@ const ManageAppointments = () => {
 
             setLoading(false);
             setLoadingNextPage(false);
+
         } catch (error) {
+            if (error.response && error.response.status === 401) {
+                navigate('/login');
+            }
             setError('Error fetching appointments.');
             setLoading(false);
             setLoadingNextPage(false);
             console.error('Error fetching appointments:', error);
         }
-    }, [page]);
+    }, [page, status, token]);
     
     useEffect(() => {
         fetchAppointments();
@@ -72,6 +101,7 @@ const ManageAppointments = () => {
 
     return (
         <div className={styles.manageAppointmentsSection}>
+            <ToastContainer />
             <Sidebar profileType={localStorage.getItem('profile_type')} logo={companyLogo} profilePic={profilePic} />
             <h2 className={styles.title}>Appointments</h2>
             <div className={styles.manageAppointments}>

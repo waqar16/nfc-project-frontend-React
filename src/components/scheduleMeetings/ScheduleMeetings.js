@@ -13,6 +13,12 @@ const ScheduleMeeting = ({ attendeeEmail, userId, username }) => {
     time: ''
   });
   const [message, setMessage] = useState('');
+  const [isTitleLengthReached, setIsTitleLengthReached] = useState('');
+  const [isDescribtionLengthReached, setIsDescriptionLengthReached] = useState('');
+
+  const titleLength = 40;
+  const descriptionLength = 200;
+
 
   useEffect(() => {
     const getQueryParams = (search) => {
@@ -37,6 +43,21 @@ const ScheduleMeeting = ({ attendeeEmail, userId, username }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === 'title' && value.length >= titleLength) {
+      setIsTitleLengthReached(true);
+      return;
+    } else {
+      setIsTitleLengthReached(false);
+    }
+
+    if (name === 'description' && value.length >= descriptionLength) {
+      setIsDescriptionLengthReached(true);
+      return;
+    } else {
+      setIsDescriptionLengthReached(false);
+    }
+
     setMeetingDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
@@ -113,6 +134,7 @@ const ScheduleMeeting = ({ attendeeEmail, userId, username }) => {
             placeholder="Enter meeting title"
             required
           />
+          {isTitleLengthReached && <p className={styles.error}>Title should not exceed {titleLength} characters.</p>}
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="description" className={styles.label}>Description</label>
@@ -125,6 +147,7 @@ const ScheduleMeeting = ({ attendeeEmail, userId, username }) => {
             placeholder="Enter meeting description"
             required
           ></textarea>
+          {isDescribtionLengthReached && <p className={styles.error}>Description should not exceed {descriptionLength} characters.</p>}
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="time" className={styles.label}>Time</label>

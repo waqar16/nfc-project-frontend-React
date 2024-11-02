@@ -5,8 +5,13 @@ import main from '../../assets/img/banner.png';
 import axios from 'axios';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; 
+import { useLocation } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
+  const location = useLocation();
+  const [status, setStatus] = useState('');
   const navigate = useNavigate();
   const [profileType, setProfileType] = useState('');
   const [username, setUsername] = useState('');
@@ -14,6 +19,20 @@ const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    const fetchQueryParams = () => {
+      const params = new URLSearchParams(location.search);
+      const statusParam = params.get('status'); // Get the 'status' parameter
+      if (statusParam) {
+        setStatus(statusParam);
+        if (statusParam === 'success') {
+          toast.success('Successfull');
+        } else if (statusParam === 'failed') {
+          toast.error('Error Scheduling Meeting. Please try again.');
+        }
+      }
+    };
+
+    fetchQueryParams();
     window.scrollTo(0, 0);
     AOS.init({
       duration: 1200,
@@ -41,7 +60,7 @@ const Home = () => {
     };
 
     userInfo();
-  }, []);
+  }, [location.search]);
 
   const handleCompanyButtonClick = () => {
     if (isAuthenticated & profileType === 'company') {
@@ -61,6 +80,7 @@ const Home = () => {
 
   return (
     <div className={styles.home}>
+    <ToastContainer />
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <h1 data-aos="fade-left">Revolutionize Networking with NFC Business and Digital Cards</h1>
